@@ -1,0 +1,159 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Balsam",
+    "theme_version": "1.0.0",
+    "theme_author": "Novspeck",
+    "theme_documentation_url": "https://novspeck.com",
+    "theme_support_url": "https://novspeck.com/support"
+  },
+  {
+    "name": "Logo & Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 80,
+        "max": 300,
+        "step": 10,
+        "default": 140,
+        "unit": "px",
+        "label": "Logo width"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image"
+      }
+    ]
+  },
+  {
+    "name": "Announcement Bar",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_enabled",
+        "default": true,
+        "label": "Show announcement bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "announcement_bar_dismissible",
+        "default": true,
+        "label": "Allow dismissal"
+      },
+      {
+        "type": "text",
+        "id": "announcement_bar_text",
+        "default": "Free shipping on orders over $100 · Made with love in Canada",
+        "label": "Announcement text"
+      },
+      {
+        "type": "text",
+        "id": "announcement_bar_link_text",
+        "default": "Shop now →",
+        "label": "Link text"
+      },
+      {
+        "type": "url",
+        "id": "announcement_bar_link_url",
+        "label": "Link URL"
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "main_menu",
+        "default": "main-menu",
+        "label": "Main menu"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu",
+        "default": "footer",
+        "label": "Footer menu"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_legal_menu",
+        "label": "Footer legal menu"
+      }
+    ]
+  },
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "footer_logo",
+        "label": "Footer logo (optional, defaults to header logo)"
+      },
+      {
+        "type": "richtext",
+        "id": "footer_tagline",
+        "default": "<p>Natural tahini, thoughtfully sourced.</p>",
+        "label": "Footer tagline"
+      },
+      {
+        "type": "text",
+        "id": "footer_instagram_url",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_facebook_url",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "footer_tiktok_url",
+        "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "Product pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_installments",
+        "default": true,
+        "label": "Show Shop Pay installments line"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_stock_badge",
+        "default": true,
+        "label": "Show in-stock badge"
+      },
+      {
+        "type": "text",
+        "id": "ships_in_text",
+        "default": "24H",
+        "label": "Ships in (text shown on badge)"
+      }
+    ]
+  },
+  {
+    "name": "Collection pages",
+    "settings": [
+      {
+        "type": "range",
+        "id": "collection_products_per_page",
+        "min": 12,
+        "max": 48,
+        "step": 12,
+        "default": 24,
+        "label": "Products per page"
+      }
+    ]
+  }
+]

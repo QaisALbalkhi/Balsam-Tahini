@@ -1,0 +1,133 @@
+{% comment %}
+  Renders the price block.
+  Usage: {% render 'price', product: product, variant: variant, card: false %}
+  - card: true renders compact card-style price
+{% endcomment %}
+
+{%- liquid
+  assign current_variant = variant | default: product.selected_or_first_available_variant
+  assign compare_at = current_variant.compare_at_price
+  assign price = current_variant.price
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+  endif
+-%}
+
+{%- if card -%}
+  <div class="price price--card">
+    {%- if on_sale -%}
+      <span class="price__sale">{{ price | money }}</span>
+      <s class="price__compare">{{ compare_at | money }}</s>
+    {%- else -%}
+      <span class="price__regular">
+        {%- if product.price_varies -%}From {% endif -%}
+        {{ price | money }}
+      </span>
+    {%- endif -%}
+  </div>
+
+{%- else -%}
+  <div class="price-block">
+    <div class="price-block__row">
+      {%- if on_sale -%}
+        {%- assign savings_pct = compare_at | minus: price | times: 100 | divided_by: compare_at | round -%}
+        <span class="price-block__sale">{{ price | money }}</span>
+        <s class="price-block__compare">{{ compare_at | money }}</s>
+        <span class="badge price-block__savings-badge">SAVE {{ savings_pct }}%</span>
+      {%- else -%}
+        <span class="price-block__regular">
+          {%- if product.price_varies -%}From {% endif -%}
+          {{ price | money }}
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- if settings.show_installments and product.selling_plan_groups.size == 0 -%}
+      {%- assign installment = price | divided_by: 4 -%}
+      <p class="price-block__installments">
+        {{ 'products.or_pay_with' | t: price: installment | money }}
+        <strong>Shop Pay</strong>
+        · {{ 'products.interest_free' | t }}
+      </p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+<style>
+  /* Card price */
+  .price--card {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .price__sale {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  .price__compare {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .price__regular {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  /* Full PDP price block */
+  .price-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .price-block__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .price-block__sale {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1;
+  }
+
+  .price-block__compare {
+    font-size: var(--text-lg);
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .price-block__savings-badge {
+    background-color: var(--warn);
+    color: var(--surface);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+
+  .price-block__regular {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1;
+  }
+
+  .price-block__installments {
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+
+  .price-block__installments strong {
+    color: var(--fg-2);
+  }
+</style>

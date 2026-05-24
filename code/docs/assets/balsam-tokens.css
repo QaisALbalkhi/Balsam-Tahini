@@ -1,0 +1,170 @@
+/* ─────────────────────────────────────────────────────────────────────────
+ * design-systems/balsam/tokens.css
+ *
+ * Structured token bindings for the Balsam design system —
+ * a natural food e-commerce language fusing Balsam Tahini's deep
+ * forest green palette with Burlap & Barrel's clean artisan component
+ * patterns and the E-Commerce UI Kit's neutral scale.
+ *
+ * Color sources:
+ *   - Deep forest greens: extracted from balsamtahini.com live site
+ *     (banner #1B4332, in-stock badge, variant selector borders)
+ *   - Neutral scale: E-Commerce Complete UI Kit (Figma community)
+ *     #141718 → #232627 → #343839 → #6C7275 → #E8ECEF → #F3F5F7
+ *   - Sage accent: UI Kit secondary green #38CB89 lightened to #52B788
+ *     for better contrast on the cream background
+ *   - Amber badge: #D97706 from Balsam "SAVE 20%" callout
+ *
+ * Typography sources:
+ *   - Playfair Display: mirrors Balsam Tahini's editorial serif headline
+ *   - Inter: clean sans matching Barrel's UI text and the UI Kit body
+ *
+ * Contract sources:
+ *   - Standard token names: design-systems/_schema/tokens.schema.ts
+ *   - A2 fallback values: design-systems/_schema/defaults.css
+ * ─────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ─── Surface ────────────────────────────────────────────────────
+   * Balsam uses a warm off-white canvas (#FAFAF8) rather than
+   * clinical white — natural food photography reads better against
+   * a lightly warm field. Cards lift to pure white. --surface-warm
+   * is a cream tint for editorial feature bands and callout sections,
+   * echoing the parchment tones in Balsam's product packaging. */
+  --bg:           #FAFAF8;
+  --surface:      #FFFFFF;
+  --surface-warm: #F5F0E8;
+
+  /* ─── Foreground ramp ────────────────────────────────────────────
+   * Near-black from the UI Kit's neutral 07 (#141718) as primary text —
+   * Shark (#22292F) is Balsam Tahini's actual primary text color (confirmed
+   * from Figma — used for product names, prices, and ATC button fills).
+   * --fg-2 matches Barrel's Mako (#3D4246) for nav/secondary text.
+   * --muted is Balsam's Dove Gray (#666666), verified from the breadcrumb
+   * and meta copy on the live product page. */
+  --fg:    #22292F;
+  --fg-2:  #3D4246;
+  --muted: #666666;
+  --meta:  #666666;
+
+  /* ─── Border ─────────────────────────────────────────────────────
+   * UI Kit neutral 03 (#E8ECEF) for standard card/input borders.
+   * --border-soft uses neutral 02 (#F3F5F7) for inner row separators
+   * and subtle dividers inside dense product-detail panels. */
+  --border:      #E8ECEF;
+  --border-soft: #F3F5F7;
+
+  /* ─── Accent (Forest Green) ──────────────────────────────────────
+   * #1B4332 — Balsam Tahini's primary brand green, extracted from
+   * the announcement banner, "In Stock" badge background, and the
+   * selected variant card border on the live site. This is the
+   * single chromatic identity anchor for the entire system.
+   * --accent-on is white for legibility; all green fills use it. */
+  --accent:        #1B4332;
+  --accent-on:     #FFFFFF;
+  --accent-hover:  #2D6A4F;
+  --accent-active: #1A3D2E;
+
+  /* ─── Semantic ───────────────────────────────────────────────────
+   * --success maps to the sage green (#52B788) used for "In Stock"
+   * status dots — warmer than a generic green, cohesive with the
+   * forest palette. --warn is Balsam's amber badge (#D97706), used
+   * for "SAVE 20%" and bulk-discount callouts. --danger inherits
+   * a desaturated red that doesn't fight the green palette. */
+  --success: #52B788;
+  --warn:    #D97706;
+  --danger:  #DC2626;
+
+  /* ─── Typography ─────────────────────────────────────────────────
+   * Display: Playfair Display mirrors Balsam Tahini's editorial serif
+   * headline style (the "Walnut Butter Spread" italic headline is the
+   * clearest brand signal). Georgia and serif as fallbacks.
+   * Body: Open Sans is Balsam Tahini's actual body font (Regular/SemiBold,
+   * confirmed from Figma — used for product names at 15px/400 and prices
+   * at 18px/600). Barrel uses Poppins Bold for nav; Open Sans covers both
+   * adequately and keeps the system on a single sans stack.
+   * Mono: SF Mono for batch numbers, SKUs, and variant codes. */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body:    "Open Sans", Inter, system-ui, sans-serif;
+  --font-mono:    "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+  /* Type scale — derived from the UI Kit's typography panel:
+   * text sizes 12/14/16/18/20/22/26px mapped to the token ladder.
+   * --text-4xl at 60px anchors the Balsam hero headline tier. */
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-base: 16px;
+  --text-lg:   18px;
+  --text-xl:   24px;
+  --text-2xl:  36px;
+  --text-3xl:  48px;
+  --text-4xl:  60px;
+
+  /* Playfair Display's tight leading (1.1) at display sizes, airy
+   * Inter body (1.6) for comfortable product-description reading. */
+  --leading-body:  1.6;
+  --leading-tight: 1.1;
+
+  /* Slight negative tracking on display gives the Playfair headlines
+   * the editorial weight Balsam's site uses on its product names. */
+  --tracking-display: -0.02em;
+
+  /* ─── Spacing ────────────────────────────────────────────────────
+   * Standard 4px grid matching the UI Kit's 8px base increments. */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+
+  /* ─── Section rhythm ─────────────────────────────────────────────
+   * Generous desktop breathing room (88px) supports Barrel's editorial
+   * product photography sections. Tighter mobile (40px) keeps shop
+   * grids comfortable on small screens. */
+  --section-y-desktop: 88px;
+  --section-y-tablet:  60px;
+  --section-y-phone:   40px;
+
+  /* ─── Radius ─────────────────────────────────────────────────────
+   * Balsam uses soft-but-not-pill geometry. The "In Stock" status
+   * badge and variant selector cards use ~8–12px radius. CTAs use
+   * ~6px — functional and clean, not playful. Full-pill reserved
+   * for status dots and tag chips only. */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-pill: 9999px;
+
+  /* ─── Elevation ──────────────────────────────────────────────────
+   * Depth is warm and organic. Cards use a soft amber-tinted shadow
+   * rather than cold grey — cohesive with the cream palette.
+   * --elev-ring uses the standard border token for contained UI. */
+  --elev-flat:   none;
+  --elev-ring:   0 0 0 1px var(--border);
+  --elev-raised: 0 4px 24px rgba(27, 67, 50, 0.10);
+
+  /* ─── Focus ring ─────────────────────────────────────────────────
+   * Forest green focus halo — accessible and on-brand. 4px spread
+   * at 30% opacity matches Balsam's restrained interaction style. */
+  --focus-ring: 0 0 0 4px rgba(27, 67, 50, 0.28);
+
+  /* ─── Motion ─────────────────────────────────────────────────────
+   * Natural food brands favor unhurried, organic motion. --motion-base
+   * at 260ms feels considered; --ease-standard decelerates gently.
+   * No bouncy springs — the brand tone is calm and artisanal. */
+  --motion-fast:   160ms;
+  --motion-base:   260ms;
+  --ease-standard: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ─── Layout ─────────────────────────────────────────────────────
+   * 1200px container matches Barrel's wide editorial grid.
+   * Gutters step 40 → 24 → 16 — generous on desktop to let
+   * product photography breathe. */
+  --container-max:            1200px;
+  --container-gutter-desktop: 40px;
+  --container-gutter-tablet:  24px;
+  --container-gutter-phone:   16px;
+}

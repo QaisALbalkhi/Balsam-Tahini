@@ -1,0 +1,221 @@
+<section class="main-blog section">
+  <div class="container">
+
+    <div class="blog-header">
+      <h1 class="section-title">{{ blog.title }}</h1>
+      {%- if section.settings.description != blank -%}
+        <p class="blog-header__desc">{{ section.settings.description }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if blog.articles.size > 0 -%}
+      <div class="article-grid">
+        {%- paginate blog.articles by 9 -%}
+          {%- for article in blog.articles -%}
+            <article class="article-card">
+              <a href="{{ article.url }}" class="article-card__image-link" tabindex="-1" aria-hidden="true">
+                {%- if article.image -%}
+                  <img
+                    src="{{ article.image | image_url: width: 600 }}"
+                    srcset="
+                      {{ article.image | image_url: width: 400 }} 400w,
+                      {{ article.image | image_url: width: 600 }} 600w
+                    "
+                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 33vw"
+                    alt="{{ article.image.alt | default: article.title | escape }}"
+                    width="600"
+                    height="400"
+                    loading="lazy"
+                    class="article-card__image"
+                  >
+                {%- else -%}
+                  <div class="article-card__image-placeholder">
+                    {{ 'lifestyle-1' | placeholder_svg_tag }}
+                  </div>
+                {%- endif -%}
+              </a>
+
+              <div class="article-card__body">
+                {%- if article.tags.size > 0 -%}
+                  <p class="article-card__tags eyebrow">
+                    {{ article.tags | join: ' · ' }}
+                  </p>
+                {%- endif -%}
+
+                <h2 class="article-card__title">
+                  <a href="{{ article.url }}">{{ article.title }}</a>
+                </h2>
+
+                {%- if article.excerpt != blank -%}
+                  <p class="article-card__excerpt">{{ article.excerpt | strip_html | truncate: 120 }}</p>
+                {%- endif -%}
+
+                <div class="article-card__meta">
+                  <time class="article-card__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{ article.published_at | date: '%B %d, %Y' }}
+                  </time>
+                  {%- if article.read_time -%}
+                    <span aria-hidden="true">·</span>
+                    <span class="article-card__read-time">{{ article.read_time }} min read</span>
+                  {%- endif -%}
+                </div>
+
+                <a href="{{ article.url }}" class="article-card__cta">
+                  {{ 'blog.read_more' | t }} →
+                </a>
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- endpaginate -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="Pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="pagination__btn btn btn-ghost btn--sm">← Previous</a>
+          {%- endif -%}
+          <span class="pagination__info">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="pagination__btn btn btn-ghost btn--sm">Next →</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <p class="blog-empty">No recipes yet. Check back soon.</p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog (Recipes)",
+  "settings": [
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Recipes, ideas, and ways to use our tahini in your kitchen."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .blog-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .blog-header__desc {
+    margin-top: var(--space-3);
+    font-size: var(--text-lg);
+    color: var(--muted);
+    max-width: 560px;
+  }
+
+  /* Article card */
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard);
+  }
+
+  .article-card:hover {
+    box-shadow: var(--elev-raised);
+    transform: translateY(-2px);
+  }
+
+  .article-card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .article-card__image-placeholder {
+    width: 100%;
+    height: 220px;
+    background-color: var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .article-card__image-placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .article-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    flex: 1;
+  }
+
+  .article-card__tags {
+    color: var(--accent);
+  }
+
+  .article-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .article-card__title a {
+    color: var(--fg);
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .article-card__title a:hover {
+    color: var(--accent);
+  }
+
+  .article-card__excerpt {
+    font-size: var(--text-sm);
+    color: var(--muted);
+    line-height: var(--leading-body);
+    flex: 1;
+  }
+
+  .article-card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--muted);
+    margin-top: auto;
+  }
+
+  .article-card__cta {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: var(--space-2);
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .article-card__cta:hover {
+    color: var(--accent-hover);
+  }
+
+  .blog-empty {
+    font-size: var(--text-lg);
+    color: var(--muted);
+    padding-block: var(--space-12);
+    text-align: center;
+  }
+</style>

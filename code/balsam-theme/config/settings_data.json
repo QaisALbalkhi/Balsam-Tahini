@@ -1,0 +1,15 @@
+{
+  "current": {
+    "announcement_bar_enabled": true,
+    "announcement_bar_dismissible": true,
+    "announcement_bar_text": "Free shipping on orders over $100 · Made with love in Canada",
+    "announcement_bar_link_text": "Shop now →",
+    "logo_width": 140,
+    "show_installments": true,
+    "show_stock_badge": true,
+    "ships_in_text": "24H",
+    "collection_products_per_page": 24,
+    "footer_tagline": "<p>Natural tahini, thoughtfully sourced.</p>"
+  },
+  "presets": {}
+}

@@ -1,0 +1,387 @@
+{%- assign show_overlay = section.settings.show_overlay_panel -%}
+
+<section class="hero-banner" style="--hero-height: {{ section.settings.height }}px;">
+
+  {%- if section.settings.image != blank -%}
+    <div class="hero-banner__bg">
+      <img
+        src="{{ section.settings.image | image_url: width: 3840 }}"
+        srcset="
+          {{ section.settings.image | image_url: width: 900 }} 900w,
+          {{ section.settings.image | image_url: width: 1440 }} 1440w,
+          {{ section.settings.image | image_url: width: 2400 }} 2400w,
+          {{ section.settings.image | image_url: width: 3840 }} 3840w
+        "
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | default: shop.name | escape }}"
+        loading="eager"
+        fetchpriority="high"
+        class="hero-banner__img"
+      >
+    </div>
+  {%- else -%}
+    <div class="hero-banner__bg hero-banner__bg--placeholder"></div>
+  {%- endif -%}
+
+  <div class="hero-banner__frame container">
+    <div class="hero-banner__panel">
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hero-banner__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="hero-banner__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="hero-banner__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.show_rating -%}
+        <div class="hero-banner__rating">
+          <span class="hero-banner__stars" aria-hidden="true">
+            {%- for i in (1..5) -%}★{%- endfor -%}
+          </span>
+          <span class="hero-banner__rating-text">{{ section.settings.rating_text }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <div class="hero-banner__actions">
+          <a href="{{ section.settings.cta_url }}" class="hero-banner__cta">
+            {{ section.settings.cta_label }}
+          </a>
+          {%- if section.settings.cta2_label != blank and section.settings.cta2_url != blank -%}
+            <a href="{{ section.settings.cta2_url }}" class="hero-banner__cta hero-banner__cta--ghost">
+              {{ section.settings.cta2_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "min": 480,
+      "max": 900,
+      "step": 20,
+      "default": 640,
+      "unit": "px",
+      "label": "Hero height"
+    },
+    {
+      "type": "select",
+      "id": "panel_position",
+      "label": "Panel position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "panel_color",
+      "label": "Panel color",
+      "options": [
+        { "value": "accent", "label": "Forest Green" },
+        { "value": "dark", "label": "Dark (near-black)" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "transparent", "label": "Transparent dark" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "natural tahini,\nthoughtfully made"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Stone-ground from the finest sesame seeds. No additives, no shortcuts."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show rating row"
+    },
+    {
+      "type": "text",
+      "id": "rating_text",
+      "label": "Rating text",
+      "default": "2,000+ five-star reviews"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Primary button label",
+      "default": "SHOP TAHINI"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Primary button URL"
+    },
+    {
+      "type": "text",
+      "id": "cta2_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "cta2_url",
+      "label": "Secondary button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero banner"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .hero-banner {
+    position: relative;
+    width: 100%;
+    height: var(--hero-height, 640px);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Background image */
+  .hero-banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-banner__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .hero-banner__bg--placeholder {
+    background: linear-gradient(135deg, var(--accent) 0%, #2D6A4F 100%);
+  }
+
+  /* Frame */
+  .hero-banner__frame {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-block: var(--space-8);
+  }
+
+  /* Panel */
+  .hero-banner__panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-5);
+    padding: 52px 48px;
+    max-width: 480px;
+    width: 100%;
+    border-radius: 4px;
+
+    /* Default: forest green */
+    background-color: var(--accent);
+    color: var(--accent-on);
+  }
+
+  /* Panel color variants — set via inline override from schema */
+  .hero-banner__panel--dark {
+    background-color: var(--fg);
+    color: var(--surface);
+  }
+
+  .hero-banner__panel--cream {
+    background-color: var(--surface-warm);
+    color: var(--fg);
+  }
+
+  .hero-banner__panel--transparent {
+    background-color: rgba(27, 67, 50, 0.82);
+    backdrop-filter: blur(2px);
+    color: var(--accent-on);
+  }
+
+  /* Eyebrow */
+  .hero-banner__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /* Heading */
+  .hero-banner__heading {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: var(--tracking-display);
+    white-space: pre-line;
+  }
+
+  /* Subheading */
+  .hero-banner__sub {
+    font-size: var(--text-base);
+    line-height: 1.65;
+    opacity: 0.88;
+    max-width: 340px;
+  }
+
+  /* Rating row */
+  .hero-banner__rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .hero-banner__stars {
+    color: var(--warn);
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  .hero-banner__rating-text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  /* CTA */
+  .hero-banner__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+    width: 100%;
+    margin-top: var(--space-2);
+  }
+
+  .hero-banner__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 52px;
+    padding-inline: var(--space-8);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--motion-fast) var(--ease-standard),
+                color var(--motion-fast) var(--ease-standard);
+
+    /* Outlined style — white border + text on green panel */
+    background-color: transparent;
+    color: var(--accent-on);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+  }
+
+  .hero-banner__cta:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent-on);
+  }
+
+  .hero-banner__cta--ghost {
+    border-color: rgba(255, 255, 255, 0.35);
+    opacity: 0.75;
+  }
+
+  .hero-banner__cta--ghost:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Panel position */
+  .hero-banner__frame {
+    justify-content: flex-start; /* default: left */
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .hero-banner {
+      height: auto;
+      min-height: 540px;
+      align-items: flex-end;
+    }
+
+    .hero-banner__frame {
+      justify-content: center;
+      padding-bottom: var(--space-8);
+    }
+
+    .hero-banner__panel {
+      max-width: 100%;
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .hero-banner__heading {
+      font-size: clamp(28px, 8vw, 40px);
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var panel = document.querySelector('.hero-banner__panel');
+    var section = document.querySelector('.hero-banner');
+    if (!panel || !section) return;
+
+    /* Apply panel color from schema */
+    var color = '{{ section.settings.panel_color }}';
+    if (color === 'dark') panel.classList.add('hero-banner__panel--dark');
+    else if (color === 'cream') panel.classList.add('hero-banner__panel--cream');
+    else if (color === 'transparent') panel.classList.add('hero-banner__panel--transparent');
+
+    /* Apply panel position from schema */
+    var pos = '{{ section.settings.panel_position }}';
+    var frame = section.querySelector('.hero-banner__frame');
+    if (frame) {
+      if (pos === 'center') frame.style.justifyContent = 'center';
+      else if (pos === 'right') frame.style.justifyContent = 'flex-end';
+    }
+  })();
+</script>

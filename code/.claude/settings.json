@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(winget install GitHub.cli --accept-source-agreements --accept-package-agreements)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Program Files\\\\GitHub CLI\"; gh auth login --web 2>&1)",
+      "Bash(cmd.exe /c start \"\" \"https://github.com/login/device\")"
+    ]
+  }
+}

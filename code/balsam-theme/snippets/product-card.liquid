@@ -1,0 +1,199 @@
+{% comment %}
+  Renders a product card.
+  Usage: {% render 'product-card', product: product %}
+{% endcomment %}
+
+<article class="product-card" aria-label="{{ product.title | escape }}">
+  <a href="{{ product.url }}" class="product-card__image-link" tabindex="-1" aria-hidden="true">
+    <div class="product-card__image-wrap">
+      {%- if product.featured_image -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          srcset="
+            {{ product.featured_image | image_url: width: 300 }} 300w,
+            {{ product.featured_image | image_url: width: 600 }} 600w
+          "
+          sizes="(max-width: 767px) 50vw, (max-width: 1199px) 25vw, 25vw"
+          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+          width="600"
+          height="600"
+          loading="lazy"
+          class="product-card__img"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+      {%- endif -%}
+
+      <!-- Wishlist button -->
+      <button
+        class="product-card__wishlist"
+        type="button"
+        aria-label="{{ 'products.wishlist_add' | t }}"
+        aria-pressed="false"
+      >
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Hover ATC -->
+      <a href="{{ product.url }}" class="product-card__hover-atc btn btn-ghost btn--sm">
+        {{ 'products.view_product' | t }}
+      </a>
+    </div>
+  </a>
+
+  <div class="product-card__body">
+    {%- if product.compare_at_price > product.price -%}
+      {%- assign savings_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+      <span class="badge product-card__badge product-card__badge--sale">Save {{ savings_pct }}%</span>
+    {%- endif -%}
+
+    <a href="{{ product.url }}" class="product-card__name">{{ product.title }}</a>
+
+    {%- render 'price', product: product, variant: product.selected_or_first_available_variant, card: true -%}
+
+    {%- if product.metafields.reviews.rating_count -%}
+      <div class="product-card__rating" aria-label="{{ product.metafields.reviews.rating_value }} out of 5 stars">
+        <span class="stars" aria-hidden="true">
+          {%- for i in (1..5) -%}★{%- endfor -%}
+        </span>
+        <span class="product-card__review-count">{{ product.metafields.reviews.rating_count }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+</article>
+
+<style>
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard);
+  }
+
+  .product-card:hover {
+    box-shadow: var(--elev-raised);
+    transform: translateY(-2px);
+  }
+
+  .product-card__image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: var(--border-soft);
+  }
+
+  .product-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--motion-base) var(--ease-standard);
+  }
+
+  .product-card:hover .product-card__img {
+    transform: scale(1.03);
+  }
+
+  .product-card__placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Wishlist */
+  .product-card__wishlist {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .product-card__wishlist:hover,
+  .product-card__wishlist--active {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .product-card__wishlist--active svg path {
+    fill: var(--accent);
+    stroke: var(--accent);
+  }
+
+  /* Hover ATC */
+  .product-card__hover-atc {
+    position: absolute;
+    bottom: var(--space-3);
+    left: var(--space-3);
+    right: var(--space-3);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+  }
+
+  .product-card:hover .product-card__hover-atc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Card body */
+  .product-card__body {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .product-card__badge {
+    align-self: flex-start;
+  }
+
+  .product-card__badge--sale {
+    background-color: var(--warn);
+    color: var(--surface);
+  }
+
+  .product-card__name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.3;
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .product-card__name:hover {
+    color: var(--accent);
+  }
+
+  .product-card__rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--muted);
+  }
+
+  .product-card__review-count {
+    font-size: var(--text-xs);
+    color: var(--muted);
+  }
+
+  @media (max-width: 767px) {
+    .product-card__hover-atc {
+      display: none;
+    }
+  }
+</style>

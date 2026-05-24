@@ -1,0 +1,261 @@
+<section class="main-collection section">
+  <div class="container">
+
+    <div class="collection-header">
+      <h1 class="section-title">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="collection-header__desc">{{ collection.description }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="collection-layout">
+
+      <!-- Filters sidebar -->
+      {%- if section.settings.show_filters -%}
+        <aside class="collection-filters" aria-label="Filters">
+          <h2 class="collection-filters__heading eyebrow">Filter</h2>
+          {%- for filter in collection.filters -%}
+            <div class="filter-group">
+              <button
+                class="filter-group__toggle"
+                type="button"
+                aria-expanded="true"
+              >
+                <span>{{ filter.label }}</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <ul class="filter-group__list" role="list">
+                {%- for filter_value in filter.values -%}
+                  <li class="filter-group__item">
+                    <label class="filter-checkbox">
+                      <input
+                        type="checkbox"
+                        class="filter-checkbox__input visually-hidden"
+                        name="{{ filter_value.param_name }}"
+                        value="{{ filter_value.value }}"
+                        {% if filter_value.active %}checked{% endif %}
+                        onchange="this.form.submit()"
+                      >
+                      <span class="filter-checkbox__box"></span>
+                      <span class="filter-checkbox__label">
+                        {{ filter_value.label }}
+                        <span class="filter-checkbox__count">({{ filter_value.count }})</span>
+                      </span>
+                    </label>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endfor -%}
+        </aside>
+      {%- endif -%}
+
+      <!-- Products -->
+      <div class="collection-products">
+        <div class="collection-toolbar">
+          <p class="collection-toolbar__count">
+            {{ collection.products_count }}
+            {{ 'collections.products_count' | t: count: collection.products_count }}
+          </p>
+
+          <div class="collection-toolbar__sort">
+            {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+            <label for="sort-by" class="visually-hidden">{{ 'collections.sort_by' | t }}</label>
+            <select id="sort-by" name="sort_by" class="sort-select" onchange="window.location = '?sort_by=' + this.value">
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>
+                  {{ option.name }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        </div>
+
+        {%- if collection.products.size > 0 -%}
+          <div class="product-grid">
+            {%- paginate collection.products by settings.collection_products_per_page -%}
+              {%- for product in collection.products -%}
+                {% render 'product-card', product: product %}
+              {%- endfor -%}
+            {%- endpaginate -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="pagination" aria-label="Pagination">
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}" class="pagination__btn btn btn-ghost btn--sm">← Previous</a>
+              {%- endif -%}
+              <span class="pagination__info">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}" class="pagination__btn btn btn-ghost btn--sm">Next →</a>
+              {%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <p class="collection-empty">{{ 'collections.no_results' | t }}</p>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "default": true,
+      "label": "Show filters sidebar"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .collection-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .collection-header__desc {
+    margin-top: var(--space-3);
+    font-size: var(--text-base);
+    color: var(--muted);
+    max-width: 600px;
+  }
+
+  .collection-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  /* Filters */
+  .collection-filters__heading {
+    margin-bottom: var(--space-6);
+  }
+
+  .filter-group {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-4);
+  }
+
+  .filter-group__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: var(--space-3);
+  }
+
+  .filter-group__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
+  }
+
+  .filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    font-size: var(--text-sm);
+  }
+
+  .filter-checkbox__box {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    transition: border-color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .filter-checkbox__input:checked ~ .filter-checkbox__box {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .filter-checkbox__count {
+    color: var(--muted);
+    font-size: var(--text-xs);
+  }
+
+  /* Toolbar */
+  .collection-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+  }
+
+  .collection-toolbar__count {
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+
+  .sort-select {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+  }
+
+  .sort-select:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-12);
+  }
+
+  .pagination__info {
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+
+  .collection-empty {
+    font-size: var(--text-base);
+    color: var(--muted);
+    padding-block: var(--space-12);
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .collection-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .collection-filters {
+      display: none;
+    }
+  }
+</style>

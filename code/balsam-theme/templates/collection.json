@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main-collection": {
+      "type": "main-collection",
+      "settings": {
+        "show_filters": true
+      }
+    }
+  },
+  "order": [
+    "main-collection"
+  ]
+}

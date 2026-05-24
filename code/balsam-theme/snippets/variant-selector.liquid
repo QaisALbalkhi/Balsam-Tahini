@@ -1,0 +1,207 @@
+{% comment %}
+  Renders the variant selector card grid.
+  Usage: {% render 'variant-selector', product: product %}
+{% endcomment %}
+
+<div class="variant-selector" data-product-id="{{ product.id }}">
+  {%- for option in product.options_with_values -%}
+    <div class="variant-option">
+      <p class="variant-option__label eyebrow">{{ option.name }}</p>
+
+      {%- if option.name == 'Size' or option.name == 'Weight' -%}
+        <!-- Card-style picker for size/weight -->
+        <div class="variant-cards">
+          {%- for value in option.values -%}
+            {%- assign variant_for_value = nil -%}
+            {%- for variant in product.variants -%}
+              {%- if variant.option1 == value or variant.option2 == value or variant.option3 == value -%}
+                {%- assign variant_for_value = variant -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            <label
+              class="variant-card{% if product.selected_or_first_available_variant.title contains value %} variant-card--selected{% endif %}{% unless variant_for_value.available %} variant-card--unavailable{% endunless %}"
+              for="variant-{{ product.id }}-{{ option.position }}-{{ forloop.index }}"
+            >
+              <!-- Badges -->
+              {%- if variant_for_value.metafields.custom.badge == 'most_loved' -%}
+                <span class="variant-card__badge variant-card__badge--loved">MOST LOVED</span>
+              {%- elsif variant_for_value.metafields.custom.badge == 'bulk' -%}
+                <span class="variant-card__badge variant-card__badge--bulk">BULK -60%</span>
+              {%- endif -%}
+
+              <input
+                type="radio"
+                class="visually-hidden"
+                id="variant-{{ product.id }}-{{ option.position }}-{{ forloop.index }}"
+                name="options[{{ option.name | escape }}]"
+                value="{{ value | escape }}"
+                {% if product.selected_or_first_available_variant.title contains value %}checked{% endif %}
+                {% unless variant_for_value.available %}disabled{% endunless %}
+              >
+
+              {%- if variant_for_value.metafields.custom.color -%}
+                <span
+                  class="variant-card__swatch"
+                  style="background-color: {{ variant_for_value.metafields.custom.color }}"
+                  aria-hidden="true"
+                ></span>
+              {%- endif -%}
+
+              <span class="variant-card__value">{{ value }}</span>
+
+              {%- if variant_for_value -%}
+                <span class="variant-card__price">{{ variant_for_value.price | money }}</span>
+              {%- endif -%}
+            </label>
+          {%- endfor -%}
+        </div>
+
+      {%- else -%}
+        <!-- Pill-style picker for other options (e.g. Color) -->
+        <div class="variant-pills">
+          {%- for value in option.values -%}
+            <label
+              class="variant-pill{% if product.selected_or_first_available_variant.title contains value %} variant-pill--selected{% endif %}"
+              for="variant-pill-{{ product.id }}-{{ option.position }}-{{ forloop.index }}"
+            >
+              <input
+                type="radio"
+                class="visually-hidden"
+                id="variant-pill-{{ product.id }}-{{ option.position }}-{{ forloop.index }}"
+                name="options[{{ option.name | escape }}]"
+                value="{{ value | escape }}"
+                {% if product.selected_or_first_available_variant.title contains value %}checked{% endif %}
+              >
+              {{ value }}
+            </label>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>
+
+<style>
+  .variant-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .variant-option__label {
+    margin-bottom: var(--space-3);
+  }
+
+  /* Card picker */
+  .variant-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .variant-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 140px;
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .variant-card:hover {
+    border-color: var(--fg-2);
+  }
+
+  .variant-card--selected {
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+
+  .variant-card--unavailable {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Badges */
+  .variant-card__badge {
+    position: absolute;
+    top: -10px;
+    right: var(--space-3);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-pill);
+    line-height: 1.6;
+  }
+
+  .variant-card__badge--loved {
+    background-color: var(--accent);
+    color: var(--accent-on);
+  }
+
+  .variant-card__badge--bulk {
+    background-color: var(--fg);
+    color: var(--surface);
+  }
+
+  .variant-card__swatch {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .variant-card__value {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  .variant-card__price {
+    font-size: var(--text-sm);
+    color: var(--muted);
+  }
+
+  /* Pill picker */
+  .variant-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .variant-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg-2);
+    background-color: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+  }
+
+  .variant-pill:hover {
+    border-color: var(--fg-2);
+    color: var(--fg);
+  }
+
+  .variant-pill--selected {
+    border-color: var(--accent);
+    border-width: 2px;
+    color: var(--accent);
+  }
+</style>

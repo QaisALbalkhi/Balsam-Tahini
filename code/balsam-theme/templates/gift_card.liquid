@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Gift Card | {{ shop.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  {{ 'balsam-tokens.css' | asset_url | stylesheet_tag }}
+  {{ 'balsam-base.css' | asset_url | stylesheet_tag }}
+</head>
+<body style="background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:var(--space-8)">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-12);max-width:480px;width:100%;text-align:center;box-shadow:var(--elev-raised)">
+
+    <p class="eyebrow" style="color:var(--accent);margin-bottom:var(--space-4)">{{ shop.name }}</p>
+    <h1 class="section-title" style="margin-bottom:var(--space-6)">Your Gift Card</h1>
+
+    {%- if gift_card.expired or gift_card.enabled == false -%}
+      <p style="color:var(--danger);font-size:var(--text-sm);font-weight:600;margin-bottom:var(--space-6)">This gift card has expired or been disabled.</p>
+    {%- endif -%}
+
+    <div style="background:var(--surface-warm);border-radius:var(--radius-md);padding:var(--space-6);margin-bottom:var(--space-6)">
+      <p style="font-size:var(--text-sm);color:var(--muted);margin-bottom:var(--space-2)">Balance</p>
+      <p style="font-size:var(--text-4xl);font-weight:700;color:var(--fg);font-family:var(--font-display)">{{ gift_card.balance | money }}</p>
+    </div>
+
+    <div style="background:var(--border-soft);border-radius:var(--radius-sm);padding:var(--space-4);margin-bottom:var(--space-6)">
+      <p style="font-size:var(--text-xs);color:var(--muted);margin-bottom:var(--space-2)">Gift card code</p>
+      <p id="gift-card-code" style="font-family:var(--font-mono);font-size:var(--text-lg);font-weight:600;letter-spacing:0.1em;color:var(--fg)">{{ gift_card.code | format_code }}</p>
+    </div>
+
+    {%- if gift_card.pass_url -%}
+      <a href="{{ gift_card.pass_url }}" class="btn btn-primary btn--full" style="margin-bottom:var(--space-4)">Add to Apple Wallet</a>
+    {%- endif -%}
+
+    <a href="{{ shop.url }}" class="btn btn-ghost btn--full">Continue shopping</a>
+
+  </div>
+  {{ 'balsam-theme.js' | asset_url | script_tag }}
+</body>
+</html>

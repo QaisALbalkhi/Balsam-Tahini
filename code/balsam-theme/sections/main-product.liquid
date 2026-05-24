@@ -1,0 +1,317 @@
+<section class="main-product section" id="product-{{ product.id }}">
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb__list" role="list">
+        <li><a href="{{ routes.root_url }}" class="breadcrumb__link">Home</a></li>
+        <li aria-hidden="true" class="breadcrumb__sep">/</li>
+        {%- if collection -%}
+          <li><a href="{{ collection.url }}" class="breadcrumb__link">{{ collection.title }}</a></li>
+          <li aria-hidden="true" class="breadcrumb__sep">/</li>
+        {%- endif -%}
+        <li aria-current="page" class="breadcrumb__current">{{ product.title }}</li>
+      </ol>
+    </nav>
+
+    <div class="product-layout">
+
+      <!-- Media column -->
+      <div class="product-layout__media">
+        <div class="product-media">
+          {%- assign featured = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+          {%- if featured -%}
+            <img
+              id="product-featured-image"
+              src="{{ featured | image_url: width: 900 }}"
+              srcset="
+                {{ featured | image_url: width: 450 }} 450w,
+                {{ featured | image_url: width: 900 }} 900w
+              "
+              sizes="(max-width: 767px) 100vw, 50vw"
+              alt="{{ featured.alt | default: product.title | escape }}"
+              width="900"
+              height="900"
+              loading="eager"
+              class="product-media__main"
+            >
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'product-media__placeholder' }}
+          {%- endif -%}
+
+          {%- if product.variants.first.sku != blank -%}
+            <span class="product-media__batch eyebrow">Batch {{ product.variants.first.sku }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- if product.images.size > 1 -%}
+          <div class="product-thumbnails">
+            {%- for image in product.images limit: 5 -%}
+              <button
+                class="product-thumbnail{% if forloop.first %} product-thumbnail--active{% endif %}"
+                type="button"
+                aria-label="{{ image.alt | default: product.title | escape }}"
+                data-image-src="{{ image | image_url: width: 900 }}"
+              >
+                <img
+                  src="{{ image | image_url: width: 120 }}"
+                  alt="{{ image.alt | default: product.title | escape }}"
+                  width="120"
+                  height="120"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Details column -->
+      <div class="product-layout__details">
+
+        {%- if settings.show_stock_badge -%}
+          {%- render 'status-badge', type: 'in_stock', ships_in: settings.ships_in_text -%}
+        {%- endif -%}
+
+        <h1 class="product-name">{{ product.title }}</h1>
+
+        <!-- Review strip -->
+        <div class="review-strip">
+          <span class="stars" aria-hidden="true">
+            {%- for i in (1..5) -%}★{%- endfor -%}
+          </span>
+          <span class="review-strip__count">{{ product.metafields.reviews.rating_count | default: 0 }} reviews</span>
+          <span class="review-strip__verified eyebrow">{{ 'products.verified_by' | t }}</span>
+        </div>
+
+        <!-- Price -->
+        {%- render 'price', product: product, variant: product.selected_or_first_available_variant -%}
+
+        <hr class="divider">
+
+        <!-- Variant selector -->
+        {%- unless product.has_only_default_variant -%}
+          {%- render 'variant-selector', product: product -%}
+        {%- endunless -%}
+
+        <!-- Add to cart form -->
+        {%- form 'product', product, class: 'product-form', id: 'product-form' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+          <div class="product-form__qty-row">
+            {%- render 'quantity-stepper' -%}
+
+            <button
+              type="submit"
+              class="btn btn-primary product-form__atc{% unless product.selected_or_first_available_variant.available %} btn--disabled{% endunless %}"
+              {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+            >
+              {%- if product.selected_or_first_available_variant.available -%}
+                {{ 'products.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'products.sold_out' | t }}
+              {%- endif -%}
+            </button>
+          </div>
+        {%- endform -%}
+
+        <!-- Description -->
+        {%- if product.description != blank -%}
+          <div class="product-description">
+            {{ product.description }}
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .breadcrumb {
+    margin-bottom: var(--space-8);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    font-size: var(--text-xs);
+    color: var(--muted);
+  }
+
+  .breadcrumb__link {
+    color: var(--muted);
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--fg);
+  }
+
+  .breadcrumb__current {
+    color: var(--fg-2);
+    font-weight: 600;
+  }
+
+  /* Layout */
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  /* Media */
+  .product-media {
+    position: relative;
+  }
+
+  .product-media__main {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+
+  .product-media__placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-lg);
+    background-color: var(--border-soft);
+  }
+
+  .product-media__batch {
+    position: absolute;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    background-color: var(--surface-warm);
+    color: var(--fg);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+  }
+
+  .product-thumbnails {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .product-thumbnail {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color var(--motion-fast) var(--ease-standard);
+    background: none;
+    padding: 0;
+  }
+
+  .product-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-thumbnail--active,
+  .product-thumbnail:hover {
+    border-color: var(--accent);
+  }
+
+  /* Details column */
+  .product-layout__details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  /* Review strip */
+  .review-strip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .review-strip__count {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg-2);
+  }
+
+  .review-strip__verified {
+    padding: var(--space-1) var(--space-2);
+    background-color: var(--border-soft);
+    border-radius: var(--radius-pill);
+  }
+
+  /* Form */
+  .product-form__qty-row {
+    display: flex;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .product-form__atc {
+    flex: 1;
+  }
+
+  .btn--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Description */
+  .product-description {
+    font-size: var(--text-base);
+    color: var(--fg-2);
+    line-height: var(--leading-body);
+  }
+
+  .product-description p + p {
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 767px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const mainImg = document.getElementById('product-featured-image');
+    if (!mainImg) return;
+
+    document.querySelectorAll('.product-thumbnail').forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        document.querySelectorAll('.product-thumbnail').forEach((t) => t.classList.remove('product-thumbnail--active'));
+        thumb.classList.add('product-thumbnail--active');
+        const src = thumb.dataset.imageSrc;
+        if (src) mainImg.src = src;
+      });
+    });
+  })();
+</script>

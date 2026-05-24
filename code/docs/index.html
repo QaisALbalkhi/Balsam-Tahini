@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Balsam Theme Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/balsam-tokens.css">
+  <link rel="stylesheet" href="assets/balsam-base.css">
+  <style>
+    /* ── Preview nav ──────────────────────────────────────────── */
+    .preview-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: #111;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 10px 24px;
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+      flex-wrap: wrap;
+    }
+    .preview-nav strong { color: #52B788; letter-spacing: .05em; }
+    .preview-nav a { color: rgba(255,255,255,.6); text-decoration: none; }
+    .preview-nav a:hover { color: #fff; }
+    body { padding-top: 42px; }
+
+    /* ── Section label strips ─────────────────────────────────── */
+    .preview-label {
+      background: #f0f0f0;
+      border-top: 2px solid #ddd;
+      padding: 6px 24px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      color: #888;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- Preview navigation bar -->
+<nav class="preview-nav">
+  <strong>BALSAM THEME PREVIEW</strong>
+  <a href="#announcement">Announcement</a>
+  <a href="#header">Header</a>
+  <a href="#hero">Hero</a>
+  <a href="#products">Products</a>
+  <a href="#editorial">Editorial Band</a>
+  <a href="#pdp">PDP</a>
+  <a href="#collection">Collection</a>
+  <a href="#cart">Cart</a>
+  <a href="#blog">Blog / Recipes</a>
+  <a href="#article">Article</a>
+  <a href="#tokens">Tokens</a>
+  <a href="#footer">Footer</a>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════
+     ANNOUNCEMENT BAR
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="announcement">announcement-bar.liquid</div>
+<div class="announcement-bar" role="region" aria-label="Announcement">
+  <div class="announcement-bar__inner container">
+    <p class="announcement-bar__text">
+      Free shipping on orders over $100 · Made with love in Canada
+      &nbsp;<a href="#" class="announcement-bar__link">Shop now →</a>
+    </p>
+    <button class="announcement-bar__close" type="button" aria-label="Dismiss">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+<style>
+  .announcement-bar { background-color: var(--accent); color: var(--accent-on); padding-block: var(--space-3); }
+  .announcement-bar__inner { display: flex; align-items: center; justify-content: center; gap: var(--space-4); position: relative; }
+  .announcement-bar__text { font-size: var(--text-sm); font-weight: 600; text-align: center; }
+  .announcement-bar__link { text-decoration: underline; text-underline-offset: 2px; }
+  .announcement-bar__close { position: absolute; right: 0; background: none; border: none; color: var(--accent-on); cursor: pointer; padding: var(--space-1); display: flex; align-items: center; justify-content: center; opacity: .7; }
+  .announcement-bar__close:hover { opacity: 1; }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="header">header.liquid</div>
+<header class="site-header site-header--scrolled" id="site-header">
+  <div class="header__inner container">
+    <a href="#" class="header__logo">
+      <span class="header__logo-text">Balsam Tahini</span>
+    </a>
+    <nav class="header__nav" aria-label="Main navigation">
+      <ul class="header__nav-list" role="list">
+        <li><a href="#" class="header__nav-link">Shop</a></li>
+        <li><a href="#" class="header__nav-link header__nav-link--active">Products</a></li>
+        <li><a href="#" class="header__nav-link">Recipes</a></li>
+        <li><a href="#" class="header__nav-link">Our Story</a></li>
+      </ul>
+    </nav>
+    <div class="header__utils">
+      <a href="#" class="header__icon-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+      <a href="#" class="header__icon-btn" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+      <a href="#" class="header__icon-btn header__cart-btn" aria-label="Cart (2)">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 2h2l2.4 9.39A2 2 0 0 0 8.34 13h7.32a2 2 0 0 0 1.94-1.51L19 6H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="17" r="1" fill="currentColor"/><circle cx="16" cy="17" r="1" fill="currentColor"/></svg>
+        <span class="header__cart-badge">2</span>
+      </a>
+    </div>
+  </div>
+</header>
+<style>
+  .site-header { background-color: var(--surface); border-bottom: 1px solid var(--border-soft); }
+  .site-header--scrolled { box-shadow: var(--elev-raised); }
+  .header__inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 72px; gap: var(--space-6); }
+  .header__logo { justify-self: start; display: flex; align-items: center; }
+  .header__logo-text { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: var(--fg); letter-spacing: var(--tracking-display); }
+  .header__nav { justify-self: center; }
+  .header__nav-list { display: flex; align-items: center; gap: var(--space-6); list-style: none; }
+  .header__nav-link { font-size: var(--text-sm); font-weight: 600; color: var(--fg-2); text-decoration: none; padding-block: var(--space-2); position: relative; }
+  .header__nav-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: var(--accent); transition: width var(--motion-fast) var(--ease-standard); }
+  .header__nav-link:hover::after, .header__nav-link--active::after { width: 100%; }
+  .header__nav-link:hover, .header__nav-link--active { color: var(--fg); }
+  .header__utils { justify-self: end; display: flex; align-items: center; gap: var(--space-3); }
+  .header__icon-btn { position: relative; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; color: var(--fg-2); border-radius: var(--radius-sm); transition: color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard); }
+  .header__icon-btn:hover { color: var(--fg); background-color: var(--border-soft); }
+  .header__cart-badge { position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px; padding-inline: 4px; background-color: var(--accent); color: var(--accent-on); font-size: 10px; font-weight: 700; line-height: 18px; text-align: center; border-radius: var(--radius-pill); }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HERO BANNER
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="hero">hero-banner.liquid</div>
+<section class="hero-preview section">
+  <div class="container">
+    <div class="hero-preview__content">
+      <p class="eyebrow" style="color:var(--accent)">New Arrival</p>
+      <h1 class="display">Natural Tahini, <em>Thoughtfully Made</em></h1>
+      <p style="font-size:var(--text-lg);color:var(--fg-2);max-width:480px;line-height:var(--leading-body)">Stone-ground from the finest sesame seeds. No additives, no shortcuts.</p>
+      <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-2)">
+        <a href="#" class="btn btn-primary">Shop Tahini</a>
+        <a href="#" class="btn btn-ghost">Our Story</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" style="background:linear-gradient(135deg,var(--accent) 0%,#2D6A4F 100%);padding:60px 0">
+  <div class="container">
+    <div style="display:flex;flex-direction:column;gap:var(--space-6);max-width:540px">
+      <p class="eyebrow" style="color:rgba(255,255,255,.6)">Limited Batch</p>
+      <h2 class="display" style="color:#fff">Walnut Butter <em>Spread</em></h2>
+      <p style="font-size:var(--text-lg);color:rgba(255,255,255,.8);line-height:var(--leading-body)">Rich, roasted walnuts stone-ground into a silky spread.</p>
+      <a href="#" class="btn" style="background:var(--surface-warm);color:var(--fg);width:fit-content">Shop now →</a>
+    </div>
+  </div>
+</section>
+<style>
+  .hero-preview { background-color: var(--bg); }
+  .hero-preview__content { display: flex; flex-direction: column; gap: var(--space-6); max-width: 600px; }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PRODUCT CARDS (Featured Products)
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="products">featured-products.liquid + product-card snippet</div>
+<section class="section">
+  <div class="container">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-8)">
+      <h2 class="section-title">Our Products</h2>
+      <a href="#" style="font-size:var(--text-sm);font-weight:600;color:var(--accent)">View all products →</a>
+    </div>
+    <div class="product-grid">
+
+      <!-- Card 1 — sale + Most Loved badge -->
+      <article class="product-card">
+        <div class="product-card__image-wrap" style="background:var(--surface-warm);display:flex;align-items:center;justify-content:center">
+          <div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#e8e0d0 0%,#c8b898 100%);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:48px">🫙</span>
+          </div>
+          <button class="product-card__wishlist" type="button" aria-pressed="false">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a>
+        </div>
+        <div class="product-card__body">
+          <span class="badge product-card__badge" style="background:var(--warn);color:var(--surface)">Save 20%</span>
+          <a href="#" class="product-card__name">Classic Sesame Tahini</a>
+          <div class="price price--card">
+            <span class="price__sale">$24.00</span>
+            <s class="price__compare">$30.00</s>
+          </div>
+          <div class="product-card__rating">
+            <span class="stars">★★★★★</span>
+            <span class="product-card__review-count">142</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 — regular price -->
+      <article class="product-card">
+        <div class="product-card__image-wrap">
+          <div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#d4e8d8 0%,#a8c8b0 100%);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:48px">🌰</span>
+          </div>
+          <button class="product-card__wishlist product-card__wishlist--active" type="button" aria-pressed="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="var(--accent)" fill="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a>
+        </div>
+        <div class="product-card__body">
+          <a href="#" class="product-card__name">Walnut Butter Spread</a>
+          <div class="price price--card">
+            <span class="price__regular">$34.00</span>
+          </div>
+          <div class="product-card__rating">
+            <span class="stars">★★★★★</span>
+            <span class="product-card__review-count">89</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 — bulk badge -->
+      <article class="product-card">
+        <div class="product-card__image-wrap">
+          <div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#e8d8c4 0%,#c8a880 100%);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:48px">📦</span>
+          </div>
+          <button class="product-card__wishlist" type="button" aria-pressed="false">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a>
+        </div>
+        <div class="product-card__body">
+          <span class="badge product-card__badge" style="background:var(--fg);color:var(--surface)">Bulk -60%</span>
+          <a href="#" class="product-card__name">Sesame Tahini — Bulk Case</a>
+          <div class="price price--card">
+            <span class="price__sale">$89.00</span>
+            <s class="price__compare">$222.00</s>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="product-card">
+        <div class="product-card__image-wrap">
+          <div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#f0e8d8 0%,#d8c8a8 100%);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:48px">🫒</span>
+          </div>
+          <button class="product-card__wishlist" type="button" aria-pressed="false">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a>
+        </div>
+        <div class="product-card__body">
+          <a href="#" class="product-card__name">Black Sesame Tahini</a>
+          <div class="price price--card">
+            <span class="price__regular">$28.00</span>
+          </div>
+          <div class="product-card__rating">
+            <span class="stars">★★★★☆</span>
+            <span class="product-card__review-count">37</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+<style>
+  .product-card { display: flex; flex-direction: column; background-color: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; transition: box-shadow var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard); }
+  .product-card:hover { box-shadow: var(--elev-raised); transform: translateY(-2px); }
+  .product-card__image-wrap { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background-color: var(--border-soft); }
+  .product-card__image-wrap > div { width: 100%; height: 100%; }
+  .product-card__wishlist { position: absolute; top: var(--space-3); right: var(--space-3); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-pill); color: var(--muted); cursor: pointer; transition: color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard); }
+  .product-card__wishlist:hover, .product-card__wishlist--active { color: var(--accent); border-color: var(--accent); }
+  .product-card__hover-atc { position: absolute; bottom: var(--space-3); left: var(--space-3); right: var(--space-3); opacity: 0; transform: translateY(4px); transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard); }
+  .product-card:hover .product-card__hover-atc { opacity: 1; transform: translateY(0); }
+  .product-card__body { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+  .product-card__name { font-size: var(--text-base); font-weight: 600; color: var(--fg); line-height: 1.3; }
+  .product-card__name:hover { color: var(--accent); }
+  .product-card__badge { align-self: flex-start; }
+  .product-card__rating { display: flex; align-items: center; gap: var(--space-1); font-size: var(--text-xs); color: var(--muted); }
+  .price--card { display: flex; align-items: baseline; gap: var(--space-2); }
+  .price__sale { font-size: var(--text-sm); font-weight: 700; color: var(--fg); }
+  .price__compare { font-size: var(--text-xs); color: var(--muted); text-decoration: line-through; }
+  .price__regular { font-size: var(--text-sm); font-weight: 700; color: var(--fg); }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════
+     EDITORIAL BAND
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="editorial">editorial-band.liquid</div>
+<section class="section section--cream">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-12);align-items:center">
+      <div style="background:linear-gradient(135deg,#2D6A4F,#1B4332);border-radius:var(--radius-lg);height:420px;display:flex;align-items:center;justify-content:center">
+        <span style="font-size:96px">🫙</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+        <p class="eyebrow">Our Process</p>
+        <h2 class="section-title">Why Balsam <em style="font-style:italic">Tahini?</em></h2>
+        <p style="font-size:var(--text-lg);color:var(--fg-2);line-height:var(--leading-body)">Stone-ground in small batches from premium sesame seeds. No preservatives, no additives. Just pure, natural tahini the way it was meant to be.</p>
+        <a href="#" class="btn btn-primary" style="width:fit-content">Our story</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PRODUCT DETAIL PAGE
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="pdp">main-product.liquid — PDP</div>
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumb" style="margin-bottom:var(--space-8)">
+      <ol style="display:flex;align-items:center;gap:var(--space-2);list-style:none;font-size:var(--text-xs);color:var(--muted)">
+        <li><a href="#" style="color:var(--muted)">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="#" style="color:var(--muted)">Products</a></li>
+        <li aria-hidden="true">/</li>
+        <li style="color:var(--fg-2);font-weight:600">Classic Sesame Tahini</li>
+      </ol>
+    </nav>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-12);align-items:start">
+      <!-- Image col -->
+      <div>
+        <div style="position:relative">
+          <div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#e8e0d0,#c8b898);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center">
+            <span style="font-size:128px">🫙</span>
+          </div>
+          <span style="position:absolute;bottom:var(--space-4);left:var(--space-4);background:var(--surface-warm);color:var(--fg);padding:var(--space-1) var(--space-3);border-radius:var(--radius-pill);font-family:var(--font-mono);font-size:var(--text-xs);font-weight:500;letter-spacing:.07em;text-transform:uppercase">Batch #2024-03</span>
+        </div>
+        <div style="display:flex;gap:var(--space-2);margin-top:var(--space-3)">
+          <div style="width:72px;height:72px;border-radius:var(--radius-sm);border:2px solid var(--accent);overflow:hidden;background:linear-gradient(135deg,#e8e0d0,#c8b898);display:flex;align-items:center;justify-content:center"><span>🫙</span></div>
+          <div style="width:72px;height:72px;border-radius:var(--radius-sm);border:1.5px solid var(--border);overflow:hidden;background:linear-gradient(135deg,#d4e8d8,#a8c8b0);display:flex;align-items:center;justify-content:center"><span>🌰</span></div>
+          <div style="width:72px;height:72px;border-radius:var(--radius-sm);border:1.5px solid var(--border);overflow:hidden;background:linear-gradient(135deg,#2d2d2d,#555);display:flex;align-items:center;justify-content:center"><span>🖤</span></div>
+        </div>
+      </div>
+
+      <!-- Details col -->
+      <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+        <!-- Status badge -->
+        <span class="status-badge status-badge--in-stock">
+          <span class="status-badge__dot"></span>
+          <span class="status-badge__label">IN STOCK</span>
+          <span class="status-badge__ships" style="color:var(--muted)">· SHIPS IN 24H</span>
+        </span>
+
+        <h1 class="product-name">Classic Sesame <em>Tahini</em></h1>
+
+        <!-- Review strip -->
+        <div style="display:flex;align-items:center;gap:var(--space-3)">
+          <span class="stars" style="color:var(--warn)">★★★★★</span>
+          <span style="font-size:var(--text-sm);font-weight:600;color:var(--fg-2)">142 reviews</span>
+          <span style="padding:var(--space-1) var(--space-2);background:var(--border-soft);border-radius:var(--radius-pill);font-family:var(--font-mono);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)">Verified by Shop</span>
+        </div>
+
+        <!-- Price -->
+        <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+          <div style="display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap">
+            <span style="font-size:28px;font-weight:700;color:var(--fg)">$24.00</span>
+            <s style="font-size:var(--text-lg);color:var(--muted)">$30.00</s>
+            <span class="badge" style="background:var(--warn);color:var(--surface);border-radius:var(--radius-sm)">SAVE 20%</span>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--muted)">Or 4 payments of $6.00 with <strong style="color:var(--fg-2)">Shop Pay</strong> · interest-free</p>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Variant selector -->
+        <div>
+          <p class="eyebrow" style="margin-bottom:var(--space-3)">Size</p>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--space-3)">
+            <label style="position:relative;display:flex;flex-direction:column;gap:var(--space-1);min-width:140px;padding:var(--space-3) var(--space-4);background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius-md);cursor:pointer">
+              <span style="position:absolute;top:-10px;right:var(--space-3);background:var(--accent);color:var(--accent-on);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:var(--radius-pill)">MOST LOVED</span>
+              <span style="font-size:var(--text-base);font-weight:600;color:var(--fg)">500g</span>
+              <span style="font-size:var(--text-sm);color:var(--muted)">$24.00</span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:var(--space-1);min-width:140px;padding:var(--space-3) var(--space-4);background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer">
+              <span style="font-size:var(--text-base);font-weight:600;color:var(--fg)">1kg</span>
+              <span style="font-size:var(--text-sm);color:var(--muted)">$42.00</span>
+            </label>
+            <label style="position:relative;display:flex;flex-direction:column;gap:var(--space-1);min-width:140px;padding:var(--space-3) var(--space-4);background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-md);cursor:pointer">
+              <span style="position:absolute;top:-10px;right:var(--space-3);background:var(--fg);color:var(--surface);font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:var(--radius-pill)">BULK -60%</span>
+              <span style="font-size:var(--text-base);font-weight:600;color:var(--fg)">5kg Case</span>
+              <span style="font-size:var(--text-sm);color:var(--muted)">$89.00</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Qty + ATC -->
+        <div style="display:flex;gap:var(--space-4);align-items:stretch">
+          <div class="qty-stepper">
+            <button type="button" class="qty-stepper__btn" data-qty-dec disabled>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <input type="number" class="qty-stepper__input" value="1" min="1">
+            <button type="button" class="qty-stepper__btn" data-qty-inc>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <button type="button" class="btn btn-primary" style="flex:1">Add to Cart</button>
+        </div>
+
+        <p style="font-size:var(--text-base);color:var(--fg-2);line-height:var(--leading-body)">Stone-ground from premium Ethiopian sesame seeds. No oil separation, no additives, no preservatives. Just pure tahini with a naturally creamy texture and rich, nutty flavour.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .status-badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 500; letter-spacing: .07em; text-transform: uppercase; line-height: 1; }
+  .status-badge--in-stock { background-color: var(--surface-warm); color: var(--fg); }
+  .status-badge__dot { display: inline-block; width: 8px; height: 8px; background-color: var(--success); border-radius: var(--radius-pill); flex-shrink: 0; }
+  .qty-stepper { display: inline-flex; align-items: center; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background-color: var(--surface); overflow: hidden; height: 52px; }
+  .qty-stepper__btn { display: flex; align-items: center; justify-content: center; width: 44px; height: 100%; background: none; border: none; color: var(--fg-2); cursor: pointer; flex-shrink: 0; }
+  .qty-stepper__btn:hover:not(:disabled) { color: var(--fg); background-color: var(--border-soft); }
+  .qty-stepper__btn:disabled { opacity: .35; cursor: not-allowed; }
+  .qty-stepper__input { width: 52px; height: 100%; border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border); text-align: center; font-size: var(--text-base); font-weight: 600; color: var(--fg); background: none; -moz-appearance: textfield; appearance: textfield; }
+  .qty-stepper__input::-webkit-outer-spin-button, .qty-stepper__input::-webkit-inner-spin-button { -webkit-appearance: none; }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════════
+     COLLECTION PAGE
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="collection">main-collection.liquid</div>
+<section class="section">
+  <div class="container">
+    <div style="margin-bottom:var(--space-8)">
+      <h1 class="section-title">All Products</h1>
+      <p style="margin-top:var(--space-3);font-size:var(--text-base);color:var(--muted)">Artisan tahini and nut butters, stone-ground in small batches.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:var(--space-8);align-items:start">
+      <!-- Filters -->
+      <aside>
+        <p class="eyebrow" style="margin-bottom:var(--space-6)">Filter</p>
+        <div style="border-top:1px solid var(--border);padding-block:var(--space-4)">
+          <p style="font-size:var(--text-sm);font-weight:600;color:var(--fg);margin-bottom:var(--space-3)">Product Type</p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);cursor:pointer">
+              <span style="width:16px;height:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);flex-shrink:0"></span>
+              Sesame Tahini <span style="color:var(--muted);font-size:var(--text-xs)">(12)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);cursor:pointer">
+              <span style="width:16px;height:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);flex-shrink:0;background:var(--accent)"></span>
+              Nut Butters <span style="color:var(--muted);font-size:var(--text-xs)">(5)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);cursor:pointer">
+              <span style="width:16px;height:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);flex-shrink:0"></span>
+              Bundles <span style="color:var(--muted);font-size:var(--text-xs)">(3)</span>
+            </label>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-block:var(--space-4)">
+          <p style="font-size:var(--text-sm);font-weight:600;color:var(--fg);margin-bottom:var(--space-3)">Size</p>
+          <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);cursor:pointer">
+              <span style="width:16px;height:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);flex-shrink:0"></span>
+              500g <span style="color:var(--muted);font-size:var(--text-xs)">(8)</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);cursor:pointer">
+              <span style="width:16px;height:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);flex-shrink:0"></span>
+              1kg <span style="color:var(--muted);font-size:var(--text-xs)">(6)</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+      <!-- Grid (reuses cards from above) -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-6)">
+          <p style="font-size:var(--text-sm);color:var(--muted)">20 products</p>
+          <select style="font-size:var(--text-sm);font-weight:600;color:var(--fg);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-4)">
+            <option>Best selling</option><option>Price: low to high</option><option>Newest</option>
+          </select>
+        </div>
+        <div class="product-grid">
+          <article class="product-card"><div class="product-card__image-wrap"><div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#e8e0d0,#c8b898);display:flex;align-items:center;justify-content:center"><span style="font-size:48px">🫙</span></div><button class="product-card__wishlist"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a></div><div class="product-card__body"><a href="#" class="product-card__name">Classic Sesame Tahini</a><div class="price price--card"><span class="price__sale">$24.00</span><s class="price__compare">$30.00</s></div></div></article>
+          <article class="product-card"><div class="product-card__image-wrap"><div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#d4e8d8,#a8c8b0);display:flex;align-items:center;justify-content:center"><span style="font-size:48px">🌰</span></div><button class="product-card__wishlist"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a></div><div class="product-card__body"><a href="#" class="product-card__name">Walnut Butter Spread</a><div class="price price--card"><span class="price__regular">$34.00</span></div></div></article>
+          <article class="product-card"><div class="product-card__image-wrap"><div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#2d2d2d,#555);display:flex;align-items:center;justify-content:center"><span style="font-size:48px">🖤</span></div><button class="product-card__wishlist"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a></div><div class="product-card__body"><a href="#" class="product-card__name">Black Sesame Tahini</a><div class="price price--card"><span class="price__regular">$28.00</span></div></div></article>
+          <article class="product-card"><div class="product-card__image-wrap"><div style="width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,#e8d8c4,#c8a880);display:flex;align-items:center;justify-content:center"><span style="font-size:48px">📦</span></div><button class="product-card__wishlist"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 15.5S1.5 11 1.5 5.5A3.5 3.5 0 0 1 8 3.56 3.5 3.5 0 0 1 16.5 5.5C16.5 11 9 15.5 9 15.5z" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="#" class="product-card__hover-atc btn btn-ghost btn--sm">View product</a></div><div class="product-card__body"><span class="badge" style="background:var(--fg);color:var(--surface);align-self:flex-start">Bulk -60%</span><a href="#" class="product-card__name">Sesame Tahini Bulk</a><div class="price price--card"><span class="price__sale">$89.00</span><s class="price__compare">$222.00</s></div></div></article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CART
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="cart">main-cart.liquid</div>
+<section class="section">
+  <div class="container">
+    <h1 class="section-title" style="margin-bottom:var(--space-8)">Your Cart</h1>
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:var(--space-12);align-items:start">
+      <!-- Items -->
+      <div>
+        <div style="display:grid;grid-template-columns:80px 1fr auto auto auto;gap:var(--space-4);align-items:center;padding-block:var(--space-6);border-bottom:1px solid var(--border)">
+          <div style="width:80px;height:80px;border-radius:var(--radius-sm);border:1px solid var(--border);background:linear-gradient(135deg,#e8e0d0,#c8b898);display:flex;align-items:center;justify-content:center"><span style="font-size:32px">🫙</span></div>
+          <div><p style="font-weight:600;font-size:var(--text-sm)">Classic Sesame Tahini</p><p style="font-size:var(--text-xs);color:var(--muted);margin-top:4px">500g</p></div>
+          <div class="qty-stepper"><button type="button" class="qty-stepper__btn" data-qty-dec><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><input type="number" class="qty-stepper__input" value="2" min="1"><button type="button" class="qty-stepper__btn" data-qty-inc><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+          <span style="font-size:var(--text-sm);font-weight:700">$48.00</span>
+          <button style="background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:var(--radius-sm)" title="Remove"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 1fr auto auto auto;gap:var(--space-4);align-items:center;padding-block:var(--space-6);border-bottom:1px solid var(--border)">
+          <div style="width:80px;height:80px;border-radius:var(--radius-sm);border:1px solid var(--border);background:linear-gradient(135deg,#d4e8d8,#a8c8b0);display:flex;align-items:center;justify-content:center"><span style="font-size:32px">🌰</span></div>
+          <div><p style="font-weight:600;font-size:var(--text-sm)">Walnut Butter Spread</p><p style="font-size:var(--text-xs);color:var(--muted);margin-top:4px">250g</p></div>
+          <div class="qty-stepper"><button type="button" class="qty-stepper__btn" data-qty-dec><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><input type="number" class="qty-stepper__input" value="1" min="1"><button type="button" class="qty-stepper__btn" data-qty-inc><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+          <span style="font-size:var(--text-sm);font-weight:700">$34.00</span>
+          <button style="background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:var(--radius-sm)" title="Remove"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+      <!-- Summary -->
+      <div style="background:var(--surface-warm);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-4)">
+        <h2 class="subheading">Order Summary</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);font-weight:600"><span>Subtotal</span><span>$82.00</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);color:var(--muted)"><span>Shipping</span><span>Calculated at checkout</span></div>
+        </div>
+        <hr class="divider">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <span style="font-size:var(--text-base);font-weight:700">Total</span>
+          <span style="font-size:var(--text-xl);font-weight:700">$82.00</span>
+        </div>
+        <p style="font-size:var(--text-xs);color:var(--muted);text-align:center">Taxes and shipping calculated at checkout</p>
+        <button type="button" class="btn btn-primary btn--full">Check out</button>
+        <a href="#" style="display:block;text-align:center;font-size:var(--text-sm);font-weight:600;color:var(--accent);margin-top:var(--space-2)">← Continue shopping</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOG / RECIPES
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="blog">main-blog.liquid — Recipes page</div>
+<section class="section section--cream">
+  <div class="container">
+    <div style="margin-bottom:var(--space-8)">
+      <h1 class="section-title">Recipes</h1>
+      <p style="margin-top:var(--space-3);font-size:var(--text-lg);color:var(--muted);max-width:560px">Recipes, ideas, and ways to use our tahini in your kitchen.</p>
+    </div>
+    <div class="article-grid">
+      <article style="display:flex;flex-direction:column;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;transition:box-shadow var(--motion-base) var(--ease-standard),transform var(--motion-base) var(--ease-standard)">
+        <div style="height:220px;background:linear-gradient(135deg,#e8e0d0,#c8b898);display:flex;align-items:center;justify-content:center"><span style="font-size:72px">🥗</span></div>
+        <div style="padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3)">
+          <p class="eyebrow" style="color:var(--accent)">Dips · 5 min</p>
+          <h2 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;line-height:var(--leading-tight);letter-spacing:var(--tracking-display)"><a href="#" style="color:var(--fg)">Classic Hummus with Balsam Tahini</a></h2>
+          <p style="font-size:var(--text-sm);color:var(--muted);line-height:var(--leading-body)">The creamiest hummus starts with the best tahini. This 5-ingredient recipe will change your hummus game forever.</p>
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--muted)">
+            <span>May 1, 2024</span><span>·</span><span>5 min read</span>
+          </div>
+          <a href="#" style="font-size:var(--text-sm);font-weight:600;color:var(--accent)">Read recipe →</a>
+        </div>
+      </article>
+      <article style="display:flex;flex-direction:column;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">
+        <div style="height:220px;background:linear-gradient(135deg,#d4e8d8,#a8c8b0);display:flex;align-items:center;justify-content:center"><span style="font-size:72px">🥙</span></div>
+        <div style="padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3)">
+          <p class="eyebrow" style="color:var(--accent)">Sauces · 10 min</p>
+          <h2 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;line-height:var(--leading-tight);letter-spacing:var(--tracking-display)"><a href="#" style="color:var(--fg)">Tahini Sauce for <em>Everything</em></a></h2>
+          <p style="font-size:var(--text-sm);color:var(--muted);line-height:var(--leading-body)">Drizzle it over roasted vegetables, grilled proteins, or use it as a dip. One sauce, infinite uses.</p>
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--muted)">
+            <span>April 18, 2024</span><span>·</span><span>3 min read</span>
+          </div>
+          <a href="#" style="font-size:var(--text-sm);font-weight:600;color:var(--accent)">Read recipe →</a>
+        </div>
+      </article>
+      <article style="display:flex;flex-direction:column;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden">
+        <div style="height:220px;background:linear-gradient(135deg,#f5e8c8,#e0c88a);display:flex;align-items:center;justify-content:center"><span style="font-size:72px">🍪</span></div>
+        <div style="padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-3)">
+          <p class="eyebrow" style="color:var(--accent)">Baking · 30 min</p>
+          <h2 style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;line-height:var(--leading-tight);letter-spacing:var(--tracking-display)"><a href="#" style="color:var(--fg)">Tahini Chocolate Chip Cookies</a></h2>
+          <p style="font-size:var(--text-sm);color:var(--muted);line-height:var(--leading-body)">Nutty, rich, and perfectly chewy — tahini adds a whole new dimension to the classic chocolate chip cookie.</p>
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--muted)">
+            <span>March 22, 2024</span><span>·</span><span>8 min read</span>
+          </div>
+          <a href="#" style="font-size:var(--text-sm);font-weight:600;color:var(--accent)">Read recipe →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     ARTICLE / SINGLE RECIPE
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="article">main-article.liquid — Single recipe</div>
+<section class="section">
+  <div class="container">
+    <a href="#" style="display:inline-block;font-size:var(--text-sm);font-weight:600;color:var(--accent);margin-bottom:var(--space-6)">← Back to recipes</a>
+    <div style="width:100%;height:420px;background:linear-gradient(135deg,#e8e0d0,#c8b898);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;margin-bottom:var(--space-8)"><span style="font-size:128px">🥗</span></div>
+    <div style="max-width:720px">
+      <p class="eyebrow" style="color:var(--accent);margin-bottom:var(--space-4)">Dips · Vegetarian</p>
+      <h1 style="font-family:var(--font-display);font-size:var(--text-3xl);font-weight:700;line-height:var(--leading-tight);letter-spacing:var(--tracking-display);margin-bottom:var(--space-4)">Classic Hummus with Balsam <em>Tahini</em></h1>
+      <div style="display:flex;align-items:center;gap:var(--space-3);font-size:var(--text-sm);color:var(--muted);margin-bottom:var(--space-8)">
+        <span>By Nour Al-Hassan</span><span>·</span><span>May 1, 2024</span><span>·</span><span>5 min read</span>
+      </div>
+      <div style="font-size:var(--text-lg);color:var(--fg-2);line-height:var(--leading-body)">
+        <p>The secret to truly exceptional hummus? It starts with your tahini. A rich, nutty, well-emulsified tahini is the backbone of every great batch — and that's where Balsam comes in.</p>
+        <h2 style="font-family:var(--font-display);font-size:var(--text-2xl);font-weight:700;letter-spacing:var(--tracking-display);margin-block:var(--space-8) var(--space-4)">Ingredients</h2>
+        <ul style="padding-left:var(--space-6);display:flex;flex-direction:column;gap:var(--space-2)">
+          <li>1 can (400g) chickpeas, drained and rinsed</li>
+          <li>3 tablespoons Balsam Tahini</li>
+          <li>2 tablespoons fresh lemon juice</li>
+          <li>1 clove garlic, minced</li>
+          <li>Salt to taste</li>
+        </ul>
+        <h2 style="font-family:var(--font-display);font-size:var(--text-2xl);font-weight:700;letter-spacing:var(--tracking-display);margin-block:var(--space-8) var(--space-4)">Method</h2>
+        <p>Add chickpeas, tahini, lemon juice and garlic to a food processor. Blend for 3–4 minutes, scraping down the sides as needed. Add ice-cold water one tablespoon at a time until you reach your desired consistency.</p>
+        <p style="margin-top:var(--space-4)">Season with salt, transfer to a serving bowl, drizzle with olive oil, and finish with a sprinkle of sumac and fresh parsley.</p>
+        <blockquote style="border-left:3px solid var(--accent);padding-left:var(--space-6);margin-block:var(--space-6);font-style:italic;color:var(--fg-2)">"The quality of your tahini determines the quality of your hummus. Don't compromise on the star ingredient."</blockquote>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-8);padding-top:var(--space-8);border-top:1px solid var(--border)">
+        <span style="background:var(--border-soft);color:var(--fg-2);font-size:var(--text-xs);font-weight:600;padding:var(--space-1) var(--space-3);border-radius:var(--radius-pill)">Dips</span>
+        <span style="background:var(--border-soft);color:var(--fg-2);font-size:var(--text-xs);font-weight:600;padding:var(--space-1) var(--space-3);border-radius:var(--radius-pill)">Vegetarian</span>
+        <span style="background:var(--border-soft);color:var(--fg-2);font-size:var(--text-xs);font-weight:600;padding:var(--space-1) var(--space-3);border-radius:var(--radius-pill)">5 min</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DESIGN TOKENS
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="tokens">Design Tokens — balsam-tokens.css</div>
+<section class="section">
+  <div class="container">
+    <h2 class="section-title" style="margin-bottom:var(--space-8)">Design Tokens</h2>
+
+    <h3 class="subheading" style="margin-bottom:var(--space-4)">Color Palette</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-8)">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--accent);border-radius:var(--radius-md);box-shadow:var(--elev-ring)"></div><span class="eyebrow">accent</span><span style="font-size:10px;color:var(--muted)">#1B4332</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--accent-hover);border-radius:var(--radius-md);box-shadow:var(--elev-ring)"></div><span class="eyebrow">hover</span><span style="font-size:10px;color:var(--muted)">#2D6A4F</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--bg);border-radius:var(--radius-md);box-shadow:var(--elev-ring)"></div><span class="eyebrow">bg</span><span style="font-size:10px;color:var(--muted)">#FAFAF8</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--surface-warm);border-radius:var(--radius-md);box-shadow:var(--elev-ring)"></div><span class="eyebrow">warm</span><span style="font-size:10px;color:var(--muted)">#F5F0E8</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--surface);border-radius:var(--radius-md);box-shadow:var(--elev-ring)"></div><span class="eyebrow">surface</span><span style="font-size:10px;color:var(--muted)">#FFFFFF</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--fg);border-radius:var(--radius-md)"></div><span class="eyebrow">fg</span><span style="font-size:10px;color:var(--muted)">#22292F</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--fg-2);border-radius:var(--radius-md)"></div><span class="eyebrow">fg-2</span><span style="font-size:10px;color:var(--muted)">#3D4246</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--muted);border-radius:var(--radius-md)"></div><span class="eyebrow">muted</span><span style="font-size:10px;color:var(--muted)">#666666</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--success);border-radius:var(--radius-md)"></div><span class="eyebrow">success</span><span style="font-size:10px;color:var(--muted)">#52B788</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--warn);border-radius:var(--radius-md)"></div><span class="eyebrow">warn</span><span style="font-size:10px;color:var(--muted)">#D97706</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2)"><div style="width:80px;height:80px;background:var(--danger);border-radius:var(--radius-md)"></div><span class="eyebrow">danger</span><span style="font-size:10px;color:var(--muted)">#DC2626</span></div>
+    </div>
+
+    <h3 class="subheading" style="margin-bottom:var(--space-4)">Typography</h3>
+    <div style="display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-6);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">60px · 700 · Display</span><span style="font-family:var(--font-display);font-size:var(--text-4xl);font-weight:700;line-height:1.1;letter-spacing:var(--tracking-display)">Hero <em>Display</em></span></div>
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">48px · 700 · Display</span><span style="font-family:var(--font-display);font-size:var(--text-3xl);font-weight:700;line-height:1.1">Section Title</span></div>
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">36px · 700 · Display</span><span style="font-family:var(--font-display);font-size:var(--text-2xl);font-weight:700;line-height:1.15">Product <em>Name</em></span></div>
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">24px · 600 · Body</span><span style="font-size:var(--text-xl);font-weight:600">Subheading Open Sans</span></div>
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">18px · 400 · Body</span><span style="font-size:var(--text-lg)">Body large — product descriptions and editorial copy</span></div>
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">14px · 600 · Body</span><span style="font-size:var(--text-sm);font-weight:600">Label / Button text</span></div>
+      <div style="display:flex;align-items:baseline;gap:var(--space-8)"><span style="min-width:120px;font-size:var(--text-xs);color:var(--muted)">12px · Mono</span><span style="font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.1em;text-transform:uppercase">BATCH #2024-03 · IN STOCK</span></div>
+    </div>
+
+    <h3 class="subheading" style="margin-top:var(--space-8);margin-bottom:var(--space-4)">Badges &amp; Buttons</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-4);align-items:center;padding:var(--space-6);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md)">
+      <a href="#" class="btn btn-primary">Add to Cart</a>
+      <a href="#" class="btn btn-ghost">View all →</a>
+      <a href="#" class="btn btn-accent">Shop now</a>
+      <span class="status-badge status-badge--in-stock"><span class="status-badge__dot"></span><span>IN STOCK · SHIPS IN 24H</span></span>
+      <span class="badge" style="background:var(--accent);color:var(--accent-on)">MOST LOVED</span>
+      <span class="badge" style="background:var(--fg);color:var(--surface)">BULK -60%</span>
+      <span class="badge" style="background:var(--warn);color:var(--surface)">SAVE 20%</span>
+      <span class="badge" style="background:var(--surface-warm);color:var(--fg)">New Arrival</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════ -->
+<div class="preview-label" id="footer">footer.liquid</div>
+<footer style="background-color:var(--fg);color:var(--surface)">
+  <div class="container" style="display:grid;grid-template-columns:1fr 2fr;gap:var(--space-12);padding-block:var(--space-12)">
+    <div>
+      <span style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:700;letter-spacing:var(--tracking-display)">Balsam Tahini</span>
+      <p style="margin-top:var(--space-3);font-size:var(--text-sm);color:rgba(255,255,255,.6);line-height:var(--leading-body)">Natural tahini, thoughtfully sourced.</p>
+      <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6)">
+        <a href="#" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+        <a href="#" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-8)">
+      <div><p style="font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:var(--space-4)">Shop</p><ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-3)"><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">All Products</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Tahini</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Nut Butters</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Bundles</a></li></ul></div>
+      <div><p style="font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:var(--space-4)">Learn</p><ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-3)"><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Recipes</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Our Story</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Sourcing</a></li></ul></div>
+      <div><p style="font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:var(--space-4)">Support</p><ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-3)"><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">FAQ</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Shipping</a></li><li><a href="#" style="font-size:var(--text-sm);color:rgba(255,255,255,.7)">Contact</a></li></ul></div>
+    </div>
+  </div>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding-block:var(--space-6);border-top:1px solid rgba(255,255,255,.1)">
+    <p style="font-size:var(--text-xs);color:rgba(255,255,255,.45)">© 2024 Balsam Tahini. All rights reserved.</p>
+    <ul style="display:flex;gap:var(--space-6);list-style:none"><li><a href="#" style="font-size:var(--text-xs);color:rgba(255,255,255,.45)">Privacy Policy</a></li><li><a href="#" style="font-size:var(--text-xs);color:rgba(255,255,255,.45)">Terms</a></li></ul>
+  </div>
+</footer>
+
+<script src="assets/balsam-theme.js"></script>
+</body>
+</html>

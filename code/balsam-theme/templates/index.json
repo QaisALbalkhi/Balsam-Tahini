@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "<p>Natural Tahini, <em>Thoughtfully Made</em></p>",
+        "subheading": "Stone-ground from the finest sesame seeds. No additives, no shortcuts.",
+        "cta_label": "Shop Tahini",
+        "bg_color": "canvas"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Our Products",
+        "products_count": 4,
+        "view_all_label": "View all products",
+        "bg": "canvas"
+      }
+    },
+    "editorial-band": {
+      "type": "editorial-band",
+      "settings": {
+        "heading": "Why Balsam Tahini?",
+        "body": "<p>Stone-ground in small batches from premium sesame seeds. No preservatives, no additives. Just pure, natural tahini the way it was meant to be.</p>",
+        "cta_label": "Our story",
+        "image_position": "left"
+      }
+    }
+  },
+  "order": [
+    "hero-banner",
+    "featured-products",
+    "editorial-band"
+  ]
+}

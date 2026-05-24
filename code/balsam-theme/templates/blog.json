@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main-blog": {
+      "type": "main-blog",
+      "settings": {
+        "description": "Recipes, ideas, and ways to use our tahini in your kitchen."
+      }
+    }
+  },
+  "order": [
+    "main-blog"
+  ]
+}
