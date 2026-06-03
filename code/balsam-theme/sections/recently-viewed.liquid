@@ -1,0 +1,396 @@
+{%- assign coll = collections[section.settings.collection] -%}
+{%- assign max_products = section.settings.products_count | default: 8 -%}
+
+<section
+  class="rv-section section{% if section.settings.bg == 'cream' %} section--cream{% endif %}"
+  id="rv-{{ section.id }}"
+>
+  <div class="container">
+    <div class="rv-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <div class="rv-section__title-row">
+        <h2 class="section-title">{{ section.settings.heading | default: 'Recently Viewed' }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="rv-track-wrap">
+    <div class="rv-track" id="rv-track-{{ section.id }}" role="list">
+
+      {%- if coll != blank and coll.products.size > 0 -%}
+        {%- for product in coll.products limit: max_products -%}
+          <div class="rv-slot" data-rv-handle="{{ product.handle }}">
+            {%- render 'product-card', product: product -%}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+    </div>
+
+    <button class="rv-nav rv-nav--prev" id="rv-prev-{{ section.id }}" aria-label="Previous" hidden>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="rv-nav rv-nav--next" id="rv-next-{{ section.id }}" aria-label="Next">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  /* ── Section ── */
+  .rv-section { padding: var(--section-y-desktop, 80px) 0; }
+
+  /* ── Header — centered, matches popular-products style ── */
+  .rv-section__header {
+    margin-bottom: var(--space-10, 40px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3, 12px);
+  }
+  .rv-section__title-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-6, 24px);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── Track wrapper — full-bleed, matches recipes-carousel ── */
+  .rv-track-wrap { position: relative; }
+
+  .rv-track {
+    display: flex;
+    gap: var(--space-6, 24px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-inline-start: max(
+      var(--container-gutter-desktop, 40px),
+      calc((100vw - var(--container-max, 1200px)) / 2 + var(--container-gutter-desktop, 40px))
+    );
+    padding-inline-end: var(--container-gutter-desktop, 40px);
+    padding-bottom: var(--space-4, 16px);
+    cursor: grab;
+  }
+  .rv-track::-webkit-scrollbar { display: none; }
+  .rv-track:active { cursor: grabbing; }
+
+  /* ── Card slot — fixed width, same for default and recently-viewed cards ── */
+  .rv-slot {
+    flex: 0 0 272px;
+    width: 272px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Force product-card image layout inside rv-slots ── */
+  /* These reinforce product-card.liquid styles for dynamically injected cards */
+  .rv-slot .product-card {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface, #ffffff);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    transition: box-shadow 0.22s ease, transform 0.22s ease;
+  }
+  .rv-slot .product-card:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    transform: translateY(-3px);
+  }
+  .rv-slot .product-card__image-link {
+    display: block;
+    flex-shrink: 0;
+  }
+  .rv-slot .product-card__image-wrap {
+    position: relative !important;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #F5F5F3;
+    width: 100%;
+  }
+  .rv-slot .product-card__img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+  }
+  .rv-slot .product-card__body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  /* ── Nav arrows — matches rc-nav style ── */
+  .rv-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border, #E8ECEF);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--fg-2, #3D4246);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition:
+      background var(--motion-fast, 160ms) var(--ease-standard),
+      color      var(--motion-fast, 160ms) var(--ease-standard),
+      box-shadow var(--motion-fast, 160ms) var(--ease-standard);
+    z-index: 2;
+  }
+  .rv-nav:hover {
+    background: var(--accent, #1B4332);
+    color: #ffffff;
+    border-color: var(--accent, #1B4332);
+    box-shadow: var(--elev-raised, 0 4px 24px rgba(27,67,50,0.12));
+  }
+  .rv-nav[hidden] { display: none; }
+  .rv-nav--prev { left: 8px; }
+  .rv-nav--next { right: 8px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .rv-section { padding: var(--section-y-tablet, 60px) 0; }
+    .rv-track {
+      padding-inline-start: var(--container-gutter-tablet, 24px);
+      padding-inline-end:   var(--container-gutter-tablet, 24px);
+    }
+    .rv-slot { flex: 0 0 240px; width: 240px; }
+  }
+  @media (max-width: 639px) {
+    .rv-section { padding: var(--section-y-phone, 40px) 0; }
+    .rv-track {
+      padding-inline-start: var(--container-gutter-phone, 16px);
+      padding-inline-end:   var(--container-gutter-phone, 16px);
+      gap: var(--space-4, 16px);
+    }
+    .rv-slot { flex: 0 0 200px; width: 200px; }
+    .rv-nav { display: none; }
+  }
+</style>
+
+<script>
+(function () {
+  var KEY      = 'balsam-recently-viewed';
+  var MAX      = {{ max_products }};
+  var track    = document.getElementById('rv-track-{{ section.id }}');
+  var btnPrev  = document.getElementById('rv-prev-{{ section.id }}');
+  var btnNext  = document.getElementById('rv-next-{{ section.id }}');
+  if (!track) return;
+
+  /* ── Helpers ── */
+  function fmt(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\.00$/, '');
+  }
+  function esc(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function buildCard(p) {
+    var url   = p.url || ('/products/' + p.handle);
+    var price = typeof p.price === 'number' ? fmt(p.price) : '';
+
+    /* Badge */
+    var badge = '';
+    if (p.is_best_seller) {
+      badge = '<span class="pc-badge pc-badge--bestseller">'
+        + '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+        + 'BEST SELLER</span>';
+    } else if (p.compare_at && p.compare_at > p.price) {
+      badge = '<span class="pc-badge pc-badge--sale">Save '
+        + Math.round((1 - p.price / p.compare_at) * 100) + '%</span>';
+    }
+
+    /* Rating */
+    var rating = '';
+    if (p.rating_count > 0) {
+      rating = '<div class="product-card__rating" aria-label="' + (+p.rating_value).toFixed(1) + ' out of 5 stars">'
+        + '<span class="pc-stars" aria-hidden="true">★★★★★</span>'
+        + '<span class="pc-rating-val">' + (+p.rating_value).toFixed(1) + '</span>'
+        + '<span class="pc-rating-count">(' + p.rating_count + ' reviews)</span>'
+        + '</div>';
+    }
+
+    /* Description */
+    var desc = p.description ? '<p class="product-card__desc">' + p.description + '</p>' : '';
+
+    /* Variants & ATC button */
+    var variants  = Array.isArray(p.variants) && p.variants.length ? p.variants : [];
+    var isMulti   = variants.length > 1;
+    var atcBtn = '<button class="pc-add-btn' + (isMulti ? '' : ' pc-add-btn--single') + '" type="button" aria-expanded="false" data-default-price="' + price + '">'
+      + '<span class="pc-add-btn__inner">'
+        + '<span class="pc-add-btn__verb">ADD</span>'
+        + '<span class="pc-add-btn__sep" aria-hidden="true"> — </span>'
+        + '<span class="pc-add-btn__price">' + price + '</span>'
+      + '</span>'
+      + (isMulti ? '<span class="pc-add-btn__chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' : '')
+      + '</button>';
+
+    /* Wishlist button */
+    var wlBtn = '<button class="product-card__wishlist" type="button" aria-label="Add to wishlist" aria-pressed="false"'
+      + ' data-product-id="'     + esc(String(p.product_id || '')) + '"'
+      + ' data-product-handle="' + esc(p.handle || '')    + '"'
+      + ' data-product-title="'  + esc(p.title || '')     + '"'
+      + ' data-product-price="'  + (p.price || 0)         + '"'
+      + ' data-product-image="'  + esc(p.image || '')     + '"'
+      + ' data-product-url="'    + esc(url)               + '">'
+      + '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      + '</button>';
+
+    return '<a href="' + url + '" class="product-card__image-link" tabindex="-1" aria-hidden="true">'
+        + '<div class="product-card__image-wrap">'
+          + (p.image ? '<img src="' + p.image + '" alt="' + esc(p.title || '') + '" loading="lazy" class="product-card__img" width="600" height="600">' : '')
+          + wlBtn
+        + '</div>'
+      + '</a>'
+      + '<div class="product-card__body">'
+        + '<a href="' + url + '" class="product-card__name">' + esc(p.title || '') + '</a>'
+        + badge + rating + desc
+        + '<div class="pc-add">'
+          + '<script type="application/json" class="pc-variants-json">' + JSON.stringify(variants) + '<\/script>'
+          + atcBtn
+          + '<div class="pc-variant-panel" hidden></div>'
+        + '</div>'
+      + '</div>';
+  }
+
+  /* ── Merge recently viewed into the track ── */
+  var stored = [];
+  try { stored = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+
+  if (stored.length > 0) {
+    /* Remove default slots whose product is in the browse history */
+    stored.forEach(function (p) {
+      var existing = track.querySelector('.rv-slot[data-rv-handle="' + p.handle + '"]');
+      if (existing) existing.remove();
+    });
+
+    /* Prepend recently viewed slots (newest first) */
+    var frag = document.createDocumentFragment();
+    stored.slice(0, MAX).forEach(function (p) {
+      var slot = document.createElement('div');
+      slot.className = 'rv-slot';
+      slot.setAttribute('data-rv-handle', p.handle || '');
+      var article = document.createElement('article');
+      article.className = 'product-card';
+      article.setAttribute('aria-label', p.title || '');
+      article.setAttribute('role', 'listitem');
+      article.innerHTML = buildCard(p);
+      slot.appendChild(article);
+      frag.appendChild(slot);
+    });
+    track.insertBefore(frag, track.firstChild);
+
+    /* Trim total slots to MAX */
+    var allSlots = track.querySelectorAll('.rv-slot');
+    for (var i = MAX; i < allSlots.length; i++) {
+      allSlots[i].remove();
+    }
+
+    /* Re-init wishlist active states */
+    document.dispatchEvent(new CustomEvent('balsam:grid-updated'));
+  }
+
+  /* ── Carousel arrows ── */
+  var STEP = 296; /* slot width 272 + gap 24 */
+
+  function updateArrows() {
+    if (btnPrev) btnPrev.hidden = track.scrollLeft <= 8;
+    if (btnNext) btnNext.hidden = track.scrollLeft >= track.scrollWidth - track.clientWidth - 8;
+  }
+
+  if (btnPrev) btnPrev.addEventListener('click', function () {
+    track.scrollBy({ left: -STEP, behavior: 'smooth' });
+  });
+  if (btnNext) btnNext.addEventListener('click', function () {
+    track.scrollBy({ left: STEP, behavior: 'smooth' });
+  });
+  track.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
+
+  /* ── Drag-to-scroll ── */
+  var dragging = false, startX, scrollStart;
+  track.addEventListener('mousedown', function (e) {
+    dragging = true; startX = e.pageX; scrollStart = track.scrollLeft;
+    track.style.cursor = 'grabbing'; track.style.userSelect = 'none';
+  });
+  window.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    track.scrollLeft = scrollStart - (e.pageX - startX);
+  });
+  window.addEventListener('mouseup', function () {
+    dragging = false; track.style.cursor = ''; track.style.userSelect = '';
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Default collection",
+      "info": "Shown before the user has a browse history. Use your Popular Products or All Products collection."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "YOUR HISTORY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently Viewed"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "label": "Max products shown",
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Background",
+      "options": [
+        { "value": "canvas", "label": "White / Off-white" },
+        { "value": "cream",  "label": "Cream" }
+      ],
+      "default": "canvas"
+    }
+  ],
+  "presets": [
+    { "name": "Recently Viewed" }
+  ]
+}
+{% endschema %}

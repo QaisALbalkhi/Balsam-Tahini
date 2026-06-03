@@ -1,0 +1,381 @@
+<section class="story-page section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+  <div class="container">
+
+    <!-- Hero header -->
+    <div class="story-page__hero">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="story-page__heading">{{ section.settings.heading | default: 'Our Story' }}</h1>
+      {%- if section.settings.intro != blank -%}
+        <p class="story-page__intro">{{ section.settings.intro }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.hero_image != blank -%}
+      <div class="story-page__hero-img-wrap">
+        <img
+          src="{{ section.settings.hero_image | image_url: width: 1400 }}"
+          srcset="{{ section.settings.hero_image | image_url: width: 800 }} 800w, {{ section.settings.hero_image | image_url: width: 1200 }} 1200w, {{ section.settings.hero_image | image_url: width: 1400 }} 1400w"
+          sizes="(max-width: 767px) 100vw, calc(100vw - 80px)"
+          alt="{{ section.settings.heading | escape }}"
+          width="1400" height="700"
+          loading="eager"
+          class="story-page__hero-img"
+        >
+      </div>
+    {%- endif -%}
+
+    <!-- Mission pull-quote -->
+    {%- if section.settings.mission != blank -%}
+      <div class="story-page__mission">
+        <blockquote class="story-page__quote">{{ section.settings.mission }}</blockquote>
+      </div>
+    {%- endif -%}
+
+    <!-- Story chapters (blocks) -->
+    {%- if section.blocks.size > 0 -%}
+      <div class="story-page__chapters">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'chapter' -%}
+            <div
+              class="story-chapter{% if block.settings.image_side == 'right' %} story-chapter--img-right{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.image != blank -%}
+                <div class="story-chapter__img-wrap">
+                  <img
+                    src="{{ block.settings.image | image_url: width: 800 }}"
+                    srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 800 }} 800w"
+                    sizes="(max-width: 959px) 100vw, 45vw"
+                    alt="{{ block.settings.heading | escape }}"
+                    width="800" height="600"
+                    loading="lazy"
+                    class="story-chapter__img"
+                  >
+                </div>
+              {%- endif -%}
+              <div class="story-chapter__body">
+                {%- if block.settings.eyebrow != blank -%}
+                  <p class="eyebrow story-chapter__eyebrow">{{ block.settings.eyebrow }}</p>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="story-chapter__heading">{{ block.settings.heading }}</h2>
+                {%- endif -%}
+                {%- if block.settings.body != blank -%}
+                  <div class="story-chapter__text rte">{{ block.settings.body }}</div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- elsif block.type == 'stat_row' -%}
+            <div class="story-stats" {{ block.shopify_attributes }}>
+              {%- for i in (1..4) -%}
+                {%- assign num_key = 'stat_' | append: i | append: '_number' -%}
+                {%- assign label_key = 'stat_' | append: i | append: '_label' -%}
+                {%- if block.settings[num_key] != blank -%}
+                  <div class="story-stat">
+                    <span class="story-stat__number">{{ block.settings[num_key] }}</span>
+                    <span class="story-stat__label">{{ block.settings[label_key] }}</span>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- elsif block.type == 'cta' -%}
+            <div class="story-cta" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h2 class="story-cta__heading">{{ block.settings.heading }}</h2>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <p class="story-cta__body">{{ block.settings.body }}</p>
+              {%- endif -%}
+              <div class="story-cta__actions">
+                {%- if block.settings.primary_label != blank -%}
+                  <a href="{{ block.settings.primary_url | default: '/products' }}" class="btn btn-primary">{{ block.settings.primary_label }}</a>
+                {%- endif -%}
+                {%- if block.settings.secondary_label != blank -%}
+                  <a href="{{ block.settings.secondary_url | default: '/pages/contact' }}" class="btn btn-ghost">{{ block.settings.secondary_label }}</a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  /* Hero */
+  .story-page__hero {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .story-page__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.1;
+  }
+  .story-page__intro {
+    font-size: 1.15rem;
+    color: var(--fg-2);
+    line-height: 1.7;
+  }
+
+  /* Hero image */
+  .story-page__hero-img-wrap {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-16);
+    aspect-ratio: 2 / 1;
+  }
+  .story-page__hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Mission quote */
+  .story-page__mission {
+    max-width: 700px;
+    margin: 0 auto var(--space-20);
+    text-align: center;
+    padding: var(--space-10) var(--space-8);
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+  }
+  .story-page__quote {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.45;
+    font-style: italic;
+  }
+
+  /* Chapters */
+  .story-page__chapters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+  .story-chapter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .story-chapter--img-right {
+    direction: rtl;
+  }
+  .story-chapter--img-right > * { direction: ltr; }
+  .story-chapter__img-wrap {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+  .story-chapter__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .story-chapter__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .story-chapter__eyebrow { color: var(--accent); }
+  .story-chapter__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.2;
+  }
+  .story-chapter__text {
+    font-size: 1.05rem;
+    color: var(--fg-2);
+    line-height: 1.75;
+  }
+  .story-chapter__text p { margin-bottom: var(--space-3); }
+  .story-chapter__text p:last-child { margin-bottom: 0; }
+
+  /* Stats row */
+  .story-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+    background: var(--surface-warm);
+    border-radius: var(--radius-lg);
+    padding: var(--space-10) var(--space-8);
+    text-align: center;
+  }
+  .story-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .story-stat__number {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: var(--tracking-display);
+  }
+  .story-stat__label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--fg-2);
+    letter-spacing: 0.04em;
+  }
+
+  /* CTA block */
+  .story-cta {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space-12) 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .story-cta__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.2;
+  }
+  .story-cta__body { font-size: 1.05rem; color: var(--fg-2); line-height: 1.6; }
+  .story-cta__actions { display: flex; gap: var(--space-4); flex-wrap: wrap; justify-content: center; margin-top: var(--space-2); }
+
+  @media (max-width: 959px) {
+    .story-chapter, .story-chapter--img-right { grid-template-columns: 1fr; direction: ltr; gap: var(--space-8); }
+    .story-chapter--img-right .story-chapter__img-wrap { order: -1; }
+    .story-stats { grid-template-columns: repeat(2, 1fr); }
+    .story-page__hero-img-wrap { aspect-ratio: 16 / 9; }
+  }
+  @media (max-width: 639px) {
+    .story-stats { grid-template-columns: repeat(2, 1fr); gap: var(--space-5) var(--space-4); padding: var(--space-8) var(--space-5); }
+    .story-page__mission { padding: var(--space-7) var(--space-5); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Our Story Page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "OUR STORY" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Made with Roots in Mind" },
+    { "type": "textarea", "id": "intro", "label": "Intro paragraph", "default": "Balsam Tahini was born out of a deep love for authentic, real food — the kind passed down through generations. We set out to make the purest tahini possible, and we haven't looked back." },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "textarea", "id": "mission", "label": "Mission pull-quote", "default": "\"We believe simple, clean ingredients make the best food. No shortcuts, no additives — just pure sesame, stone-ground with care.\"" },
+    { "type": "select", "id": "bg", "label": "Background", "options": [{"value":"canvas","label":"White"},{"value":"cream","label":"Cream"}], "default": "canvas" }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Story chapter",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "select", "id": "image_side", "label": "Image position", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default": "left" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow label" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Where It All Began" },
+        { "type": "richtext", "id": "body", "label": "Body text", "default": "<p>Growing up, tahini was a staple at every meal. We wanted to bring that same quality and authenticity to everyone's table — starting with the very best sesame seeds we could find.</p>" }
+      ]
+    },
+    {
+      "type": "stat_row",
+      "name": "Stats row",
+      "settings": [
+        { "type": "text", "id": "stat_1_number", "label": "Stat 1 number", "default": "100%" },
+        { "type": "text", "id": "stat_1_label", "label": "Stat 1 label", "default": "Pure sesame" },
+        { "type": "text", "id": "stat_2_number", "label": "Stat 2 number", "default": "0" },
+        { "type": "text", "id": "stat_2_label", "label": "Stat 2 label", "default": "Additives" },
+        { "type": "text", "id": "stat_3_number", "label": "Stat 3 number", "default": "2,000+" },
+        { "type": "text", "id": "stat_3_label", "label": "Stat 3 label", "default": "5-star reviews" },
+        { "type": "text", "id": "stat_4_number", "label": "Stat 4 number", "default": "Small" },
+        { "type": "text", "id": "stat_4_label", "label": "Stat 4 label", "default": "Batch produced" }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Call to action",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Ready to taste the difference?" },
+        { "type": "textarea", "id": "body", "label": "Body text", "default": "Order your first jar today and experience what real tahini tastes like." },
+        { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Shop now" },
+        { "type": "url", "id": "primary_url", "label": "Primary button URL" },
+        { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Contact us" },
+        { "type": "url", "id": "secondary_url", "label": "Secondary button URL" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Story Page",
+      "settings": {
+        "eyebrow": "OUR STORY",
+        "heading": "Made with Roots in Mind",
+        "intro": "Balsam Tahini was born out of a deep love for authentic, real food — the kind passed down through generations. We set out to make the purest tahini possible, and we haven't looked back.",
+        "mission": "\"We believe simple, clean ingredients make the best food. No shortcuts, no additives — just pure sesame, stone-ground with care.\"",
+        "bg": "canvas"
+      },
+      "blocks": [
+        {
+          "type": "chapter",
+          "settings": {
+            "image_side": "left",
+            "eyebrow": "THE BEGINNING",
+            "heading": "Where It All Began",
+            "body": "<p>Growing up, tahini was on the table at every meal. But when we moved to Canada, we struggled to find tahini that tasted anything like home. Store shelves were filled with bitter, over-processed products loaded with additives.</p><p>So we decided to make our own.</p>"
+          }
+        },
+        {
+          "type": "chapter",
+          "settings": {
+            "image_side": "right",
+            "eyebrow": "THE PROCESS",
+            "heading": "Stone-Ground the Old Way",
+            "body": "<p>We partnered with traditional stone mills to slowly grind premium sesame seeds at cool temperatures. This preserves the natural oils, nutrients, and deep flavour that modern high-speed processing destroys.</p><p>Every batch is small, every jar is fresh. That's the Balsam promise.</p>"
+          }
+        },
+        {
+          "type": "stat_row",
+          "settings": {
+            "stat_1_number": "100%",
+            "stat_1_label": "Pure sesame",
+            "stat_2_number": "0",
+            "stat_2_label": "Additives or preservatives",
+            "stat_3_number": "2,000+",
+            "stat_3_label": "Five-star reviews",
+            "stat_4_number": "Small",
+            "stat_4_label": "Batch every time"
+          }
+        },
+        {
+          "type": "cta",
+          "settings": {
+            "heading": "Ready to taste the difference?",
+            "body": "Order your first jar today and experience what real tahini tastes like.",
+            "primary_label": "Shop now",
+            "secondary_label": "Get in touch"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

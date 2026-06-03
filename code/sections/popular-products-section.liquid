@@ -1,0 +1,159 @@
+{%- assign coll = collections[section.settings.collection] -%}
+{%- assign product_limit = section.settings.products_count | default: 8 -%}
+
+<section class="popular-products section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+  <div class="container">
+
+    <div class="popular-products__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <div class="popular-products__title-row">
+        <h2 class="section-title">{{ section.settings.heading | default: 'Popular Products' }}</h2>
+        {%- if section.settings.view_all_label != blank -%}
+          <a href="{{ section.settings.view_all_url | default: '/collections/popular-products' }}" class="popular-products__view-all">
+            {{ section.settings.view_all_label }} →
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.subheading != blank -%}
+        <p class="popular-products__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if coll != blank and coll.products.size > 0 -%}
+      <div class="popular-products__grid">
+        {%- for product in coll.products limit: product_limit -%}
+          {% render 'product-card', product: product %}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="popular-products__grid">
+        {%- for i in (1..8) -%}
+          <div class="product-card product-card--placeholder">
+            <div class="product-card__image-wrap">
+              <div class="product-card__placeholder" style="aspect-ratio:1/1;background:var(--surface-warm);"></div>
+            </div>
+            <div class="product-card__body">
+              <p class="product-card__name" style="height:14px;background:var(--border);border-radius:4px;width:70%;"></p>
+              <p class="product-card__price" style="height:14px;background:var(--border-soft);border-radius:4px;width:40%;margin-top:8px;"></p>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .popular-products__header {
+    margin-bottom: var(--space-10, 40px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+  }
+  .popular-products__title-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-6);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .popular-products__view-all {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--motion-fast) var(--ease-standard);
+  }
+  .popular-products__view-all:hover { color: var(--accent-hover); }
+  .popular-products__sub {
+    font-size: var(--text-base);
+    color: var(--muted);
+    max-width: 500px;
+    line-height: var(--leading-body);
+  }
+
+  .popular-products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 1023px) {
+    .popular-products__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 767px) {
+    .popular-products__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Popular products",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select the collection to feature (e.g. Popular Products)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "CUSTOMER FAVOURITES"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Popular Products"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "View all label",
+      "default": "View all products"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View all URL"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "default": 8,
+      "label": "Number of products"
+    },
+    {
+      "type": "select",
+      "id": "bg",
+      "label": "Background",
+      "options": [
+        { "value": "canvas", "label": "White" },
+        { "value": "cream", "label": "Cream" }
+      ],
+      "default": "canvas"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Popular products"
+    }
+  ]
+}
+{% endschema %}

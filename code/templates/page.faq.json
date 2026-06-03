@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-faq",
+      "blocks": {
+        "q1": { "type": "question", "settings": { "category": "About Our Product", "question": "What makes Balsam Tahini different?", "answer": "<p>Balsam Tahini is stone-ground in small batches from premium sesame seeds. No added oils, no preservatives, no stabilizers. Just pure sesame — the way tahini was meant to be made.</p>" } },
+        "q2": { "type": "question", "settings": { "question": "What are the ingredients?", "answer": "<p>Our tahini contains one ingredient: premium sesame seeds (100%). That's it.</p>" } },
+        "q3": { "type": "question", "settings": { "question": "Is Balsam Tahini vegan and gluten-free?", "answer": "<p>Yes — 100% plant-based, vegan, and naturally gluten-free.</p>" } },
+        "q4": { "type": "question", "settings": { "question": "Is it kosher and halal certified?", "answer": "<p>Yes, Balsam Tahini is both kosher and halal certified. You'll find the certification badges on our product pages.</p>" } },
+        "q5": { "type": "question", "settings": { "question": "Why does the oil separate?", "answer": "<p>Because we use zero stabilizers or additives, the natural sesame oil separates to the top — this is a sign of purity, not a defect. Simply stir it back in before use.</p>" } },
+        "q6": { "type": "question", "settings": { "category": "Orders & Shipping", "question": "How long does shipping take?", "answer": "<p>Orders are packed and shipped within 1–2 business days from our Mississauga, Ontario facility. Standard shipping typically takes 3–7 business days across Canada.</p>" } },
+        "q7": { "type": "question", "settings": { "question": "Do you offer free shipping?", "answer": "<p>Yes — free standard shipping on all orders over $40 within Canada.</p>" } },
+        "q8": { "type": "question", "settings": { "question": "Can I change or cancel my order?", "answer": "<p>Please contact us as soon as possible at hello@balsamtahini.ca. We process orders quickly, but we'll do our best to accommodate changes before your order ships.</p>" } },
+        "q9": { "type": "question", "settings": { "category": "Returns & Freshness", "question": "What is your return policy?", "answer": "<p>If you're not completely satisfied, we'll replace your order or issue a full refund — no questions asked. We stand behind the quality of every jar.</p>" } },
+        "q10": { "type": "question", "settings": { "question": "How should I store my tahini?", "answer": "<p>Store in a cool, dry place away from direct sunlight. Once opened, you can refrigerate it to extend freshness, though it may thicken slightly when cold — bring it to room temperature and stir before use.</p>" } }
+      },
+      "block_order": ["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"],
+      "settings": {
+        "eyebrow": "HELP CENTER",
+        "heading": "Frequently Asked Questions",
+        "subheading": "Everything you need to know about Balsam Tahini.",
+        "bg": "canvas"
+      }
+    }
+  },
+  "order": ["main"]
+}

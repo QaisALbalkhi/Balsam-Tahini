@@ -1,0 +1,187 @@
+<section class="team-page section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+  <div class="container">
+
+    <div class="team-page__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="team-page__heading">{{ section.settings.heading | default: 'Meet Our Team' }}</h1>
+      {%- if section.settings.subheading != blank -%}
+        <p class="team-page__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="team-page__grid">
+        {%- for block in section.blocks -%}
+          <div class="team-member" {{ block.shopify_attributes }}>
+            <div class="team-member__img-wrap">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w"
+                  sizes="(max-width: 639px) 50vw, (max-width: 959px) 33vw, 25vw"
+                  alt="{{ block.settings.name | escape }}"
+                  width="600" height="600"
+                  loading="lazy"
+                  class="team-member__img"
+                >
+              {%- else -%}
+                <div class="team-member__img-placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="team-member__body">
+              {%- if block.settings.name != blank -%}
+                <h3 class="team-member__name">{{ block.settings.name }}</h3>
+              {%- endif -%}
+              {%- if block.settings.role != blank -%}
+                <p class="team-member__role">{{ block.settings.role }}</p>
+              {%- endif -%}
+              {%- if block.settings.bio != blank -%}
+                <p class="team-member__bio">{{ block.settings.bio }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .team-page__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .team-page__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.15;
+  }
+  .team-page__sub {
+    font-size: 1.05rem;
+    color: var(--fg-2);
+    line-height: 1.6;
+  }
+  .team-page__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-8) var(--space-6);
+  }
+  .team-member {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .team-member__img-wrap {
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface-warm);
+  }
+  .team-member__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--motion-base) var(--ease-standard);
+  }
+  .team-member:hover .team-member__img { transform: scale(1.04); }
+  .team-member__img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+  .team-member__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .team-member__name {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.3;
+  }
+  .team-member__role {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .team-member__bio {
+    font-size: 0.9rem;
+    color: var(--fg-2);
+    line-height: 1.6;
+    margin-top: var(--space-1);
+  }
+
+  @media (max-width: 1199px) {
+    .team-page__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 767px) {
+    .team-page__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-7) var(--space-4); }
+  }
+  @media (max-width: 479px) {
+    .team-page__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-6) var(--space-3); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Team Page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE PEOPLE BEHIND BALSAM" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Meet Our Team" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "A small, passionate team dedicated to bringing you the finest tahini in Canada." },
+    { "type": "select", "id": "bg", "label": "Background", "options": [{"value":"canvas","label":"White"},{"value":"cream","label":"Cream"}], "default": "canvas" }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team member",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Team Member" },
+        { "type": "text", "id": "role", "label": "Role / Title", "default": "Founder" },
+        { "type": "textarea", "id": "bio", "label": "Short bio (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Team Page",
+      "settings": {
+        "eyebrow": "THE PEOPLE BEHIND BALSAM",
+        "heading": "Meet Our Team",
+        "subheading": "A small, passionate team dedicated to bringing you the finest tahini in Canada.",
+        "bg": "canvas"
+      },
+      "blocks": [
+        { "type": "member", "settings": { "name": "Founder", "role": "Founder & CEO" } },
+        { "type": "member", "settings": { "name": "Team Member", "role": "Operations" } },
+        { "type": "member", "settings": { "name": "Team Member", "role": "Marketing" } },
+        { "type": "member", "settings": { "name": "Team Member", "role": "Customer Care" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

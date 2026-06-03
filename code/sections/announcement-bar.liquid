@@ -1,0 +1,130 @@
+{%- if section.settings.enabled -%}
+<div
+  class="announcement-bar"
+  role="region"
+  aria-label="Announcement"
+  id="announcement-bar"
+>
+  <div class="announcement-bar__inner container">
+    <p class="announcement-bar__text">
+      {{- section.settings.text -}}
+      {%- if section.settings.link_url != blank and section.settings.link_text != blank -%}
+        &nbsp;<a href="{{ section.settings.link_url }}" class="announcement-bar__link">
+          {{- section.settings.link_text -}}
+        </a>
+      {%- endif -%}
+    </p>
+
+    {%- if section.settings.dismissible -%}
+      <button
+        class="announcement-bar__close"
+        aria-label="{{ 'announcement.dismiss' | t }}"
+        type="button"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    {%- endif -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "default": true,
+      "label": "Show announcement bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "dismissible",
+      "default": true,
+      "label": "Allow dismissal"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "default": "Free shipping on orders over $100 · Made with love in Canada",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "default": "Shop now →",
+      "label": "Link text"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .announcement-bar {
+    background-color: var(--accent);
+    color: var(--accent-on);
+    padding-block: var(--space-3);
+  }
+
+  .announcement-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    position: relative;
+  }
+
+  .announcement-bar__text {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .announcement-bar__link {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .announcement-bar__link:hover {
+    opacity: 0.85;
+  }
+
+  .announcement-bar__close {
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+    color: var(--accent-on);
+    cursor: pointer;
+    padding: var(--space-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity var(--motion-fast) var(--ease-standard);
+  }
+
+  .announcement-bar__close:hover {
+    opacity: 1;
+  }
+
+  .announcement-bar__close:focus-visible {
+    outline: 2px solid var(--accent-on);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+</style>

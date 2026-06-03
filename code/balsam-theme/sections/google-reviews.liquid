@@ -1,0 +1,259 @@
+<section class="google-reviews section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+  <div class="container">
+
+    <div class="google-reviews__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="section-title">{{ section.settings.heading | default: 'What Our Customers Say' }}</h2>
+
+      <!-- Google badge + overall rating -->
+      <div class="gr-badge">
+        <!-- Google "G" logo -->
+        <svg class="gr-badge__logo" width="22" height="22" viewBox="0 0 24 24" aria-label="Google">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        <div class="gr-badge__rating">
+          <span class="gr-badge__score">{{ section.settings.overall_rating | default: '4.9' }}</span>
+          <div class="gr-badge__stars" aria-label="Rating {{ section.settings.overall_rating }} out of 5">
+            {%- assign rating_val = section.settings.overall_rating | default: '4.9' | times: 1 -%}
+            {%- for i in (1..5) -%}
+              {%- if i <= rating_val -%}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FBBC05" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {%- else -%}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#E5E7EB" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <span class="gr-badge__count">{{ section.settings.review_count | default: '200+' }} Google reviews</span>
+        </div>
+        {%- if section.settings.place_url != blank -%}
+          <a href="{{ section.settings.place_url }}" target="_blank" rel="noopener" class="gr-badge__link">
+            See all reviews →
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="gr-track-wrap">
+        <div class="gr-track" id="gr-track-{{ section.id }}" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'review' -%}
+              <div class="gr-card" role="listitem" {{ block.shopify_attributes }}>
+                <div class="gr-card__top">
+                  <div class="gr-card__avatar" aria-hidden="true">
+                    {{ block.settings.initials | default: '?' | upcase | truncate: 2, '' }}
+                  </div>
+                  <div class="gr-card__reviewer">
+                    <p class="gr-card__name">{{ block.settings.reviewer_name | default: 'Customer' }}</p>
+                    <p class="gr-card__date">{{ block.settings.date }}</p>
+                  </div>
+                  <!-- Google icon -->
+                  <svg class="gr-card__google-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  </svg>
+                </div>
+
+                <div class="gr-card__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                  {%- assign r = block.settings.rating | default: 5 -%}
+                  {%- for i in (1..5) -%}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="{% if i <= r %}#FBBC05{% else %}#E5E7EB{% endif %}" aria-hidden="true">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  {%- endfor -%}
+                </div>
+
+                <p class="gr-card__text">{{ block.settings.text }}</p>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <button class="gr-nav gr-nav--prev" id="gr-prev-{{ section.id }}" aria-label="Previous" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="gr-nav gr-nav--next" id="gr-next-{{ section.id }}" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+  .google-reviews__header {
+    text-align: center;
+    margin-bottom: var(--space-10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  /* Overall rating badge */
+  .gr-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-6);
+  }
+  .gr-badge__logo { flex-shrink: 0; }
+  .gr-badge__rating { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+  .gr-badge__score { font-size: var(--text-xl); font-weight: 700; color: var(--fg); line-height: 1; }
+  .gr-badge__stars { display: flex; align-items: center; gap: 2px; }
+  .gr-badge__count { font-size: var(--text-sm); color: var(--muted); font-weight: 500; }
+  .gr-badge__link { font-size: var(--text-sm); font-weight: 700; color: var(--accent); text-decoration: none; white-space: nowrap; border-left: 1px solid var(--border); padding-left: var(--space-4); transition: color 0.15s; }
+  .gr-badge__link:hover { color: var(--accent-hover); }
+
+  /* Carousel */
+  .gr-track-wrap { position: relative; }
+  .gr-track {
+    display: flex;
+    gap: var(--space-5);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-inline: var(--container-gutter-desktop, 40px);
+    padding-bottom: var(--space-4);
+    cursor: grab;
+  }
+  .gr-track:active { cursor: grabbing; }
+  .gr-track::-webkit-scrollbar { display: none; }
+
+  /* Review card */
+  .gr-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .gr-card:hover { box-shadow: var(--elev-raised); transform: translateY(-3px); }
+
+  .gr-card__top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .gr-card__avatar {
+    flex-shrink: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gr-card__reviewer { flex: 1; }
+  .gr-card__name { font-size: var(--text-sm); font-weight: 700; color: var(--fg); }
+  .gr-card__date { font-size: var(--text-xs); color: var(--muted); margin-top: 1px; }
+  .gr-card__google-icon { flex-shrink: 0; }
+  .gr-card__stars { display: flex; align-items: center; gap: 2px; }
+  .gr-card__text { font-size: var(--text-sm); color: var(--fg-2); line-height: 1.65; flex: 1; }
+
+  /* Nav arrows */
+  .gr-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 40px; height: 40px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--fg-2); z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .gr-nav:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .gr-nav[hidden] { display: none; }
+  .gr-nav--prev { left: 6px; }
+  .gr-nav--next { right: 6px; }
+
+  @media (max-width: 767px) {
+    .gr-card { flex: 0 0 280px; }
+    .gr-track { padding-inline: var(--container-gutter-phone, 16px); }
+    .gr-nav { display: none; }
+  }
+</style>
+
+<script>
+(function () {
+  var track = document.getElementById('gr-track-{{ section.id }}');
+  var prev  = document.getElementById('gr-prev-{{ section.id }}');
+  var next  = document.getElementById('gr-next-{{ section.id }}');
+  if (!track) return;
+
+  function updateArrows() {
+    if (prev) prev.hidden = track.scrollLeft <= 8;
+    if (next) next.hidden = track.scrollLeft >= track.scrollWidth - track.clientWidth - 8;
+  }
+
+  if (next) next.addEventListener('click', function () { track.scrollBy({ left: 340, behavior: 'smooth' }); });
+  if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -340, behavior: 'smooth' }); });
+  track.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
+
+  var isDragging = false, startX, scrollStart;
+  track.addEventListener('mousedown', function (e) { isDragging = true; startX = e.pageX; scrollStart = track.scrollLeft; });
+  window.addEventListener('mousemove', function (e) { if (!isDragging) return; track.scrollLeft = scrollStart - (e.pageX - startX); });
+  window.addEventListener('mouseup', function () { isDragging = false; });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Google Reviews",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CUSTOMER STORIES" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Customers Say" },
+    { "type": "text", "id": "overall_rating", "label": "Overall rating (e.g. 4.9)", "default": "4.9" },
+    { "type": "text", "id": "review_count", "label": "Review count label", "default": "200+" },
+    { "type": "url", "id": "place_url", "label": "Google Maps place URL" },
+    { "type": "select", "id": "bg", "label": "Background",
+      "options": [{ "value": "canvas", "label": "White" }, { "value": "cream", "label": "Cream" }],
+      "default": "canvas"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "text", "id": "reviewer_name", "label": "Reviewer name", "default": "Happy Customer" },
+        { "type": "text", "id": "initials", "label": "Avatar initials (2 chars)", "default": "HC" },
+        { "type": "range", "id": "rating", "label": "Star rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Review text", "default": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality." },
+        { "type": "text", "id": "date", "label": "Date (e.g. May 2025)", "default": "May 2025" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Google Reviews",
+      "blocks": [
+        { "type": "review", "settings": { "reviewer_name": "Sarah M.", "initials": "SM", "rating": 5, "date": "April 2025", "text": "This is hands down the best tahini I've ever tasted. Smooth, rich, and absolutely no bitterness. My hummus has never been better!" } },
+        { "type": "review", "settings": { "reviewer_name": "Ahmed K.", "initials": "AK", "rating": 5, "date": "March 2025", "text": "Ordered three jars and they were gone within two weeks. The stone-ground difference is real — completely different texture than store brands." } },
+        { "type": "review", "settings": { "reviewer_name": "Jennifer L.", "initials": "JL", "rating": 5, "date": "March 2025", "text": "I'm obsessed. I put it in everything — smoothies, salad dressings, straight from the jar. Clean ingredients, amazing quality." } },
+        { "type": "review", "settings": { "reviewer_name": "Omar R.", "initials": "OR", "rating": 5, "date": "February 2025", "text": "As someone who grew up eating tahini in Lebanon, this is the closest I've found to homemade. Genuinely impressed. Will be a repeat customer." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

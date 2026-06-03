@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-contact",
+      "blocks": {
+        "link-1": {
+          "type": "quick_link",
+          "settings": {
+            "label": "View frequently asked questions",
+            "url": ""
+          }
+        },
+        "link-2": {
+          "type": "quick_link",
+          "settings": {
+            "label": "Wholesale enquiries",
+            "url": ""
+          }
+        },
+        "link-3": {
+          "type": "quick_link",
+          "settings": {
+            "label": "Track your order",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "link-1",
+        "link-2",
+        "link-3"
+      ],
+      "settings": {
+        "eyebrow": "REACH OUT",
+        "heading": "Get in Touch",
+        "intro": "Have a question about our tahini, your order, or a wholesale inquiry? We'd love to hear from you.",
+        "email": "hello@balsamtahini.ca",
+        "response_time": "Within 1–2 business days",
+        "location": "Mississauga, Ontario, Canada",
+        "bg": "cream"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

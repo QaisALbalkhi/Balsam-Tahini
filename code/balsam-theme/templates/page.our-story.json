@@ -1,0 +1,86 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-our-story",
+      "blocks": {
+        "ch1": {
+          "type": "chapter",
+          "settings": {
+            "image_side": "left",
+            "eyebrow": "THE BEGINNING",
+            "heading": "Where It All Began",
+            "body": "<p>Growing up, tahini was on the table at every meal. But when we moved to Canada, we struggled to find tahini that tasted anything like home. Store shelves were filled with bitter, over-processed products loaded with additives.</p><p>So we decided to make our own.</p>"
+          }
+        },
+        "ch2": {
+          "type": "chapter",
+          "settings": {
+            "image_side": "right",
+            "eyebrow": "THE PROCESS",
+            "heading": "Stone-Ground the Old Way",
+            "body": "<p>We partnered with traditional stone mills to slowly grind premium sesame seeds at cool temperatures. This preserves the natural oils, nutrients, and deep flavour that modern high-speed processing destroys.</p><p>Every batch is small, every jar is fresh. That's the Balsam promise.</p>"
+          }
+        },
+        "stats": {
+          "type": "stat_row",
+          "settings": {
+            "stat_1_number": "100%",
+            "stat_1_label": "Pure sesame",
+            "stat_2_number": "0",
+            "stat_2_label": "Additives or preservatives",
+            "stat_3_number": "2,000+",
+            "stat_3_label": "Five-star reviews",
+            "stat_4_number": "Small",
+            "stat_4_label": "Batch every time"
+          }
+        },
+        "ch3": {
+          "type": "chapter",
+          "settings": {
+            "image_side": "left",
+            "eyebrow": "OUR VALUES",
+            "heading": "Quality Over Everything",
+            "body": "<p>We never compromise. Every sesame seed is inspected. Every jar is stone-ground in small batches. No shortcuts, no additives, no stabilizers — just pure tahini the way it's been made for generations.</p><p>When you open a jar of Balsam, you taste the difference immediately.</p>"
+          }
+        },
+        "cta1": {
+          "type": "cta",
+          "settings": {
+            "heading": "Ready to taste the difference?",
+            "body": "Order your first jar today and experience what real tahini tastes like.",
+            "primary_label": "Shop now",
+            "primary_url": "",
+            "secondary_label": "Get in touch",
+            "secondary_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "ch1",
+        "ch2",
+        "stats",
+        "ch3",
+        "cta1"
+      ],
+      "settings": {
+        "eyebrow": "OUR STORY",
+        "heading": "Made with Roots in Mind",
+        "intro": "Balsam Tahini was born out of a deep love for authentic, real food — the kind passed down through generations. We set out to make the purest tahini possible, and we haven't looked back.",
+        "mission": "\"We believe simple, clean ingredients make the best food. No shortcuts, no additives — just pure sesame, stone-ground with care.\"",
+        "bg": "cream"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

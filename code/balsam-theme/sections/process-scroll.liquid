@@ -1,0 +1,312 @@
+<section class="ps-section section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+    <div class="ps-section__header container">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow ps-eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ps-section__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="ps-section__inner">
+
+    <!-- Left: sticky image stack -->
+    <div class="ps-section__media" aria-hidden="true">
+      <div class="ps-section__media-sticky">
+        {%- for block in section.blocks -%}
+          <div
+            class="ps-section__img-wrap{% if forloop.first %} ps-img--active{% endif %}"
+            data-ps-img="{{ forloop.index0 }}"
+          >
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 900 }}"
+                srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w"
+                sizes="(max-width: 959px) 100vw, 50vw"
+                alt="{{ block.settings.title | escape }}"
+                width="900" height="900"
+                loading="lazy"
+                class="ps-section__img"
+              >
+            {%- else -%}
+              <div class="ps-section__img-placeholder"></div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- Right: scrollable steps -->
+    <div class="ps-section__steps">
+      {%- for block in section.blocks -%}
+        <div
+          class="ps-section__step"
+          data-ps-step="{{ forloop.index0 }}"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.label != blank -%}
+            <span class="ps-section__step-num">{{ block.settings.label }}</span>
+          {%- endif -%}
+          {%- if block.settings.title != blank -%}
+            <h3 class="ps-section__step-title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+          {%- if block.settings.body != blank -%}
+            <div class="ps-section__step-body rte">{{ block.settings.body }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Process Scroll",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "select", "id": "bg", "label": "Background", "default": "canvas",
+      "options": [
+        { "value": "canvas", "label": "White" },
+        { "value": "cream", "label": "Cream" }
+      ]
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "OUR PROCESS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Crafted with Intention" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "label", "label": "Step label (e.g. 01)", "default": "01" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Premium Sesame Seeds" },
+        { "type": "richtext", "id": "body", "label": "Description", "default": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Process Scroll",
+      "settings": {
+        "eyebrow": "OUR PROCESS",
+        "heading": "Crafted with Intention",
+        "bg": "canvas"
+      },
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "label": "01",
+            "title": "Premium Sesame Seeds",
+            "body": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "02",
+            "title": "Traditional Stone-Grinding",
+            "body": "<p>Our tahini is slowly stone-ground the traditional way — cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "03",
+            "title": "Small Batch Production",
+            "body": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention — quality over volume, every single time.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "04",
+            "title": "Zero Additives, Ever",
+            "body": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "label": "05",
+            "title": "Shipped Fresh to Your Door",
+            "body": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest — never sitting in a warehouse for months.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .ps-section { padding: 0; }
+
+  /* Section header — centered above the 2-col grid */
+  .ps-section__header {
+    text-align: center;
+    padding: var(--space-16) var(--container-gutter-desktop, 40px) var(--space-10);
+  }
+  .ps-eyebrow { margin-bottom: var(--space-2); }
+  .ps-section__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.15;
+    letter-spacing: var(--tracking-display);
+    margin-bottom: 0;
+  }
+
+  /* ── Desktop 2-col layout ── */
+  .ps-section__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start; /* critical — lets left column stick independently */
+  }
+
+  /* Left: CSS sticky — pinned at top, fills viewport height */
+  .ps-section__media {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .ps-section__media-sticky {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Image stack — each absolutely fills the sticky pane, fade in/out */
+  .ps-section__img-wrap {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .ps-section__img-wrap.ps-img--active { opacity: 1; }
+
+  .ps-section__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ps-section__img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--surface-warm, #F5F0E8);
+  }
+
+  /* Right: scrollable steps — padding gives breathing room */
+  .ps-section__steps {
+    padding: 0 var(--container-gutter-desktop, 40px) 120px 64px;
+  }
+
+  .ps-section__step {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .ps-section__step:last-child { border-bottom: none; }
+
+  .ps-section__step-num {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--space-4);
+  }
+
+  .ps-section__step-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.2;
+    margin-bottom: var(--space-5);
+  }
+
+  .ps-section__step-body {
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    color: var(--fg-2);
+    max-width: 480px;
+  }
+  .ps-section__step-body p { margin-bottom: var(--space-3); }
+  .ps-section__step-body p:last-child { margin-bottom: 0; }
+
+  /* ── Mobile ── */
+  @media (max-width: 959px) {
+    .ps-section__inner { display: block; }
+
+    .ps-section__media {
+      position: sticky;
+      top: 0;
+      height: 56vw;
+      min-height: 260px;
+      max-height: 400px;
+      z-index: 10;
+    }
+
+    .ps-section__steps {
+      padding: 0;
+      position: relative;
+      z-index: 5;
+      background: var(--bg);
+    }
+    .section--cream .ps-section__steps { background: var(--surface-warm); }
+
+    .ps-section__step {
+      min-height: auto;
+      padding: 48px var(--container-gutter-phone, 16px);
+      justify-content: flex-start;
+    }
+
+    .ps-section__step-body { max-width: 100%; }
+  }
+</style>
+
+<script>
+(function () {
+  document.querySelectorAll('.ps-section').forEach(function (section) {
+    var steps = Array.prototype.slice.call(section.querySelectorAll('[data-ps-step]'));
+    var imgs  = Array.prototype.slice.call(section.querySelectorAll('[data-ps-img]'));
+    if (steps.length < 1) return;
+
+    var current = 0;
+
+    function activate(index) {
+      if (index === current) return;
+      if (imgs[current]) imgs[current].classList.remove('ps-img--active');
+      if (imgs[index])   imgs[index].classList.add('ps-img--active');
+      current = index;
+    }
+
+    /* Trigger image switch when step is 20% through from top or bottom */
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          activate(parseInt(entry.target.dataset.psStep, 10));
+        }
+      });
+    }, { rootMargin: '-20% 0px -20% 0px', threshold: 0 });
+
+    steps.forEach(function (step) { observer.observe(step); });
+  });
+})();
+</script>

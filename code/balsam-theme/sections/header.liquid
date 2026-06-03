@@ -1,51 +1,66 @@
+{%- assign mega_trigger = section.settings.mega_trigger | default: 'Shop' -%}
+{%- assign mega_groups  = section.blocks | where: 'type', 'mega_group' -%}
+
+{%- comment -%} Build group-start positions for positional item grouping {%- endcomment -%}
+{%- assign _grp_positions = "" -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'mega_group' -%}
+    {%- assign _grp_positions = _grp_positions | append: forloop.index0 | append: "||" -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign _grp_pos_arr = _grp_positions | split: "||" -%}
+
 <header class="site-header" id="site-header" role="banner">
   <div class="header__inner container">
 
     <!-- Logo -->
     <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ shop.name }}">
-      {%- if settings.logo -%}
-        <img
-          src="{{ settings.logo | image_url: width: settings.logo_width | times: 2 }}"
-          alt="{{ settings.logo.alt | default: shop.name }}"
-          width="{{ settings.logo_width }}"
-          height="auto"
-          loading="eager"
-        >
-      {%- else -%}
-        <span class="header__logo-text">{{ shop.name }}</span>
-      {%- endif -%}
+      <img
+        src="{{ 'balsam-logo.svg' | asset_url }}"
+        alt="{{ shop.name }}"
+        width="120"
+        height="60"
+        loading="eager"
+      >
     </a>
 
-    <!-- Primary nav (desktop) -->
-    <nav class="header__nav" id="header-nav" aria-label="Main navigation">
+    <!-- Desktop nav -->
+    <nav class="header__nav" aria-label="Main navigation">
       <ul class="header__nav-list" role="list">
         {%- for link in linklists[settings.main_menu].links -%}
-          <li class="header__nav-item">
-            {%- if link.links.size > 0 -%}
-              <button
-                class="header__nav-link header__nav-link--toggle"
-                aria-expanded="false"
-                aria-haspopup="true"
-                type="button"
-              >
+          {%- assign is_mega = false -%}
+          {%- if link.title == mega_trigger and mega_groups.size > 0 -%}
+            {%- assign is_mega = true -%}
+          {%- endif -%}
+
+          <li class="header__nav-item{% if is_mega %} hni--mega{% endif %}">
+            {%- if is_mega -%}
+              <button class="header__nav-link hni__mega-btn" type="button"
+                aria-expanded="false" aria-haspopup="dialog" data-mega-btn>
                 {{ link.title }}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+            {%- elsif link.links.size > 0 -%}
+              <button class="header__nav-link header__nav-link--toggle" type="button"
+                aria-expanded="false" aria-haspopup="true">
+                {{ link.title }}
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                   <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </button>
               <ul class="header__dropdown" role="list">
                 {%- for child in link.links -%}
-                  <li>
-                    <a href="{{ child.url }}" class="header__dropdown-link">{{ child.title }}</a>
-                  </li>
+                  <li><a href="{{ child.url }}" class="header__dropdown-link">{{ child.title }}</a></li>
                 {%- endfor -%}
               </ul>
+
             {%- else -%}
-              <a
-                href="{{ link.url }}"
+              <a href="{{ link.url }}"
                 class="header__nav-link{% if link.active %} header__nav-link--active{% endif %}"
-                {% if link.current %}aria-current="page"{% endif %}
-              >{{ link.title }}</a>
+                {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
             {%- endif -%}
           </li>
         {%- endfor -%}
@@ -54,302 +69,879 @@
 
     <!-- Utility icons -->
     <div class="header__utils">
-      <a href="{{ routes.search_url }}" class="header__icon-btn" aria-label="{{ 'header.search' | t }}">
+      <button type="button" class="header__icon-btn" aria-label="Open search" data-search-open>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
           <path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-      </a>
-
+      </button>
       {%- if shop.customer_accounts_enabled -%}
-        <a
-          href="{{ routes.account_url }}"
-          class="header__icon-btn"
-          aria-label="{{ 'header.account' | t }}"
-        >
+        <a href="{{ routes.account_url }}" class="header__icon-btn" aria-label="Account">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.5"/>
             <path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </a>
       {%- endif -%}
-
-      <a
-        href="{{ routes.cart_url }}"
-        class="header__icon-btn header__cart-btn"
-        aria-label="{{ 'header.cart' | t }}"
-        data-open-cart
-      >
+      <a href="/pages/wishlist" class="header__icon-btn header__wishlist-btn" aria-label="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="header__wishlist-badge" data-wishlist-count hidden></span>
+      </a>
+      <a href="{{ routes.cart_url }}" class="header__icon-btn header__cart-btn" aria-label="Cart" data-open-cart>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M2 2h2l2.4 9.39A2 2 0 0 0 8.34 13h7.32a2 2 0 0 0 1.94-1.51L19 6H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 2h2l2.4 9.39A2 2 0 0 0 8.34 13h7.32a2 2 0 0 0 1.94-1.51L19 6H5"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           <circle cx="8" cy="17" r="1" fill="currentColor"/>
           <circle cx="16" cy="17" r="1" fill="currentColor"/>
         </svg>
-        {%- if cart.item_count > 0 -%}
-          <span class="header__cart-badge" aria-label="{{ 'header.cart_count' | t: count: cart.item_count }}">
-            {{ cart.item_count }}
-          </span>
-        {%- endif -%}
+        <span class="header__cart-badge" data-cart-count
+          {% unless cart.item_count > 0 %}style="display:none"{% endunless %}>{{ cart.item_count }}</span>
       </a>
-
-      <!-- Mobile menu toggle -->
-      <button
-        class="header__nav-toggle"
-        type="button"
-        aria-controls="header-nav"
-        aria-expanded="false"
-        aria-label="{{ 'header.menu' | t }}"
-      >
-        <svg class="icon-menu" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+      <button class="header__hamburger" type="button"
+        aria-controls="mobile-nav" aria-expanded="false" aria-label="Open menu" data-hamburger>
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
           <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true" style="display:none">
-          <path d="M3 3l16 16M19 3L3 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </button>
     </div>
 
-  </div>
+  </div><!-- /.header__inner -->
+
+  <!-- ── Mega menu ─────────────────────────────────────── -->
+  {%- if mega_groups.size > 0 -%}
+    <div class="mega-menu" id="mega-menu" role="dialog"
+      aria-label="{{ mega_trigger }} menu" aria-hidden="true">
+      <div class="mega-menu__inner">
+
+        <!-- COL 1 — static group labels, never change size -->
+        <div class="mega-menu__col1">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'mega_group' -%}
+              <button class="mega-group-btn" type="button"
+                data-group="{{ block.id }}" {{ block.shopify_attributes }}>
+                {{ block.settings.label }}
+                <svg class="mga" width="13" height="13" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+
+          {%- if section.settings.shop_all_label != blank -%}
+            <div class="mega-col1__footer">
+              <a href="{{ section.settings.shop_all_url | default: routes.collections_url }}"
+                class="mega-shop-all">{{ section.settings.shop_all_label }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- COL 2 — item panels, one per group, JS swaps visibility -->
+        <div class="mega-menu__col2">
+          {%- assign _grp_ri = 0 -%}
+          {%- for grp_block in section.blocks -%}
+            {%- if grp_block.type == 'mega_group' -%}
+              {%- assign _gs = _grp_pos_arr[_grp_ri] | plus: 1 -%}
+              {%- assign _gnext = _grp_ri | plus: 1 -%}
+              {%- if _grp_pos_arr[_gnext] != blank -%}
+                {%- assign _ge = _grp_pos_arr[_gnext] | plus: 0 -%}
+              {%- else -%}
+                {%- assign _ge = 9999 -%}
+              {%- endif -%}
+
+              <div class="mega-items-panel" data-items-panel="{{ grp_block.id }}" hidden>
+                {%- for item_block in section.blocks -%}
+                  {%- if item_block.type == 'mega_item' -%}
+                    {%- if forloop.index0 >= _gs and forloop.index0 < _ge -%}
+                      <a href="{{ item_block.settings.url | default: routes.collections_url }}"
+                        class="mega-item-link"
+                        data-item="{{ item_block.id }}"
+                        {{ item_block.shopify_attributes }}>
+                        {{ item_block.settings.label }}
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              {%- assign _grp_ri = _grp_ri | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <!-- COL 3 — featured tile, JS swaps visibility -->
+        <div class="mega-menu__col3">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'mega_item' -%}
+              <div class="mega-panel" data-panel="{{ block.id }}" hidden>
+                <a href="{{ block.settings.url | default: routes.collections_url }}"
+                  class="mega-featured-tile" {{ block.shopify_attributes }}>
+                  <div class="mega-featured-tile__img-wrap"
+                    style="background:{{ block.settings.bg_color | default: '#F5F0E8' }};">
+                    {%- if block.settings.image -%}
+                      <img
+                        src="{{ block.settings.image | image_url: width: 480 }}"
+                        alt="{{ block.settings.label | escape }}"
+                        width="240" height="300"
+                        loading="lazy"
+                        class="mega-featured-tile__img"
+                      >
+                    {%- endif -%}
+                  </div>
+                  <div class="mega-featured-tile__body">
+                    <span class="mega-featured-tile__label">{{ block.settings.label }}</span>
+                    <span class="mega-featured-tile__cta">Browse Collection →</span>
+                  </div>
+                </a>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div class="mega-panel mega-panel--empty" data-panel="__empty">
+            <p class="mega-empty-hint">← Hover a category</p>
+          </div>
+        </div>
+
+      </div><!-- /.mega-menu__inner -->
+    </div>
+  {%- endif -%}
+
 </header>
+
+<!-- ── Predictive search overlay ─────────────────────── -->
+<div class="srch-overlay" id="srch-overlay" aria-hidden="true" hidden>
+  <div class="srch-modal" role="dialog" aria-label="Search" aria-modal="true">
+    <div class="srch-input-row">
+      <svg class="srch-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input class="srch-input" type="search" id="srch-input"
+        placeholder="Search products, collections…" autocomplete="off" spellcheck="false">
+      <button class="srch-clear" type="button" aria-label="Clear" hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="srch-close" type="button" aria-label="Close search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="srch-results" id="srch-results" hidden>
+      <div class="srch-col srch-col--suggestions">
+        <span class="srch-col-label">SUGGESTIONS</span>
+        <ul class="srch-sug-list" id="srch-suggestions"></ul>
+      </div>
+      <div class="srch-col srch-col--products">
+        <span class="srch-col-label">PRODUCTS</span>
+        <ul class="srch-prod-list" id="srch-products"></ul>
+      </div>
+    </div>
+    <div class="srch-empty" id="srch-empty" hidden>
+      <p>No results for "<span id="srch-empty-term"></span>"</p>
+    </div>
+    <a class="srch-footer-link" id="srch-footer-link" href="/search?q=" hidden>
+      Search for "<span id="srch-footer-term"></span>" →
+    </a>
+  </div>
+</div>
+
+<!-- ── Mobile nav ─────────────────────────────────────── -->
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true" data-mobile-nav>
+  <div class="mobile-nav__backdrop" data-mobile-close></div>
+  <div class="mobile-nav__panel">
+    <div class="mobile-nav__hdr">
+      <a href="{{ routes.root_url }}" class="mobile-nav__logo-link">
+        <img src="{{ 'balsam-logo.svg' | asset_url }}"
+          alt="{{ shop.name }}" width="100" height="50" loading="eager">
+      </a>
+      <button class="mobile-nav__close" type="button" aria-label="Close menu" data-mobile-close>
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M3 3l16 16M19 3L3 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-nav__body">
+      <ul class="mobile-nav__list" role="list">
+        {%- for link in linklists[settings.main_menu].links -%}
+          {%- assign is_mega_mob = false -%}
+          {%- if link.title == mega_trigger and mega_groups.size > 0 -%}
+            {%- assign is_mega_mob = true -%}
+          {%- endif -%}
+          <li class="mobile-nav__item">
+            {%- if is_mega_mob or link.links.size > 0 -%}
+              <button class="mob-link mob-link--toggle" type="button" aria-expanded="false">
+                {{ link.title }}
+                <svg class="mob-chevron" width="16" height="16" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+              <div class="mob-sub" hidden>
+                {%- if is_mega_mob -%}
+                  {%- assign _mob_grp_ri = 0 -%}
+                  {%- for grp_block in section.blocks -%}
+                    {%- if grp_block.type == 'mega_group' -%}
+                      {%- assign _mgs = _grp_pos_arr[_mob_grp_ri] | plus: 1 -%}
+                      {%- assign _mgnext = _mob_grp_ri | plus: 1 -%}
+                      {%- if _grp_pos_arr[_mgnext] != blank -%}
+                        {%- assign _mge = _grp_pos_arr[_mgnext] | plus: 0 -%}
+                      {%- else -%}
+                        {%- assign _mge = 9999 -%}
+                      {%- endif -%}
+                      <p class="mob-sub__heading">{{ grp_block.settings.label }}</p>
+                      {%- for item_block in section.blocks -%}
+                        {%- if item_block.type == 'mega_item' -%}
+                          {%- if forloop.index0 >= _mgs and forloop.index0 < _mge -%}
+                            <a href="{{ item_block.settings.url }}" class="mob-sub__link">{{ item_block.settings.label }}</a>
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {%- assign _mob_grp_ri = _mob_grp_ri | plus: 1 -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if section.settings.shop_all_label != blank -%}
+                    <a href="{{ section.settings.shop_all_url | default: routes.collections_url }}"
+                      class="mob-sub__all">{{ section.settings.shop_all_label }}</a>
+                  {%- endif -%}
+                {%- else -%}
+                  {%- for child in link.links -%}
+                    <a href="{{ child.url }}" class="mob-sub__link">{{ child.title }}</a>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            {%- else -%}
+              <a href="{{ link.url }}" class="mob-link"
+                {% if link.current %}aria-current="page"{% endif %}>{{ link.title }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+        <li class="mobile-nav__item mobile-nav__item--sep">
+          <button type="button" class="mob-link mob-link--util" data-search-open>Search</button>
+        </li>
+        {%- if shop.customer_accounts_enabled -%}
+          <li class="mobile-nav__item">
+            <a href="{{ routes.account_url }}" class="mob-link mob-link--util">Account</a>
+          </li>
+        {%- endif -%}
+        <li class="mobile-nav__item">
+          <a href="/pages/wishlist" class="mob-link mob-link--util">Wishlist</a>
+        </li>
+        <li class="mobile-nav__item">
+          <a href="{{ routes.cart_url }}" class="mob-link mob-link--util">
+            Cart{%- if cart.item_count > 0 -%}<span class="mob-cart-count">{{ cart.item_count }}</span>{%- endif -%}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 
 {% schema %}
 {
   "name": "Header",
   "limit": 1,
-  "settings": [],
-  "presets": [
+  "max_blocks": 80,
+  "settings": [
     {
-      "name": "Header"
+      "type": "text",
+      "id": "mega_trigger",
+      "label": "Mega menu nav title",
+      "default": "Shop",
+      "info": "Exact title of the nav link that opens the mega menu (case-sensitive)"
+    },
+    { "type": "header", "content": "Shop all button" },
+    { "type": "text", "id": "shop_all_label", "label": "Button label", "default": "SHOP ALL" },
+    { "type": "url",  "id": "shop_all_url",   "label": "Button URL" }
+  ],
+  "blocks": [
+    {
+      "type": "mega_group",
+      "name": "Category group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Group name",
+          "default": "Collections",
+          "info": "Left-column label. Add Category item blocks directly below this."
+        }
+      ]
+    },
+    {
+      "type": "mega_item",
+      "name": "Category item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Category name",
+          "default": "Tahini"
+        },
+        { "type": "url",          "id": "url",      "label": "Collection URL" },
+        { "type": "image_picker", "id": "image",    "label": "Featured image" },
+        { "type": "color",        "id": "bg_color", "label": "Image background", "default": "#F5F0E8" }
+      ]
     }
-  ]
+  ],
+  "presets": [{ "name": "Header" }]
 }
 {% endschema %}
 
 <style>
+  /* ── Header shell ── */
   .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background-color: var(--surface);
-    border-bottom: 1px solid var(--border-soft);
-    transition: box-shadow var(--motion-fast) var(--ease-standard);
+    position: relative; z-index: 200;
+    background: #fff;
+    border-bottom: 1px solid var(--border-soft, #F0F0EC);
+    transition: box-shadow 0.2s ease;
   }
-
-  .site-header--scrolled {
-    box-shadow: var(--elev-raised);
-  }
+  .site-header--scrolled { box-shadow: 0 2px 16px rgba(0,0,0,0.09); }
 
   .header__inner {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    height: 72px;
-    gap: var(--space-6);
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; height: 72px; gap: 24px;
   }
+  .header__logo { justify-self: start; display: flex; align-items: center; }
+  .header__logo img { display: block; max-height: 44px; width: auto; }
+  .header__logo-text { font-size: 1.25rem; font-weight: 700; color: var(--fg); }
 
-  .header__logo {
-    justify-self: start;
-    display: flex;
-    align-items: center;
-  }
-
-  .header__logo-text {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: 700;
-    color: var(--fg);
-    letter-spacing: var(--tracking-display);
-  }
-
-  /* Nav */
-  .header__nav {
-    justify-self: center;
-  }
-
-  .header__nav-list {
-    display: flex;
-    align-items: center;
-    gap: var(--space-6);
-    list-style: none;
-  }
-
-  .header__nav-item {
-    position: relative;
-  }
+  /* ── Desktop nav ── */
+  .header__nav { justify-self: center; }
+  .header__nav-list { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .header__nav-item { position: relative; }
 
   .header__nav-link {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--fg-2);
-    text-decoration: none;
-    padding-block: var(--space-2);
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    transition: color var(--motion-fast) var(--ease-standard);
+    font-size: 0.875rem; font-weight: 600; color: var(--fg-2, #4B5563);
+    text-decoration: none; padding-block: 8px; background: none; border: none;
+    cursor: pointer; display: flex; align-items: center; gap: 4px;
+    transition: color 0.15s; white-space: nowrap; position: relative;
   }
-
   .header__nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--accent);
-    transition: width var(--motion-fast) var(--ease-standard);
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 2px; background: var(--accent, #1B4332); transition: width 0.2s;
   }
-
-  .header__nav-link:hover,
-  .header__nav-link--active {
-    color: var(--fg);
-  }
-
   .header__nav-link:hover::after,
-  .header__nav-link--active::after {
-    width: 100%;
-  }
+  .header__nav-link--active::after { width: 100%; }
+  .header__nav-link:hover,
+  .header__nav-link--active { color: var(--fg, #22292F); }
 
-  /* Dropdown */
   .header__dropdown {
-    display: none;
-    position: absolute;
-    top: calc(100% + var(--space-2));
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--elev-raised);
-    min-width: 180px;
-    padding: var(--space-2);
-    list-style: none;
-    z-index: 10;
+    display: none; position: absolute; top: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%); background: #fff; border: 1px solid #E5E7EB;
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    min-width: 180px; padding: 8px; list-style: none; z-index: 50;
   }
-
   .header__nav-item:hover .header__dropdown,
-  .header__nav-item:focus-within .header__dropdown {
-    display: block;
-  }
-
+  .header__nav-item:focus-within .header__dropdown { display: block; }
   .header__dropdown-link {
-    display: block;
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--fg-2);
-    border-radius: var(--radius-sm);
-    transition: background-color var(--motion-fast) var(--ease-standard);
+    display: block; padding: 8px 16px; font-size: 0.875rem; font-weight: 600;
+    color: var(--fg-2); border-radius: 6px; transition: background 0.15s;
   }
+  .header__dropdown-link:hover { background: #F5F5F3; color: var(--fg); }
 
-  .header__dropdown-link:hover {
-    background-color: var(--border-soft);
-    color: var(--fg);
-  }
-
-  /* Utility icons */
-  .header__utils {
-    justify-self: end;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-
+  .header__utils { justify-self: end; display: flex; align-items: center; gap: 4px; }
   .header__icon-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    color: var(--fg-2);
-    border-radius: var(--radius-sm);
-    transition: color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
+    position: relative; display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; color: var(--fg-2);
+    border-radius: 8px; transition: color 0.15s, background 0.15s;
   }
-
-  .header__icon-btn:hover {
-    color: var(--fg);
-    background-color: var(--border-soft);
-  }
-
-  .header__icon-btn:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-  }
-
+  .header__icon-btn:hover { color: var(--fg); background: var(--border-soft); }
   .header__cart-badge {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    min-width: 18px;
-    height: 18px;
-    padding-inline: 4px;
-    background-color: var(--accent);
-    color: var(--accent-on);
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 18px;
-    text-align: center;
-    border-radius: var(--radius-pill);
-    pointer-events: none;
+    position: absolute; top: 4px; right: 4px;
+    min-width: 18px; height: 18px; padding-inline: 4px;
+    background: var(--accent, #1B4332); color: #fff;
+    font-size: 10px; font-weight: 700; line-height: 18px; text-align: center;
+    border-radius: 999px; pointer-events: none;
+  }
+  .header__wishlist-badge {
+    position: absolute; top: 4px; right: 4px;
+    min-width: 18px; height: 18px; padding-inline: 4px;
+    background: var(--accent, #1B4332); color: #fff;
+    font-size: 10px; font-weight: 700; line-height: 18px; text-align: center;
+    border-radius: 999px; pointer-events: none;
+  }
+  .header__wishlist-btn { position: relative; }
+  .header__hamburger {
+    display: none; background: none; border: none; color: var(--fg); cursor: pointer;
+    padding: 8px; border-radius: 6px; align-items: center; justify-content: center;
+  }
+  .header__hamburger:hover { background: var(--border-soft); }
+
+  /* ── Mega menu shell ── */
+  .mega-menu {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: #fff; border-top: 2px solid var(--accent, #1B4332);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.13);
+    z-index: 150; opacity: 0; pointer-events: none;
+    transform: translateY(-6px); transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+  .mega-menu--open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  /* Three fixed columns — nothing expands, nothing moves */
+  .mega-menu__inner {
+    display: grid;
+    grid-template-columns: 180px 200px 1fr;
+    max-width: 1200px; margin: 0 auto; min-height: 320px;
   }
 
-  /* Mobile toggle */
-  .header__nav-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--fg);
-    cursor: pointer;
-    padding: var(--space-1);
+  /* ── COL 1: static group labels ── */
+  .mega-menu__col1 {
+    border-right: 1px solid #E5E7EB;
+    display: flex; flex-direction: column;
+    padding: 12px 0;
   }
 
-  @media (max-width: 767px) {
-    .header__inner {
-      grid-template-columns: 1fr auto;
-      height: 60px;
-    }
+  /* Group button — fixed height, never grows */
+  .mega-group-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 13px 18px;
+    font-size: 0.875rem; font-weight: 600; color: #374151;
+    background: none; border: none; border-left: 3px solid transparent;
+    cursor: pointer; text-align: left; white-space: nowrap;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .mega-group-btn:hover,
+  .mega-group-btn--active {
+    background: #F0F5F1;
+    color: var(--accent, #1B4332);
+    border-left-color: var(--accent, #1B4332);
+  }
+  /* Arrow — hidden until hover/active */
+  .mga {
+    flex-shrink: 0; color: var(--accent, #1B4332);
+    opacity: 0; transition: opacity 0.15s, transform 0.15s;
+  }
+  .mega-group-btn:hover .mga,
+  .mega-group-btn--active .mga { opacity: 1; }
 
-    .header__nav {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: var(--space-4) var(--container-gutter-phone);
-      box-shadow: var(--elev-raised);
-    }
+  .mega-col1__footer { margin-top: auto; padding: 16px 18px 12px; }
+  .mega-shop-all {
+    display: flex; align-items: center; justify-content: center;
+    padding: 10px 20px; background: var(--accent, #1B4332); color: #fff;
+    border-radius: 999px; font-size: 0.72rem; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+    transition: background 0.18s;
+  }
+  .mega-shop-all:hover { background: #144028; }
 
-    .header__nav.header__nav--open {
-      display: block;
-    }
+  /* ── COL 2: item panels ── */
+  .mega-menu__col2 {
+    border-right: 1px solid #E5E7EB;
+    padding: 12px 0;
+  }
 
-    .header__nav-list {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-1);
-    }
+  .mega-items-panel { display: block; }
+  .mega-items-panel[hidden] { display: none; }
 
-    .header__nav-toggle {
-      display: flex;
-    }
+  .mega-item-link {
+    display: block; padding: 11px 18px;
+    font-size: 0.875rem; font-weight: 600; color: #374151;
+    text-decoration: none; border-left: 3px solid transparent;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .mega-item-link:hover,
+  .mega-item-link--active {
+    background: #F0F5F1; color: var(--accent, #1B4332);
+    border-left-color: var(--accent, #1B4332);
+  }
 
-    .header__dropdown {
-      position: static;
-      transform: none;
-      box-shadow: none;
-      border: none;
-      padding: 0 0 0 var(--space-4);
-    }
+  /* ── COL 3: featured tile ── */
+  .mega-menu__col3 {
+    display: flex; align-items: center; justify-content: center;
+    padding: 28px 36px;
+  }
 
-    .header__nav-item:hover .header__dropdown {
-      display: none;
-    }
+  .mega-panel { display: none; }
+  .mega-panel:not([hidden]) { display: flex; align-items: center; justify-content: center; width: 100%; }
+  .mega-panel--empty { height: 100%; width: 100%; }
+  .mega-panel--empty[hidden] { display: none; }
+  .mega-empty-hint { font-size: 0.875rem; color: #D1D5DB; font-style: italic; }
+
+  .mega-featured-tile {
+    display: flex; flex-direction: column; width: 190px;
+    text-decoration: none; border-radius: 12px;
+    overflow: hidden; border: 1px solid #F3F4F6; background: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .mega-featured-tile:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .mega-featured-tile__img-wrap { aspect-ratio: 3/4; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .mega-featured-tile__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+  .mega-featured-tile:hover .mega-featured-tile__img { transform: scale(1.04); }
+  .mega-featured-tile__body { padding: 11px 13px; border-top: 1px solid #F3F4F6; }
+  .mega-featured-tile__label { display: block; font-size: 0.85rem; font-weight: 700; color: #22292F; }
+  .mega-featured-tile__cta { display: block; font-size: 0.71rem; font-weight: 600; color: var(--accent, #1B4332); margin-top: 3px; }
+
+  /* ── Mobile ── */
+  .mobile-nav { position: fixed; inset: 0; z-index: 300; pointer-events: none; visibility: hidden; }
+  .mobile-nav--open { pointer-events: all; visibility: visible; }
+  .mobile-nav__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s; cursor: pointer; }
+  .mobile-nav--open .mobile-nav__backdrop { opacity: 1; }
+  .mobile-nav__panel { position: absolute; left: 0; top: 0; bottom: 0; width: min(340px,88vw); background: #fff; display: flex; flex-direction: column; transform: translateX(-100%); transition: transform 0.32s cubic-bezier(0.23,1,0.32,1); overflow: hidden; }
+  .mobile-nav--open .mobile-nav__panel { transform: translateX(0); }
+  .mobile-nav__hdr { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #F3F4F6; flex-shrink: 0; }
+  .mobile-nav__logo-link img { max-height: 36px; width: auto; display: block; }
+  .mobile-nav__close { background: none; border: none; color: #374151; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; align-items: center; }
+  .mobile-nav__close:hover { background: #F3F4F6; }
+  .mobile-nav__body { flex: 1; overflow-y: auto; padding-bottom: 32px; }
+  .mobile-nav__list { list-style: none; }
+  .mobile-nav__item { border-bottom: 1px solid #F3F4F6; }
+  .mobile-nav__item--sep { border-top: 2px solid #F3F4F6; margin-top: 8px; }
+  .mob-link { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 17px 20px; font-size: 1rem; font-weight: 700; color: #22292F; text-decoration: none; background: none; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; text-align: left; }
+  .mob-link:hover { background: #F9FAFB; color: #1B4332; }
+  .mob-link--util { font-size: 0.9rem; font-weight: 600; color: #6B7280; padding-block: 13px; }
+  .mob-chevron { flex-shrink: 0; transition: transform 0.2s; }
+  .mob-link--toggle[aria-expanded="true"] .mob-chevron { transform: rotate(180deg); }
+  .mob-sub { background: #FAFAF8; border-top: 1px solid #F3F4F6; padding: 4px 20px 16px; }
+  .mob-sub__heading { font-size: 0.63rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #9CA3AF; margin: 14px 0 6px; }
+  .mob-sub__link { display: block; padding: 9px 0; font-size: 0.95rem; font-weight: 600; color: #374151; text-decoration: none; border-bottom: 1px solid #F3F4F6; transition: color 0.15s, padding-left 0.15s; }
+  .mob-sub__link:last-of-type { border-bottom: none; }
+  .mob-sub__link:hover { color: #1B4332; padding-left: 4px; }
+  .mob-sub__all { display: block; margin-top: 16px; padding: 12px 20px; background: #1B4332; color: #fff; border-radius: 999px; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; text-align: center; }
+  .mob-sub__all:hover { background: #144028; }
+  .mob-cart-count { background: #1B4332; color: #fff; font-size: 0.72rem; font-weight: 700; border-radius: 999px; padding: 1px 7px; margin-left: 6px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 991px) {
+    .header__nav { display: none; }
+    .header__hamburger { display: flex; }
+    .header__inner { grid-template-columns: 1fr auto; }
+  }
+  @media (max-width: 1199px) {
+    .mega-menu__inner { grid-template-columns: 160px 190px 1fr; }
+  }
+
+  /* ── Predictive search overlay ── */
+  .srch-overlay {
+    position: fixed; inset: 0; z-index: 250;
+    background: rgba(0,0,0,0.45);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 80px;
+    opacity: 0; transition: opacity 0.22s ease;
+  }
+  .srch-overlay.is-open { opacity: 1; }
+  .srch-overlay[hidden] { display: none; }
+  .srch-modal {
+    background: #fff; border-radius: 16px;
+    width: min(760px, calc(100vw - 32px));
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    overflow: hidden; max-height: calc(100vh - 120px); overflow-y: auto;
+    transform: translateY(-10px); transition: transform 0.22s ease;
+  }
+  .srch-overlay.is-open .srch-modal { transform: translateY(0); }
+  .srch-input-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 24px; border-bottom: 1px solid #F3F4F6;
+    position: sticky; top: 0; background: #fff; z-index: 1;
+  }
+  .srch-icon { flex-shrink: 0; color: #9CA3AF; }
+  .srch-input {
+    flex: 1; border: none; outline: none;
+    font-family: var(--font-body); font-size: 1.05rem; color: var(--fg);
+    background: transparent;
+  }
+  .srch-input::placeholder { color: #9CA3AF; }
+  .srch-clear, .srch-close {
+    flex-shrink: 0; background: none; border: none; cursor: pointer;
+    color: #9CA3AF; padding: 6px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s, background 0.15s;
+  }
+  .srch-clear:hover, .srch-close:hover { color: var(--fg); background: #F3F4F6; }
+  .srch-clear[hidden] { display: none; }
+  .srch-results { display: grid; grid-template-columns: 220px 1fr; border-bottom: 1px solid #F3F4F6; }
+  .srch-results[hidden] { display: none; }
+  .srch-col { padding: 16px 0; }
+  .srch-col--suggestions { border-right: 1px solid #F3F4F6; }
+  .srch-col-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #9CA3AF; padding: 0 20px 10px; display: block;
+  }
+  .srch-sug-list { list-style: none; }
+  .srch-sug-item a {
+    display: block; padding: 9px 20px;
+    font-size: 0.88rem; color: var(--fg); text-decoration: none;
+    transition: background 0.12s, color 0.12s;
+  }
+  .srch-sug-item a:hover { background: #F9FAFB; color: var(--accent, #1B4332); }
+  .srch-sug-item--none { padding: 9px 20px; font-size: 0.85rem; color: #9CA3AF; }
+  .srch-prod-list { list-style: none; }
+  .srch-prod-item a {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 20px; text-decoration: none; transition: background 0.12s;
+  }
+  .srch-prod-item a:hover { background: #F9FAFB; }
+  .srch-prod-img {
+    width: 52px; height: 52px; object-fit: cover;
+    border-radius: 8px; border: 1px solid #F3F4F6; flex-shrink: 0; display: block;
+  }
+  .srch-prod-img--placeholder { background: #F3F4F6; }
+  .srch-prod-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .srch-prod-title {
+    font-size: 0.88rem; font-weight: 600; color: var(--fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .srch-prod-price { font-size: 0.8rem; color: #6B7280; display: flex; gap: 6px; align-items: center; }
+  .srch-price--was { text-decoration: line-through; color: #9CA3AF; }
+  .srch-price--sale { color: #DC2626; font-weight: 700; }
+  .srch-footer-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; font-size: 0.88rem; font-weight: 600; color: var(--fg);
+    text-decoration: none; transition: background 0.12s, color 0.12s;
+  }
+  .srch-footer-link[hidden] { display: none; }
+  .srch-footer-link:hover { background: #F9FAFB; color: var(--accent, #1B4332); }
+  .srch-empty { padding: 32px 24px; text-align: center; font-size: 0.9rem; color: #6B7280; }
+  .srch-empty[hidden] { display: none; }
+  @media (max-width: 639px) {
+    .srch-overlay { padding-top: 16px; align-items: center; }
+    .srch-modal { border-radius: 12px; }
+    .srch-results { grid-template-columns: 1fr; }
+    .srch-col--suggestions { border-right: none; border-bottom: 1px solid #F3F4F6; }
   }
 </style>
+
+<script>
+(function () {
+  var header    = document.getElementById('site-header');
+  var megaMenu  = document.getElementById('mega-menu');
+  var megaBtn   = document.querySelector('[data-mega-btn]');
+  var megaItem  = megaBtn && megaBtn.closest('.hni--mega');
+  var hamburger = document.querySelector('[data-hamburger]');
+  var mobileNav = document.getElementById('mobile-nav');
+  var hideTimer;
+
+  window.addEventListener('scroll', function () {
+    header.classList.toggle('site-header--scrolled', window.scrollY > 4);
+  }, { passive: true });
+
+  if (megaItem && megaMenu) {
+    var groupBtns  = megaMenu.querySelectorAll('.mega-group-btn');
+    var itemPanels = megaMenu.querySelectorAll('.mega-items-panel');
+    var itemLinks  = megaMenu.querySelectorAll('.mega-item-link');
+    var tilePanels = megaMenu.querySelectorAll('.mega-panel');
+    var emptyPanel = megaMenu.querySelector('.mega-panel--empty');
+
+    function activateItem(itemId) {
+      tilePanels.forEach(function (p) { p.hidden = true; });
+      var tile = megaMenu.querySelector('.mega-panel[data-panel="' + itemId + '"]');
+      if (tile) tile.hidden = false;
+      else if (emptyPanel) emptyPanel.hidden = false;
+      itemLinks.forEach(function (l) {
+        l.classList.toggle('mega-item-link--active', l.dataset.item === itemId);
+      });
+    }
+
+    function activateGroup(groupId) {
+      /* swap col-2 panel */
+      itemPanels.forEach(function (p) { p.hidden = true; });
+      var panel = megaMenu.querySelector('.mega-items-panel[data-items-panel="' + groupId + '"]');
+      if (panel) panel.hidden = false;
+
+      /* highlight col-1 button */
+      groupBtns.forEach(function (b) {
+        b.classList.toggle('mega-group-btn--active', b.dataset.group === groupId);
+      });
+
+      /* auto-show first item's tile */
+      var first = panel && panel.querySelector('.mega-item-link');
+      if (first) {
+        activateItem(first.dataset.item);
+      } else {
+        tilePanels.forEach(function (p) { p.hidden = true; });
+        if (emptyPanel) emptyPanel.hidden = false;
+        itemLinks.forEach(function (l) { l.classList.remove('mega-item-link--active'); });
+      }
+    }
+
+    groupBtns.forEach(function (btn) {
+      btn.addEventListener('mouseenter', function () { activateGroup(btn.dataset.group); });
+    });
+    itemLinks.forEach(function (link) {
+      link.addEventListener('mouseenter', function () { activateItem(link.dataset.item); });
+    });
+
+    function defaultState() {
+      var first = groupBtns[0];
+      if (first) activateGroup(first.dataset.group);
+    }
+
+    function openMega() {
+      clearTimeout(hideTimer);
+      megaMenu.classList.add('mega-menu--open');
+      megaMenu.setAttribute('aria-hidden', 'false');
+      megaBtn.setAttribute('aria-expanded', 'true');
+      defaultState();
+    }
+    function closeMega() {
+      hideTimer = setTimeout(function () {
+        megaMenu.classList.remove('mega-menu--open');
+        megaMenu.setAttribute('aria-hidden', 'true');
+        megaBtn.setAttribute('aria-expanded', 'false');
+        groupBtns.forEach(function (b) { b.classList.remove('mega-group-btn--active'); });
+        itemLinks.forEach(function (l) { l.classList.remove('mega-item-link--active'); });
+      }, 90);
+    }
+
+    megaItem.addEventListener('mouseenter', openMega);
+    megaItem.addEventListener('mouseleave', closeMega);
+    megaMenu.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+    megaMenu.addEventListener('mouseleave', closeMega);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMega(); });
+  }
+
+  function openMobile() {
+    mobileNav.classList.add('mobile-nav--open');
+    mobileNav.setAttribute('aria-hidden', 'false');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobile() {
+    mobileNav.classList.remove('mobile-nav--open');
+    mobileNav.setAttribute('aria-hidden', 'true');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  if (hamburger) hamburger.addEventListener('click', openMobile);
+  document.querySelectorAll('[data-mobile-close]').forEach(function (el) {
+    el.addEventListener('click', closeMobile);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && mobileNav.classList.contains('mobile-nav--open')) closeMobile();
+  });
+
+  document.querySelectorAll('.mob-link--toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var sub = btn.nextElementSibling;
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      sub.hidden = expanded;
+    });
+  });
+
+  /* ── Predictive search ── */
+  var srchOverlay  = document.getElementById('srch-overlay');
+  var srchInput    = document.getElementById('srch-input');
+  var srchClearBtn = document.querySelector('.srch-clear');
+  var srchResults  = document.getElementById('srch-results');
+  var srchEmpty    = document.getElementById('srch-empty');
+  var srchFooter   = document.getElementById('srch-footer-link');
+  var srchSugList  = document.getElementById('srch-suggestions');
+  var srchProdList = document.getElementById('srch-products');
+  var srchDebounce;
+
+  if (srchOverlay && srchInput) {
+    function openSearch() {
+      if (mobileNav && mobileNav.classList.contains('mobile-nav--open')) closeMobile();
+      var stickyBar = document.querySelector('.header-sticky-group');
+      srchOverlay.style.paddingTop = (stickyBar ? stickyBar.offsetHeight + 8 : 88) + 'px';
+      srchOverlay.hidden = false;
+      requestAnimationFrame(function () { srchOverlay.classList.add('is-open'); });
+      srchInput.focus();
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSearch() {
+      srchOverlay.classList.remove('is-open');
+      var onEnd = function () { srchOverlay.hidden = true; srchOverlay.removeEventListener('transitionend', onEnd); };
+      srchOverlay.addEventListener('transitionend', onEnd);
+      document.body.style.overflow = '';
+    }
+    document.querySelectorAll('[data-search-open]').forEach(function (btn) {
+      btn.addEventListener('click', openSearch);
+    });
+    document.querySelector('.srch-close').addEventListener('click', closeSearch);
+    srchOverlay.addEventListener('click', function (e) { if (e.target === srchOverlay) closeSearch(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !srchOverlay.hidden) closeSearch(); });
+
+    srchInput.addEventListener('input', function () {
+      var q = srchInput.value.trim();
+      srchClearBtn.hidden = q.length === 0;
+      clearTimeout(srchDebounce);
+      if (q.length < 2) { srchResults.hidden = true; srchEmpty.hidden = true; srchFooter.hidden = true; return; }
+      srchDebounce = setTimeout(function () { fetchSuggestions(q); }, 280);
+    });
+    srchClearBtn.addEventListener('click', function () {
+      srchInput.value = ''; srchClearBtn.hidden = true;
+      srchResults.hidden = true; srchEmpty.hidden = true; srchFooter.hidden = true;
+      srchInput.focus();
+    });
+
+    function formatMoney(cents) { return '$' + (cents / 100).toFixed(2); }
+
+    function fetchSuggestions(q) {
+      fetch('/search/suggest.json?q=' + encodeURIComponent(q) + '&resources[type]=product,collection,page&resources[limit]=5')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { renderResults(q, data.resources.results); })
+        .catch(function () {});
+    }
+
+    function renderResults(q, results) {
+      var products    = results.products    || [];
+      var collections = results.collections || [];
+      var pages       = results.pages       || [];
+      var suggestions = collections.concat(pages);
+      srchFooter.href = '/search?q=' + encodeURIComponent(q);
+      document.getElementById('srch-footer-term').textContent = q;
+      document.getElementById('srch-empty-term').textContent  = q;
+      srchFooter.hidden = false;
+      if (products.length === 0 && suggestions.length === 0) {
+        srchResults.hidden = true; srchEmpty.hidden = false; return;
+      }
+      srchEmpty.hidden = true;
+      srchSugList.innerHTML = suggestions.map(function (s) {
+        return '<li class="srch-sug-item"><a href="' + s.url + '">' + s.title + '</a></li>';
+      }).join('') || '<li class="srch-sug-item srch-sug-item--none">No suggestions</li>';
+      srchProdList.innerHTML = products.map(function (p) {
+        var img = p.featured_image
+          ? '<img class="srch-prod-img" src="' + p.featured_image.url + '&width=104" width="52" height="52" alt="" loading="lazy">'
+          : '<div class="srch-prod-img srch-prod-img--placeholder"></div>';
+        var priceHtml = (p.compare_at_price_max && p.compare_at_price_max > p.price)
+          ? '<s class="srch-price--was">' + formatMoney(p.compare_at_price_max) + '</s><span class="srch-price--sale">' + formatMoney(p.price) + '</span>'
+          : formatMoney(p.price);
+        return '<li class="srch-prod-item"><a href="' + p.url + '">' + img
+          + '<span class="srch-prod-info"><span class="srch-prod-title">' + p.title + '</span>'
+          + '<span class="srch-prod-price">' + priceHtml + '</span></span></a></li>';
+      }).join('');
+      srchResults.hidden = false;
+    }
+  }
+
+  /* ── Wishlist badge ── */
+  function updateWishlistBadge() {
+    var WL_KEY = 'balsam-wishlist';
+    var count = 0;
+    try {
+      var raw = localStorage.getItem(WL_KEY);
+      if (raw) {
+        var data = JSON.parse(raw);
+        if (Array.isArray(data)) {
+          count = data.length;
+        } else if (typeof data === 'object' && data !== null) {
+          count = Object.keys(data).length;
+        }
+      }
+    } catch (_) {}
+    document.querySelectorAll('[data-wishlist-count]').forEach(function (el) {
+      if (count > 0) {
+        el.textContent = count;
+        el.hidden = false;
+      } else {
+        el.hidden = true;
+      }
+    });
+  }
+  updateWishlistBadge();
+  document.addEventListener('balsam:wishlist-updated', updateWishlistBadge);
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'balsam-wishlist') updateWishlistBadge();
+  });
+})();
+</script>

@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-team",
+      "blocks": {
+        "m1": { "type": "member", "settings": { "name": "Founder", "role": "Founder & CEO", "bio": "The vision behind Balsam — passionate about authentic food and building something meaningful." } },
+        "m2": { "type": "member", "settings": { "name": "Team Member", "role": "Operations", "bio": "Keeps everything running smoothly from production to your front door." } },
+        "m3": { "type": "member", "settings": { "name": "Team Member", "role": "Marketing", "bio": "Shares the Balsam story and helps customers discover the tahini they've been missing." } },
+        "m4": { "type": "member", "settings": { "name": "Team Member", "role": "Customer Care", "bio": "Here to make sure every Balsam experience exceeds expectations." } }
+      },
+      "block_order": ["m1","m2","m3","m4"],
+      "settings": {
+        "eyebrow": "THE PEOPLE BEHIND BALSAM",
+        "heading": "Meet Our Team",
+        "subheading": "A small, passionate team dedicated to bringing you the finest tahini in Canada.",
+        "bg": "canvas"
+      }
+    }
+  },
+  "order": ["main"]
+}

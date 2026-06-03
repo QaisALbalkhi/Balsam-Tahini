@@ -1,0 +1,173 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "<p>Natural Tahini, <em>Thoughtfully Made</em></p>",
+        "subheading": "Stone-ground from the finest sesame seeds. No additives, no shortcuts.",
+        "cta_label": "Shop Tahini",
+        "cta_url": "/collections/tahini",
+        "show_rating": true,
+        "rating_text": "2,000+ five-star reviews",
+        "show_certifications": true
+      }
+    },
+    "collections-grid": {
+      "type": "collections-grid",
+      "settings": {
+        "eyebrow": "EXPLORE",
+        "heading": "Our Collections",
+        "view_all_label": "View all collections",
+        "view_all_url": "/collections",
+        "bg": "canvas"
+      },
+      "blocks": {
+        "coll-tahini": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "tahini",
+            "label": "Tahini"
+          }
+        },
+        "coll-pistachio": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "pistachio-spreads",
+            "label": "Pistachio Spreads"
+          }
+        },
+        "coll-halawa": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "halawas",
+            "label": "Halawas"
+          }
+        },
+        "coll-butters": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "pure-butters",
+            "label": "Pure Butters"
+          }
+        },
+        "coll-honey": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "honey",
+            "label": "Specialty Honey"
+          }
+        },
+        "coll-oils": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "oils",
+            "label": "Oils"
+          }
+        }
+      },
+      "block_order": [
+        "coll-tahini",
+        "coll-pistachio",
+        "coll-halawa",
+        "coll-butters",
+        "coll-honey",
+        "coll-oils"
+      ]
+    },
+    "popular-products": {
+      "type": "popular-products-section",
+      "settings": {
+        "collection": "popular-products",
+        "eyebrow": "CUSTOMER FAVOURITES",
+        "heading": "Popular Products",
+        "view_all_label": "View all products",
+        "view_all_url": "/collections/popular-products",
+        "products_count": 8,
+        "bg": "canvas"
+      }
+    },
+    "recipes-carousel": {
+      "type": "recipes-carousel",
+      "settings": {
+        "blog": "recipes",
+        "eyebrow": "FROM OUR KITCHEN",
+        "heading": "Featured Recipes",
+        "articles_count": 6,
+        "show_tags": true,
+        "cta_label": "View all recipes",
+        "cta_url": "/blogs/recipes",
+        "bg": "cream"
+      }
+    },
+    "why-balsam": {
+      "type": "why-balsam",
+      "settings": {
+        "eyebrow": "OUR STORY",
+        "heading": "Why Balsam Tahini?",
+        "intro": "Stone-ground in small batches from premium sesame seeds. No preservatives, no additives. Just pure, natural tahini the way it was meant to be.",
+        "cta_label": "Our story",
+        "bg": "cream"
+      },
+      "blocks": {
+        "wb-seeds": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Premium Sesame Seeds",
+            "content": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>"
+          }
+        },
+        "wb-grind": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Traditional Stone-Grinding",
+            "content": "<p>Our tahini is slowly stone-ground the traditional way — cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>"
+          }
+        },
+        "wb-batch": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Small Batch Production",
+            "content": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention — quality over volume, every single time.</p>"
+          }
+        },
+        "wb-clean": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Zero Additives, Ever",
+            "content": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>"
+          }
+        },
+        "wb-ship": {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Shipped Fresh to Your Door",
+            "content": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest — never sitting in a warehouse for months.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "wb-seeds",
+        "wb-grind",
+        "wb-batch",
+        "wb-clean",
+        "wb-ship"
+      ]
+    }
+  },
+  "order": [
+    "hero-banner",
+    "collections-grid",
+    "popular-products",
+    "recipes-carousel",
+    "why-balsam"
+  ]
+}

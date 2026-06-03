@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-wholesale",
+      "blocks": {
+        "b1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "percent",
+            "title": "Competitive margins",
+            "body": "Wholesale pricing that lets you price competitively while maintaining healthy margins on every jar."
+          }
+        },
+        "b2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "truck",
+            "title": "Fast fulfillment",
+            "body": "Orders ship from our Mississauga facility within 1–2 business days, with flexible MOQ for new partners."
+          }
+        },
+        "b3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "handshake",
+            "title": "Dedicated support",
+            "body": "A dedicated wholesale contact to help with orders, reorders, and merchandising — any time."
+          }
+        },
+        "fp1": {
+          "type": "faire_perk",
+          "settings": {
+            "text": "Free returns on your first order"
+          }
+        },
+        "fp2": {
+          "type": "faire_perk",
+          "settings": {
+            "text": "Net 60 payment terms"
+          }
+        },
+        "fp3": {
+          "type": "faire_perk",
+          "settings": {
+            "text": "Full product catalog access"
+          }
+        },
+        "fp4": {
+          "type": "faire_perk",
+          "settings": {
+            "text": "No minimum for first-time buyers"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "fp1",
+        "fp2",
+        "fp3",
+        "fp4"
+      ],
+      "settings": {
+        "eyebrow": "WHOLESALE PARTNERS",
+        "heading": "Bring Balsam to Your Shelves",
+        "intro": "We partner with grocery stores, restaurants, cafés, and specialty retailers across Canada. Stock the purest tahini your customers have ever tasted.",
+        "faire_url": "",
+        "faire_eyebrow": "ALREADY ON FAIRE?",
+        "faire_heading": "Shop Wholesale on Faire",
+        "faire_body": "Faire makes ordering easy — net 60 payment terms, free returns on your first order, and instant access to our full product catalog.",
+        "form_heading": "Apply to Become a Wholesale Partner",
+        "form_subheading": "Fill out the form below and we'll be in touch within 2–3 business days.",
+        "bg": "cream"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

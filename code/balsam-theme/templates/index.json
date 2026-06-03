@@ -1,36 +1,350 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
+        "image": "shopify://shop_images/pistacho-spread1.jpg",
+        "height": 640,
+        "panel_position": "left",
+        "panel_color": "accent",
+        "eyebrow": "",
         "heading": "<p>Natural Tahini, <em>Thoughtfully Made</em></p>",
         "subheading": "Stone-ground from the finest sesame seeds. No additives, no shortcuts.",
-        "cta_label": "Shop Tahini",
-        "bg_color": "canvas"
+        "show_rating": true,
+        "rating_text": "150+ Google five-star reviews",
+        "cta_label": "Shop All",
+        "cta_url": "shopify://collections",
+        "cta2_label": "",
+        "cta2_url": "",
+        "show_certifications": true
       }
     },
-    "featured-products": {
-      "type": "featured-products",
+    "review_spotlight_6rtBCU": {
+      "type": "review-spotlight",
+      "blocks": {
+        "review_yiQCTU": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "If you are looking for fresh locally produced middle eastern tahini and other ground products , this is definitely a place to be. They also have an assortment of tasty confectioneries. The products are fresh and of best quality",
+            "author": "Mohan Ariyath",
+            "verified": true
+          }
+        },
+        "review_9jbn8E": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Balsam Tahini is a unique epicurean store with a huge variety of flavored fresh ground tahini’s, nut butters, halwa’s, imported candies and gifts. These products are all excellent top quality made and packaged. The flavors are all creamy, smooth and burst with amazing taste! I bought some to give as gifts as you won’t find many of these flavors anywhere in the world!!",
+            "author": "Michelle Foy",
+            "verified": true
+          }
+        },
+        "review_GaWF8L": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Just bought some honey & nuts and let me tell you the price is amazing for real raw organic honey!",
+            "author": "Salam Za",
+            "verified": true
+          }
+        },
+        "review_qcQ8tc": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "I put it in everything — smoothies, dressings, straight from the jar. Clean ingredients, amazing quality.",
+            "author": "Jennifer L.",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "review_yiQCTU",
+        "review_9jbn8E",
+        "review_GaWF8L",
+        "review_qcQ8tc"
+      ],
+      "name": "Review Spotlight",
       "settings": {
-        "heading": "Our Products",
-        "products_count": 4,
+        "bg": "canvas",
+        "eyebrow": "WHAT CUSTOMERS SAY",
+        "heading": "Real Reviews from Real People"
+      }
+    },
+    "collections-grid": {
+      "type": "collections-grid",
+      "blocks": {
+        "coll-tahini": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "tahini",
+            "label": "Tahini"
+          }
+        },
+        "coll-pistachio": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "pistachio-spreads",
+            "label": "Pistachio Spreads"
+          }
+        },
+        "coll-halawa": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "halawas",
+            "label": "Halawas"
+          }
+        },
+        "coll-butters": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "pure-butters",
+            "label": "Pure Butters"
+          }
+        },
+        "coll-honey": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "honey",
+            "label": "Specialty Honey"
+          }
+        },
+        "coll-oils": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "oils",
+            "label": "Oils"
+          }
+        }
+      },
+      "block_order": [
+        "coll-tahini",
+        "coll-pistachio",
+        "coll-halawa",
+        "coll-butters",
+        "coll-honey",
+        "coll-oils"
+      ],
+      "settings": {
+        "eyebrow": "EXPLORE",
+        "heading": "Our Collections",
+        "subheading": "",
+        "view_all_label": "View all collections",
+        "view_all_url": "/collections",
+        "bg": "cream"
+      }
+    },
+    "popular-products": {
+      "type": "popular-products-section",
+      "settings": {
+        "collection": "popular-products",
+        "eyebrow": "CUSTOMER FAVOURITES",
+        "heading": "Popular Products",
+        "subheading": "",
         "view_all_label": "View all products",
+        "view_all_url": "/collections/popular-products",
+        "products_count": 8,
         "bg": "canvas"
       }
     },
-    "editorial-band": {
-      "type": "editorial-band",
+    "process_scroll_8nE6mX": {
+      "type": "process-scroll",
+      "blocks": {
+        "step_X9YKCD": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Process-section-image-1.avif",
+            "label": "01",
+            "title": "Premium Sesame Seeds",
+            "body": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>"
+          }
+        },
+        "step_P7BGYh": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Prcoess-section-2.jpg",
+            "label": "02",
+            "title": "Traditional Stone-Grinding",
+            "body": "<p>Our tahini is slowly stone-ground the traditional way  cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>"
+          }
+        },
+        "step_RFxAEP": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Prcoess-section-3.png",
+            "label": "03",
+            "title": "Small Batch Production",
+            "body": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention  quality over volume, every single time.</p>"
+          }
+        },
+        "step_xeHHkc": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-06-02_112755.png",
+            "label": "04",
+            "title": "Zero Additives, Ever",
+            "body": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>"
+          }
+        },
+        "step_WqRNPD": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Prcoess-section-4.png",
+            "label": "05",
+            "title": "Shipped Fresh to Your Door",
+            "body": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest — never sitting in a warehouse for months.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_X9YKCD",
+        "step_P7BGYh",
+        "step_RFxAEP",
+        "step_xeHHkc",
+        "step_WqRNPD"
+      ],
+      "name": "Process Scroll",
       "settings": {
-        "heading": "Why Balsam Tahini?",
-        "body": "<p>Stone-ground in small batches from premium sesame seeds. No preservatives, no additives. Just pure, natural tahini the way it was meant to be.</p>",
-        "cta_label": "Our story",
-        "image_position": "left"
+        "bg": "cream",
+        "eyebrow": "OUR PROCESS",
+        "heading": "Crafted with Intention"
+      }
+    },
+    "google_reviews_EDcN4J": {
+      "type": "google-reviews",
+      "blocks": {
+        "review_CeX4fR": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Rahela Sachedina",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Upon trying the pistachio spread with cardamom, I ended up buying four jars to take back with me. It was THAT heavenly.  Back in New York having breakfast on New Year’s Day with warm croissants and pistachio spread with cardamom from this lovely shop! Will definitely go back next time I’m up in Mississauga.",
+            "date": "Jan 2026"
+          }
+        },
+        "review_mrKNDi": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "RS",
+            "initials": "RS",
+            "rating": 5,
+            "text": "I went here with my best friend after visiting once before, and it blew me away again. Everything is made in-house, and you can truly taste the love and care in every bite.",
+            "date": "May 2025"
+          }
+        },
+        "review_PPR6mc": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "SAM",
+            "initials": "S",
+            "rating": 5,
+            "text": "First visit to BALSAM tahini shop..alot of fresh..natural ...delicious products...tahini..butter..oil...chocolat..etc..the most important that is all made in CANADA by a proffessional team and  management ..",
+            "date": "May 2025"
+          }
+        },
+        "review_q7jGQA": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Sarah Scott",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Great place. Lots of desserts and treats. Got fresh tahini, bottled right in front of me. Everything homemade, no extra sugar. Loved it. Nice small business and friendly staff.",
+            "date": "May 2025"
+          }
+        },
+        "review_iWc9gC": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Aneesa Magsi",
+            "initials": "AM",
+            "rating": 5,
+            "text": "Best customer service with really tasty deserts and nut spreads. Quality of items purchased exceeded my expectations !!!!!",
+            "date": "May 2026"
+          }
+        },
+        "review_CxmpXR": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Samar Alsalem",
+            "initials": "SA",
+            "rating": 5,
+            "text": "I bought a large 18 kg bucket of tahini from this store. The first time it was amazing rich flavor and great quality.",
+            "date": "March 2026"
+          }
+        },
+        "review_mAztQQ": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Rosalin Krieger",
+            "initials": "RK",
+            "rating": 5,
+            "text": "The chocolates are outstanding! I am looking forward to trying the pistachio pastes that we bought, on sale. Excellent customer service and I want to eagerly return.",
+            "date": "April 2026"
+          }
+        },
+        "review_MhVWYR": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Lyndsay Sink",
+            "initials": "LS",
+            "rating": 5,
+            "text": "Wonderful owner- she was very kind and even offered us free samples to try ! Large selection of Arab treats, will be back again soon. Thank you!",
+            "date": "February 2026"
+          }
+        }
+      },
+      "block_order": [
+        "review_CeX4fR",
+        "review_mrKNDi",
+        "review_PPR6mc",
+        "review_q7jGQA",
+        "review_iWc9gC",
+        "review_CxmpXR",
+        "review_mAztQQ",
+        "review_MhVWYR"
+      ],
+      "name": "Google Reviews",
+      "settings": {
+        "eyebrow": "CUSTOMER STORIES",
+        "heading": "What Our Customers Say",
+        "overall_rating": "4.8",
+        "review_count": "160+",
+        "place_url": "",
+        "bg": "canvas"
+      }
+    },
+    "recipes-carousel": {
+      "type": "recipes-carousel",
+      "settings": {
+        "blog": "recipes",
+        "eyebrow": "FROM OUR KITCHEN",
+        "heading": "Featured Recipes",
+        "articles_count": 6,
+        "show_tags": true,
+        "cta_label": "View all recipes",
+        "cta_url": "/blogs/recipes",
+        "bg": "cream"
       }
     }
   },
   "order": [
     "hero-banner",
-    "featured-products",
-    "editorial-band"
+    "review_spotlight_6rtBCU",
+    "collections-grid",
+    "popular-products",
+    "process_scroll_8nE6mX",
+    "google_reviews_EDcN4J",
+    "recipes-carousel"
   ]
 }

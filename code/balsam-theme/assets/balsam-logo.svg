@@ -1,0 +1,13 @@
+<svg viewBox="0 0 360 180" width="360" height="180" xmlns="http://www.w3.org/2000/svg" aria-label="Balsam Tahini">
+  <ellipse cx="180" cy="90" rx="174" ry="86" fill="none" stroke="rgba(27,67,50,0.15)" stroke-width="2"/>
+  <ellipse cx="180" cy="90" rx="172" ry="84" fill="#1B4332"/>
+  <ellipse cx="180" cy="90" rx="161" ry="74" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+  <path d="M 10 68 C 55 56 115 80 180 70 C 245 60 308 80 350 68" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.5"/>
+  <path d="M 180 14 C 176 24 175 36 180 52 C 185 36 184 24 180 14 Z" fill="#52B788"/>
+  <path d="M 180 52 C 170 40 150 38 140 50 C 150 60 168 60 180 57 Z" fill="#52B788"/>
+  <path d="M 180 52 C 190 40 210 38 220 50 C 210 60 192 60 180 57 Z" fill="#52B788"/>
+  <circle cx="180" cy="54" r="3" fill="#52B788"/>
+  <line x1="180" y1="14" x2="180" y2="70" stroke="rgba(255,255,255,0.55)" stroke-width="1.2"/>
+  <text x="180" y="124" text-anchor="middle" font-family="'Playfair Display',Georgia,'Times New Roman',serif" font-style="italic" font-weight="700" font-size="48" fill="white" letter-spacing="-0.02em">Balsam</text>
+  <text x="180" y="148" text-anchor="middle" font-family="'SF Mono',ui-monospace,monospace" font-weight="700" font-size="10" fill="rgba(255,255,255,0.45)" letter-spacing="0.22em">TAHINI</text>
+</svg>

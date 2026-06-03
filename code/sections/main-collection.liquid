@@ -1,0 +1,744 @@
+<section class="main-collection section">
+  <div class="container">
+
+    <div class="collection-header">
+      <h1 class="collection-header__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="collection-header__desc">{{ collection.description }}</p>
+      {%- endif -%}
+    </div>
+
+    <!-- ── Toolbar ── -->
+    <div class="collection-toolbar">
+      <div class="collection-toolbar__left">
+        {%- if section.settings.show_filters -%}
+          <button class="filter-toggle-btn" id="filter-toggle-btn" type="button" aria-expanded="false" aria-controls="cfs">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 6h18M7 12h10M11 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Filter
+            <span class="filter-toggle-btn__badge" id="filter-active-count" hidden>0</span>
+          </button>
+        {%- endif -%}
+
+        <div class="coll-search">
+          <svg class="coll-search__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input class="coll-search__input" id="coll-search-input" type="search"
+            placeholder="Search {{ collection.title | downcase }}…"
+            autocomplete="off" spellcheck="false">
+          <button class="coll-search__clear" id="coll-search-clear" type="button" aria-label="Clear" hidden>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="collection-toolbar__right">
+        <p class="collection-toolbar__count" id="products-count">
+          {{ collection.products_count }}
+          {{ 'collections.products_count' | t: count: collection.products_count }}
+        </p>
+        <div class="collection-toolbar__sort">
+          {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+          <label for="sort-by" class="visually-hidden">Sort by</label>
+          <select id="sort-by" name="sort_by" class="sort-select">
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+        </div>
+      </div>
+    </div><!-- /.collection-toolbar -->
+
+    <!-- ── Body: sidebar + grid ── -->
+    <div class="collection-body" id="collection-body">
+
+      {%- if section.settings.show_filters -%}
+        <!-- Filter sidebar -->
+        <aside class="cfs" id="cfs" aria-label="Filters">
+          <div class="cfs__inner">
+
+            <div class="cfs__hdr">
+              <span class="cfs__title">Filters</span>
+              <button class="cfs__clear" id="clear-all-filters" type="button">Clear all</button>
+            </div>
+
+            <form id="collection-filter-form" action="{{ request.path }}" method="get">
+
+              <!-- Collections group -->
+              <div class="cfs-group">
+                <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
+                  <span>Collections</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="cfs-group__body" data-filter-body>
+                  {%- assign main_collections = 'all,tahini,pistachio-spreads,halawas,pure-butters,honey,oils' | split: ',' -%}
+                  {%- assign coll_labels = 'All Products,Tahini,Pistachio Spreads,Halawas,Pure Butters,Honey,Oils' | split: ',' -%}
+                  <ul class="cfs-check-list" role="list">
+                    {%- for coll_handle in main_collections -%}
+                      {%- assign cl = coll_labels[forloop.index0] -%}
+                      {%- assign cu = '/collections/' | append: coll_handle -%}
+                      {%- assign is_active = false -%}
+                      {%- if coll_handle == 'all' and collection.handle == 'all' -%}{%- assign is_active = true -%}
+                      {%- elsif coll_handle == collection.handle -%}{%- assign is_active = true -%}
+                      {%- endif -%}
+                      <li>
+                        <label class="cfs-checkbox">
+                          <input type="checkbox" class="cfs-checkbox__input visually-hidden"
+                            {% if is_active %}checked{% endif %}
+                            data-coll-checkbox data-coll-url="{{ cu }}">
+                          <span class="cfs-cb"></span>
+                          <span class="cfs-checkbox__label">{{ cl }}</span>
+                        </label>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Dynamic filter groups -->
+              {%- for filter in collection.filters -%}
+                {%- if filter.type == 'list' -%}
+                  <div class="cfs-group">
+                    <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
+                      <span>{{ filter.label }}</span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                    <div class="cfs-group__body" data-filter-body>
+                      <ul class="cfs-check-list" role="list">
+                        {%- for fv in filter.values -%}
+                          <li>
+                            <label class="cfs-checkbox">
+                              <input type="checkbox" class="cfs-checkbox__input visually-hidden"
+                                name="{{ fv.param_name }}" value="{{ fv.value }}"
+                                {% if fv.active %}checked{% endif %} data-filter-input>
+                              <span class="cfs-cb"></span>
+                              <span class="cfs-checkbox__label">
+                                {{ fv.label }}
+                                <span class="cfs-checkbox__count">({{ fv.count }})</span>
+                              </span>
+                            </label>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  </div>
+
+                {%- elsif filter.type == 'price_range' -%}
+                  {%- assign rmin = filter.range_min | money_without_currency | replace: ',', '' -%}
+                  {%- assign rmax = filter.range_max | money_without_currency | replace: ',', '' -%}
+                  {%- if filter.min_value.value != blank -%}{%- assign smin = filter.min_value.value | money_without_currency | replace: ',', '' -%}{%- else -%}{%- assign smin = rmin -%}{%- endif -%}
+                  {%- if filter.max_value.value != blank -%}{%- assign smax = filter.max_value.value | money_without_currency | replace: ',', '' -%}{%- else -%}{%- assign smax = rmax -%}{%- endif -%}
+                  <div class="cfs-group">
+                    <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
+                      <span>{{ filter.label }}</span>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                        <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                    <div class="cfs-group__body" data-filter-body>
+                      <div class="price-slider" id="price-slider"
+                        data-range-min="{{ rmin }}" data-range-max="{{ rmax }}"
+                        data-param-min="{{ filter.min_value.param_name }}" data-param-max="{{ filter.max_value.param_name }}">
+                        <div class="price-slider__track-wrap">
+                          <div class="price-slider__track"><div class="price-slider__fill" id="price-fill"></div></div>
+                          <input type="range" class="price-slider__range price-slider__range--min" id="price-min"
+                            min="{{ rmin }}" max="{{ rmax }}" value="{{ smin }}" step="0.01"
+                            name="{{ filter.min_value.param_name }}" aria-label="Minimum price">
+                          <input type="range" class="price-slider__range price-slider__range--max" id="price-max"
+                            min="{{ rmin }}" max="{{ rmax }}" value="{{ smax }}" step="0.01"
+                            name="{{ filter.max_value.param_name }}" aria-label="Maximum price">
+                        </div>
+                        <div class="price-slider__labels">
+                          <span>$<span id="price-min-label">0</span></span>
+                          <span>$<span id="price-max-label">0</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+
+            </form>
+          </div><!-- /.cfs__inner -->
+        </aside>
+      {%- endif -%}
+
+      <!-- Products area -->
+      <div class="collection-products-area">
+        <div id="collection-grid-wrap" class="collection-grid-wrap">
+          {%- if collection.products.size > 0 -%}
+            <div class="product-grid" id="product-grid">
+              {%- paginate collection.products by settings.collection_products_per_page -%}
+                {%- for product in collection.products -%}
+                  {% render 'product-card', product: product %}
+                {%- endfor -%}
+              {%- endpaginate -%}
+            </div>
+            <p class="coll-no-results" id="coll-no-results" hidden>No products match your search.</p>
+            {%- if paginate.pages > 1 -%}
+              <nav class="pagination" aria-label="Pagination">
+                {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="pagination__btn btn btn-ghost btn--sm">← Previous</a>{%- endif -%}
+                <span class="pagination__info">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+                {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="pagination__btn btn btn-ghost btn--sm">Next →</a>{%- endif -%}
+              </nav>
+            {%- endif -%}
+          {%- else -%}
+            <p class="collection-empty">No products found.</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div><!-- /.collection-body -->
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "checkbox", "id": "show_filters", "default": true, "label": "Show filters" }
+  ],
+  "presets": [{ "name": "Collection" }]
+}
+{% endschema %}
+
+<style>
+  /* ── Header ── */
+  .collection-header {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border);
+  }
+  .collection-header__title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .collection-header__desc {
+    margin-top: var(--space-2);
+    font-size: var(--text-base);
+    color: var(--muted);
+    max-width: 600px;
+  }
+
+  /* ── Toolbar ── */
+  .collection-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+  }
+  .collection-toolbar__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 1;
+    min-width: 0;
+  }
+  .collection-toolbar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-shrink: 0;
+  }
+  .collection-toolbar__count {
+    font-size: var(--text-sm);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Filter toggle button */
+  .filter-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .filter-toggle-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(27,67,50,0.04); }
+  .filter-toggle-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); background: rgba(27,67,50,0.06); }
+  .filter-toggle-btn__badge {
+    min-width: 18px; height: 18px; padding: 0 5px;
+    background: var(--accent); color: #fff;
+    border-radius: var(--radius-pill);
+    font-size: 0.65rem; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .filter-toggle-btn__badge[hidden] { display: none; }
+
+  /* Search bar */
+  .coll-search {
+    display: flex; align-items: center; gap: 8px;
+    flex: 1; max-width: 300px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    transition: border-color 0.15s;
+  }
+  .coll-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(27,67,50,0.08); }
+  .coll-search__icon { flex-shrink: 0; color: var(--muted); }
+  .coll-search__input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-family: var(--font-body); font-size: var(--text-sm); color: var(--fg); min-width: 0;
+  }
+  .coll-search__input::placeholder { color: var(--muted); }
+  .coll-search__input::-webkit-search-cancel-button { display: none; }
+  .coll-search__clear {
+    flex-shrink: 0; background: none; border: none; cursor: pointer;
+    color: var(--muted); padding: 2px; border-radius: 50%;
+    display: flex; align-items: center; transition: color 0.15s, background 0.15s;
+  }
+  .coll-search__clear:hover { color: var(--fg); background: var(--border-soft); }
+  .coll-search__clear[hidden] { display: none; }
+
+  /* Sort */
+  .sort-select {
+    font-size: var(--text-sm); font-weight: 600; color: var(--fg);
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 8px 14px; cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .sort-select:hover { border-color: var(--accent); }
+
+  /* ── Body layout ── */
+  .collection-body {
+    display: flex;
+    gap: 0;
+    align-items: start;
+  }
+
+  /* ── Filter sidebar ── */
+  .cfs {
+    flex-shrink: 0;
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 0;
+  }
+  .cfs.is-open {
+    width: 258px;
+    margin-right: 36px;
+  }
+  .cfs__inner {
+    width: 258px; /* fixed — stays at full width during animation */
+    padding-right: var(--space-2);
+  }
+
+  .cfs__hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+  .cfs__title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  .cfs__clear {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s;
+  }
+  .cfs__clear:hover { color: var(--accent); }
+
+  /* Filter groups */
+  .cfs-group { border-top: 1px solid var(--border); }
+  .cfs-group__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-4) 0;
+    background: none;
+    border: none;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    cursor: pointer;
+    text-align: left;
+    user-select: none;
+  }
+  .cfs-group__toggle svg { flex-shrink: 0; transition: transform 0.2s; color: var(--muted); }
+  .cfs-group__toggle[aria-expanded="false"] svg { transform: rotate(-90deg); }
+  .cfs-group__body { padding-bottom: var(--space-3); }
+  .cfs-group__body[hidden] { display: none; }
+
+  /* Shared checkbox box */
+  .cfs-cb {
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .cfs-cb.is-checked { background: var(--accent); border-color: var(--accent); }
+
+  /* Checkboxes */
+  .cfs-check-list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+  .cfs-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    padding: 5px 0;
+  }
+  .cfs-checkbox__input:checked ~ .cfs-cb {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .cfs-checkbox__input:checked ~ .cfs-cb::after {
+    content: '';
+    position: absolute;
+    left: 3px; top: 1px;
+    width: 5px; height: 9px;
+    border: 2px solid #fff;
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .cfs-checkbox__label { color: var(--fg); line-height: 1.3; }
+  .cfs-checkbox__count { color: var(--muted); font-size: var(--text-xs); margin-left: 2px; }
+
+  /* Price slider */
+  .price-slider { padding: 4px 0 2px; }
+  .price-slider__track-wrap { position: relative; height: 36px; display: flex; align-items: center; }
+  .price-slider__track { position: absolute; left: 0; right: 0; height: 4px; background: #E5E7EB; border-radius: 4px; }
+  .price-slider__fill { position: absolute; height: 100%; background: var(--accent); border-radius: 4px; }
+  .price-slider__range {
+    position: absolute; left: 0; right: 0; width: 100%; height: 4px;
+    background: transparent; -webkit-appearance: none; appearance: none;
+    pointer-events: none; outline: none;
+  }
+  .price-slider__range::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--accent);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    cursor: pointer; pointer-events: all; z-index: 2; position: relative;
+    transition: box-shadow 0.15s;
+  }
+  .price-slider__range::-webkit-slider-thumb:hover { box-shadow: 0 0 0 6px rgba(27,67,50,0.12); }
+  .price-slider__range::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--accent);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    cursor: pointer; pointer-events: all;
+  }
+  .price-slider__labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.82rem; font-weight: 600; color: var(--fg); }
+
+  /* ── Products area ── */
+  .collection-products-area { flex: 1; min-width: 0; }
+  .collection-grid-wrap { transition: opacity 0.2s; }
+  .collection-grid-wrap.is-loading { opacity: 0.4; pointer-events: none; }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+    transition: grid-template-columns 0.3s ease;
+  }
+  /* 3-col when sidebar is open */
+  .cfs.is-open ~ .collection-products-area .product-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .collection-empty, .coll-no-results {
+    font-size: var(--text-base); color: var(--muted);
+    padding-block: var(--space-12); text-align: center;
+  }
+  .coll-no-results[hidden] { display: none; }
+
+  /* Pagination */
+  .pagination {
+    display: flex; align-items: center; justify-content: center;
+    gap: var(--space-4); margin-top: var(--space-12);
+  }
+  .pagination__info { font-size: var(--text-sm); color: var(--muted); }
+
+  /* ── Responsive ── */
+  @media (max-width: 1023px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .cfs.is-open { width: 220px; margin-right: 24px; }
+    .cfs__inner { width: 220px; }
+  }
+  @media (max-width: 767px) {
+    .cfs.is-open { width: 100%; margin-right: 0; margin-bottom: var(--space-6); }
+    .cfs__inner { width: 100%; }
+    .collection-body { flex-direction: column; }
+    .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: var(--space-4); }
+    .coll-search { max-width: none; }
+  }
+  @media (max-width: 479px) {
+    .product-grid { gap: var(--space-3); }
+  }
+</style>
+
+<script>
+(function () {
+  var filterForm   = document.getElementById('collection-filter-form');
+  var gridWrap     = document.getElementById('collection-grid-wrap');
+  var sortSelect   = document.getElementById('sort-by');
+  var clearBtn     = document.getElementById('clear-all-filters');
+  var priceSlider  = document.getElementById('price-slider');
+  var toggleBtn    = document.getElementById('filter-toggle-btn');
+  var cfs          = document.getElementById('cfs');
+  var activeBadge  = document.getElementById('filter-active-count');
+  var searchInput  = document.getElementById('coll-search-input');
+  var searchClear  = document.getElementById('coll-search-clear');
+  var noResults    = document.getElementById('coll-no-results');
+  var productGrid  = document.getElementById('product-grid');
+  var filterDebounce, searchDebounce;
+
+  /* ── Sidebar open / close ── */
+  function openSidebar() {
+    if (!cfs) return;
+    cfs.hidden = false;
+    requestAnimationFrame(function () { cfs.classList.add('is-open'); });
+    toggleBtn && toggleBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeSidebar() {
+    if (!cfs) return;
+    cfs.classList.remove('is-open');
+    var onEnd = function () { cfs.hidden = true; cfs.removeEventListener('transitionend', onEnd); };
+    cfs.addEventListener('transitionend', onEnd);
+    toggleBtn && toggleBtn.setAttribute('aria-expanded', 'false');
+  }
+  function toggleSidebar() {
+    if (cfs && cfs.classList.contains('is-open')) closeSidebar();
+    else openSidebar();
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+
+  /* ── Filter group collapse / expand ── */
+  document.querySelectorAll('[data-filter-toggle]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      var body = btn.nextElementSibling;
+      if (body) body.hidden = expanded;
+    });
+  });
+
+  /* ── Badge ── */
+  function updateBadge() {
+    if (!filterForm || !activeBadge) return;
+    var count = filterForm.querySelectorAll('[data-filter-input]:checked').length;
+    if (priceSlider) {
+      var mi = priceSlider.querySelector('.price-slider__range--min');
+      var ma = priceSlider.querySelector('.price-slider__range--max');
+      if (mi && parseFloat(mi.value) > parseFloat(priceSlider.dataset.rangeMin)) count++;
+      if (ma && parseFloat(ma.value) < parseFloat(priceSlider.dataset.rangeMax)) count++;
+    }
+    activeBadge.textContent = count;
+    activeBadge.hidden = count === 0;
+  }
+
+  if (!filterForm || !gridWrap) return;
+
+  /* ── Build params ── */
+  function buildParams() {
+    var params = new URLSearchParams();
+    var sv = sortSelect ? sortSelect.value : '';
+    if (sv) params.set('sort_by', sv);
+    filterForm.querySelectorAll('[data-filter-input]:checked').forEach(function (cb) {
+      params.append(cb.name, cb.value);
+    });
+    if (priceSlider) {
+      var mi = priceSlider.querySelector('.price-slider__range--min');
+      var ma = priceSlider.querySelector('.price-slider__range--max');
+      if (mi && parseFloat(mi.value) > parseFloat(priceSlider.dataset.rangeMin)) params.set(priceSlider.dataset.paramMin, mi.value);
+      if (ma && parseFloat(ma.value) < parseFloat(priceSlider.dataset.rangeMax)) params.set(priceSlider.dataset.paramMax, ma.value);
+    }
+    return params;
+  }
+
+  /* ── AJAX load (shared by filters + collection nav) ── */
+  function loadUrl(url, pushState) {
+    gridWrap.classList.add('is-loading');
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc      = new DOMParser().parseFromString(html, 'text/html');
+        var newGrid  = doc.getElementById('collection-grid-wrap');
+        var newCount = doc.getElementById('products-count');
+        if (newGrid) gridWrap.innerHTML = newGrid.innerHTML;
+        productGrid = document.getElementById('product-grid');
+        var countEl = document.getElementById('products-count');
+        if (newCount && countEl) countEl.textContent = newCount.textContent;
+        if (pushState !== false) history.pushState({ url: url }, '', url);
+        bindPaginationLinks();
+        document.dispatchEvent(new CustomEvent('balsam:grid-updated'));
+        updateBadge();
+        if (searchInput && searchInput.value.trim()) filterBySearch(searchInput.value.trim());
+      })
+      .catch(function () { window.location.href = url; })
+      .finally(function () { gridWrap.classList.remove('is-loading'); });
+  }
+
+  function applyFilters() {
+    var params = buildParams();
+    var url = filterForm.action + (params.toString() ? '?' + params.toString() : '');
+    loadUrl(url);
+  }
+
+  function scheduleFilter() {
+    clearTimeout(filterDebounce);
+    filterDebounce = setTimeout(applyFilters, 300);
+  }
+
+  filterForm.querySelectorAll('[data-filter-input]').forEach(function (cb) {
+    cb.addEventListener('change', applyFilters);
+  });
+  if (sortSelect) sortSelect.addEventListener('change', applyFilters);
+
+  /* ── Collection checkboxes — AJAX nav ── */
+  document.querySelectorAll('[data-coll-checkbox]').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      var url = cb.dataset.collUrl;
+      /* only one collection active at a time — uncheck all others */
+      document.querySelectorAll('[data-coll-checkbox]').forEach(function (other) {
+        if (other !== cb) other.checked = false;
+      });
+      /* if unchecked, fall back to /collections/all */
+      if (!cb.checked) url = '/collections/all';
+      filterForm.querySelectorAll('[data-filter-input]:checked').forEach(function (inp) { inp.checked = false; });
+      filterForm.action = url;
+      loadUrl(url);
+    });
+  });
+
+  /* ── Clear all ── */
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      filterForm.querySelectorAll('[data-filter-input]:checked').forEach(function (cb) { cb.checked = false; });
+      if (priceSlider) {
+        var mi = priceSlider.querySelector('.price-slider__range--min');
+        var ma = priceSlider.querySelector('.price-slider__range--max');
+        if (mi) mi.value = priceSlider.dataset.rangeMin;
+        if (ma) ma.value = priceSlider.dataset.rangeMax;
+        updateSlider();
+      }
+      applyFilters();
+      /* uncheck collection boxes so we're back on all-collections */
+      document.querySelectorAll('[data-coll-checkbox]:checked').forEach(function (cb) { cb.checked = false; });
+      filterForm.action = '/collections/all';
+    });
+  }
+
+  /* ── Client-side search ── */
+  function filterBySearch(query) {
+    if (!productGrid) return;
+    var q = query.toLowerCase().trim();
+    var cards = productGrid.querySelectorAll('.product-card');
+    var visible = 0;
+    cards.forEach(function (card) {
+      var name = (card.querySelector('.product-card__name') || card).textContent.toLowerCase();
+      var show = q === '' || name.indexOf(q) !== -1;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (noResults) noResults.hidden = visible > 0 || q === '';
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value;
+      if (searchClear) searchClear.hidden = q.length === 0;
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(function () { filterBySearch(q); }, 180);
+    });
+  }
+  if (searchClear) {
+    searchClear.addEventListener('click', function () {
+      searchInput.value = ''; searchClear.hidden = true;
+      filterBySearch(''); searchInput.focus();
+    });
+  }
+
+  /* ── Price slider ── */
+  function updateSlider() {
+    if (!priceSlider) return;
+    var mi = priceSlider.querySelector('.price-slider__range--min');
+    var ma = priceSlider.querySelector('.price-slider__range--max');
+    var fill = document.getElementById('price-fill');
+    var minLabel = document.getElementById('price-min-label');
+    var maxLabel = document.getElementById('price-max-label');
+    if (!mi || !ma || !fill) return;
+    var rMin = parseFloat(priceSlider.dataset.rangeMin);
+    var rMax = parseFloat(priceSlider.dataset.rangeMax);
+    var minV = parseFloat(mi.value);
+    var maxV = parseFloat(ma.value);
+    var gap  = (rMax - rMin) * 0.01;
+    if (minV > maxV - gap) { mi.value = maxV - gap; minV = parseFloat(mi.value); }
+    if (maxV < minV + gap) { ma.value = minV + gap; maxV = parseFloat(ma.value); }
+    fill.style.left  = ((minV - rMin) / (rMax - rMin)) * 100 + '%';
+    fill.style.width = ((maxV - minV) / (rMax - rMin)) * 100 + '%';
+    if (minLabel) minLabel.textContent = Math.floor(minV);
+    if (maxLabel) maxLabel.textContent = Math.ceil(maxV);
+  }
+
+  if (priceSlider) {
+    var mi = priceSlider.querySelector('.price-slider__range--min');
+    var ma = priceSlider.querySelector('.price-slider__range--max');
+    [mi, ma].forEach(function (inp) {
+      if (!inp) return;
+      inp.addEventListener('input', updateSlider);
+      inp.addEventListener('change', scheduleFilter);
+    });
+    updateSlider();
+  }
+
+  /* ── Pagination AJAX ── */
+  function bindPaginationLinks() {
+    gridWrap.querySelectorAll('.pagination a').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        loadUrl(a.href);
+        window.scrollTo({ top: gridWrap.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
+      });
+    });
+  }
+
+  bindPaginationLinks();
+  updateBadge();
+
+  window.addEventListener('popstate', function () { window.location.reload(); });
+})();
+</script>

@@ -1,0 +1,118 @@
+{% comment %}
+  Renders a quantity stepper.
+  Usage: {% render 'quantity-stepper', quantity: 1, name: 'quantity', id: 'qty' %}
+{% endcomment %}
+
+{%- liquid
+  assign qty_value = quantity | default: 1
+  assign qty_name = name | default: 'quantity'
+  assign qty_id = id | default: 'qty-stepper'
+  assign qty_min = min | default: 1
+  assign qty_max = max | default: ''
+-%}
+
+<div class="qty-stepper" role="group" aria-label="{{ 'products.quantity' | t }}">
+  <button
+    type="button"
+    class="qty-stepper__btn"
+    data-qty-dec
+    aria-label="Decrease quantity"
+    {% if qty_value <= qty_min %}disabled{% endif %}
+  >
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <input
+    type="number"
+    id="{{ qty_id }}"
+    name="{{ qty_name }}"
+    value="{{ qty_value }}"
+    min="{{ qty_min }}"
+    {% if qty_max != '' %}max="{{ qty_max }}"{% endif %}
+    class="qty-stepper__input"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    aria-label="{{ 'products.quantity' | t }}"
+  >
+
+  <button
+    type="button"
+    class="qty-stepper__btn"
+    data-qty-inc
+    aria-label="Increase quantity"
+    {% if qty_max != '' and qty_value >= qty_max %}disabled{% endif %}
+  >
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--surface);
+    overflow: hidden;
+    height: 52px;
+  }
+
+  .qty-stepper__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 100%;
+    background: none;
+    border: none;
+    color: var(--fg-2);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) var(--ease-standard);
+  }
+
+  .qty-stepper__btn:hover:not(:disabled) {
+    color: var(--fg);
+    background-color: var(--border-soft);
+  }
+
+  .qty-stepper__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .qty-stepper__btn:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring) inset;
+  }
+
+  .qty-stepper__input {
+    width: 52px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    text-align: center;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--fg);
+    background: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .qty-stepper__input::-webkit-outer-spin-button,
+  .qty-stepper__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .qty-stepper__input:focus {
+    outline: none;
+  }
+</style>
+

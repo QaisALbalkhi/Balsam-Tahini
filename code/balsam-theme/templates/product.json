@@ -1,11 +1,338 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main-product": {
       "type": "main-product",
-      "settings": {}
+      "blocks": {
+        "benefit-1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "leaf",
+            "text": "Single origin sesame, stone-ground in small batches"
+          }
+        },
+        "benefit-2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "thumbs_up",
+            "text": "Over 2,000 five-star reviews"
+          }
+        },
+        "benefit-3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "award",
+            "text": "Guaranteed to wow you or we'll replace it"
+          }
+        },
+        "benefit-4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "truck",
+            "text": "Free shipping on orders over $40"
+          }
+        }
+      },
+      "block_order": [
+        "benefit-1",
+        "benefit-2",
+        "benefit-3",
+        "benefit-4"
+      ],
+      "settings": {
+        "why_heading": "Why Balsam?",
+        "categories_label": "CATEGORIES",
+        "categories_max": 5,
+        "cert_heading": "Our Certifications",
+        "pairs_heading": "Pairs Well With",
+        "pairs_collection": ""
+      }
+    },
+    "product_details_9LFLfT": {
+      "type": "product-details",
+      "blocks": {
+        "ingredients_63EJWw": {
+          "type": "ingredients",
+          "settings": {
+            "title": "Ingredients",
+            "ingredient_list": "Premium sesame seeds (100%)",
+            "open_default": true
+          }
+        },
+        "nutrition_zt7RRq": {
+          "type": "nutrition",
+          "settings": {
+            "title": "Nutrition",
+            "serving_size": "Per 30g serving",
+            "nutrition_rows": "Calories: 180\nTotal Fat: 16g\nSaturated Fat: 2g\nSodium: 5mg\nTotal Carbs: 6g\nDietary Fiber: 2g\nProtein: 5g\nCalcium: 80mg\nIron: 2.5mg",
+            "open_default": true
+          }
+        },
+        "badge_XnTdLe": {
+          "type": "badge",
+          "settings": {
+            "icon": "kosher",
+            "label": "Kosher"
+          }
+        },
+        "badge_VUg6QR": {
+          "type": "badge",
+          "settings": {
+            "icon": "halal",
+            "label": "Halal"
+          }
+        },
+        "badge_TFhCaF": {
+          "type": "badge",
+          "settings": {
+            "icon": "non_gmo",
+            "label": "Non-GMO"
+          }
+        },
+        "badge_GYUNb9": {
+          "type": "badge",
+          "settings": {
+            "icon": "no_preservatives",
+            "label": "No Preservatives"
+          }
+        },
+        "badge_LYfFHX": {
+          "type": "badge",
+          "settings": {
+            "icon": "sugar_free",
+            "label": "Sugar Free"
+          }
+        },
+        "badge_TN7xbD": {
+          "type": "badge",
+          "settings": {
+            "icon": "vegan",
+            "label": "Vegan"
+          }
+        }
+      },
+      "block_order": [
+        "ingredients_63EJWw",
+        "nutrition_zt7RRq",
+        "badge_XnTdLe",
+        "badge_VUg6QR",
+        "badge_TFhCaF",
+        "badge_GYUNb9",
+        "badge_LYfFHX",
+        "badge_TN7xbD"
+      ],
+      "name": "Product Details",
+      "settings": {
+        "bg": "canvas",
+        "heading": "What's Inside"
+      }
+    },
+    "process_scroll_EWPiD6": {
+      "type": "process-scroll",
+      "blocks": {
+        "step_wQLDPj": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Process-section-image-1.avif",
+            "label": "01",
+            "title": "Premium Sesame Seeds",
+            "body": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>"
+          }
+        },
+        "step_tnNtiB": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Prcoess-section-2.jpg",
+            "label": "02",
+            "title": "Traditional Stone-Grinding",
+            "body": "<p>Our tahini is slowly stone-ground the traditional way  cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>"
+          }
+        },
+        "step_E4WdUc": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Prcoess-section-3.png",
+            "label": "03",
+            "title": "Small Batch Production",
+            "body": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention  quality over volume, every single time.</p>"
+          }
+        },
+        "step_LRNXrp": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2026-06-02_112755.png",
+            "label": "04",
+            "title": "Zero Additives, Ever",
+            "body": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>"
+          }
+        },
+        "step_tNj8Pp": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/Prcoess-section-4.png",
+            "label": "05",
+            "title": "Shipped Fresh to Your Door",
+            "body": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest — never sitting in a warehouse for months.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_wQLDPj",
+        "step_tnNtiB",
+        "step_E4WdUc",
+        "step_LRNXrp",
+        "step_tNj8Pp"
+      ],
+      "name": "Process Scroll",
+      "settings": {
+        "bg": "canvas",
+        "eyebrow": "OUR PROCESS",
+        "heading": "Crafted with Intention"
+      }
+    },
+    "recently_viewed_7kyrHz": {
+      "type": "recently-viewed",
+      "name": "Recently Viewed",
+      "settings": {
+        "collection": "",
+        "eyebrow": "YOUR HISTORY",
+        "heading": "Recently Viewed",
+        "products_count": 8,
+        "bg": "canvas"
+      }
+    },
+    "google_reviews_KgRRnK": {
+      "type": "google-reviews",
+      "blocks": {
+        "review_EAH7x4": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Rahela Sachedina",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Upon trying the pistachio spread with cardamom, I ended up buying four jars to take back with me. It was THAT heavenly.  Back in New York having breakfast on New Year’s Day with warm croissants and pistachio spread with cardamom from this lovely shop! Will definitely go back next time I’m up in Mississauga.",
+            "date": "Jan 2026"
+          }
+        },
+        "review_ecD9bU": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "RS",
+            "initials": "RS",
+            "rating": 5,
+            "text": "I went here with my best friend after visiting once before, and it blew me away again. Everything is made in-house, and you can truly taste the love and care in every bite.",
+            "date": "May 2025"
+          }
+        },
+        "review_x4XNUG": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "SAM",
+            "initials": "S",
+            "rating": 5,
+            "text": "First visit to BALSAM tahini shop..alot of fresh..natural ...delicious products...tahini..butter..oil...chocolat..etc..the most important that is all made in CANADA by a proffessional team and  management ..",
+            "date": "May 2025"
+          }
+        },
+        "review_anPVk9": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Sarah Scott",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Great place. Lots of desserts and treats. Got fresh tahini, bottled right in front of me. Everything homemade, no extra sugar. Loved it. Nice small business and friendly staff.",
+            "date": "May 2025"
+          }
+        },
+        "review_JNtEd4": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Aneesa Magsi",
+            "initials": "AM",
+            "rating": 5,
+            "text": "Best customer service with really tasty deserts and nut spreads. Quality of items purchased exceeded my expectations !!!!!",
+            "date": "May 2026"
+          }
+        },
+        "review_8jFan9": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Samar Alsalem",
+            "initials": "SA",
+            "rating": 5,
+            "text": "I bought a large 18 kg bucket of tahini from this store. The first time it was amazing rich flavor and great quality.",
+            "date": "March 2026"
+          }
+        },
+        "review_eBWLGL": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Rosalin Krieger",
+            "initials": "RK",
+            "rating": 5,
+            "text": "The chocolates are outstanding! I am looking forward to trying the pistachio pastes that we bought, on sale. Excellent customer service and I want to eagerly return.",
+            "date": "April 2026"
+          }
+        },
+        "review_xTRK7H": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Lyndsay Sink",
+            "initials": "LS",
+            "rating": 5,
+            "text": "Wonderful owner- she was very kind and even offered us free samples to try ! Large selection of Arab treats, will be back again soon. Thank you!",
+            "date": "February 2026"
+          }
+        }
+      },
+      "block_order": [
+        "review_EAH7x4",
+        "review_ecD9bU",
+        "review_x4XNUG",
+        "review_anPVk9",
+        "review_JNtEd4",
+        "review_8jFan9",
+        "review_eBWLGL",
+        "review_xTRK7H"
+      ],
+      "name": "Google Reviews",
+      "settings": {
+        "eyebrow": "CUSTOMER STORIES",
+        "heading": "What Our Customers Say",
+        "overall_rating": "4.8",
+        "review_count": "160+",
+        "place_url": "",
+        "bg": "cream"
+      }
+    },
+    "recipes-carousel": {
+      "type": "recipes-carousel",
+      "settings": {
+        "blog": "recipes",
+        "eyebrow": "FROM OUR KITCHEN",
+        "heading": "Recipes Using This Product",
+        "articles_count": 6,
+        "show_tags": true,
+        "cta_label": "View all recipes",
+        "cta_url": "/blogs/recipes",
+        "bg": "canvas"
+      }
     }
   },
   "order": [
-    "main-product"
+    "main-product",
+    "product_details_9LFLfT",
+    "process_scroll_EWPiD6",
+    "recently_viewed_7kyrHz",
+    "google_reviews_KgRRnK",
+    "recipes-carousel"
   ]
 }

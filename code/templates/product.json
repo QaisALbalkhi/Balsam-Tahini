@@ -1,0 +1,128 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main-product": {
+      "type": "main-product",
+      "blocks": {
+        "benefit-1": { "type": "benefit", "settings": { "icon": "leaf", "text": "Single origin sesame, stone-ground in small batches" } },
+        "benefit-2": { "type": "benefit", "settings": { "icon": "thumbs_up", "text": "Over 2,000 five-star reviews" } },
+        "benefit-3": { "type": "benefit", "settings": { "icon": "award", "text": "Guaranteed to wow you or we'll replace it" } },
+        "benefit-4": { "type": "benefit", "settings": { "icon": "truck", "text": "Free shipping on orders over $40" } }
+      },
+      "block_order": ["benefit-1", "benefit-2", "benefit-3", "benefit-4"],
+      "settings": {
+        "why_heading": "Why Balsam?",
+        "categories_label": "CATEGORIES",
+        "categories_max": 5,
+        "cert_heading": "Our Certifications",
+        "pairs_heading": "Pairs Well With"
+      }
+    },
+    "product-details": {
+      "type": "product-details",
+      "blocks": {
+        "pd-ingredients": { "type": "ingredients", "settings": { "title": "Ingredients", "ingredient_list": "Premium sesame seeds (100%)", "open_default": true } },
+        "pd-nutrition": { "type": "nutrition", "settings": { "title": "Nutrition", "serving_size": "Per 30g serving", "nutrition_rows": "Calories: 180\nTotal Fat: 16g\nSaturated Fat: 2g\nSodium: 5mg\nTotal Carbs: 6g\nDietary Fiber: 2g\nProtein: 5g\nCalcium: 80mg\nIron: 2.5mg", "open_default": true } },
+        "pd-badge-1": { "type": "badge", "settings": { "icon": "kosher", "label": "Kosher" } },
+        "pd-badge-2": { "type": "badge", "settings": { "icon": "halal", "label": "Halal" } },
+        "pd-badge-3": { "type": "badge", "settings": { "icon": "non_gmo", "label": "Non-GMO" } },
+        "pd-badge-4": { "type": "badge", "settings": { "icon": "no_preservatives", "label": "No Preservatives" } },
+        "pd-badge-5": { "type": "badge", "settings": { "icon": "sugar_free", "label": "Sugar Free" } },
+        "pd-badge-6": { "type": "badge", "settings": { "icon": "vegan", "label": "Vegan" } }
+      },
+      "block_order": ["pd-ingredients", "pd-nutrition", "pd-badge-1", "pd-badge-2", "pd-badge-3", "pd-badge-4", "pd-badge-5", "pd-badge-6"],
+      "settings": { "heading": "What's Inside", "bg": "canvas" }
+    },
+    "review-spotlight": {
+      "type": "review-spotlight",
+      "blocks": {
+        "rs-1": { "type": "review", "settings": { "rating": 5, "text": "Absolutely love this tahini — rich, creamy, and the best I've ever tried. My hummus has never been better!", "author": "Sarah M.", "verified": true } },
+        "rs-2": { "type": "review", "settings": { "rating": 5, "text": "Stone-ground difference is real. Completely different texture than anything from the store.", "author": "Ahmed K.", "verified": true } },
+        "rs-3": { "type": "review", "settings": { "rating": 5, "text": "I put it in everything — smoothies, dressings, straight from the jar. Clean ingredients, amazing quality.", "author": "Jennifer L.", "verified": true } }
+      },
+      "block_order": ["rs-1", "rs-2", "rs-3"],
+      "settings": {
+        "bg": "cream",
+        "eyebrow": "WHAT CUSTOMERS SAY",
+        "heading": "Real Reviews from Real People"
+      }
+    },
+    "google-reviews": {
+      "type": "google-reviews",
+      "blocks": {
+        "review-1": { "type": "review", "settings": { "reviewer_name": "Sarah M.", "initials": "SM", "rating": 5, "date": "April 2025", "text": "This is hands down the best tahini I've ever tasted. Smooth, rich, and absolutely no bitterness. My hummus has never been better!" } },
+        "review-2": { "type": "review", "settings": { "reviewer_name": "Ahmed K.", "initials": "AK", "rating": 5, "date": "March 2025", "text": "Ordered three jars and they were gone within two weeks. The stone-ground difference is real — completely different texture than store brands." } },
+        "review-3": { "type": "review", "settings": { "reviewer_name": "Jennifer L.", "initials": "JL", "rating": 5, "date": "March 2025", "text": "I'm obsessed. I put it in everything — smoothies, salad dressings, straight from the jar. Clean ingredients, amazing quality." } },
+        "review-4": { "type": "review", "settings": { "reviewer_name": "Omar R.", "initials": "OR", "rating": 5, "date": "February 2025", "text": "As someone who grew up eating tahini in Lebanon, this is the closest I've found to homemade. Genuinely impressed. Will be a repeat customer." } }
+      },
+      "block_order": ["review-1", "review-2", "review-3", "review-4"],
+      "settings": {
+        "eyebrow": "CUSTOMER STORIES",
+        "heading": "What Our Customers Say",
+        "overall_rating": "4.9",
+        "review_count": "200+",
+        "bg": "canvas"
+      }
+    },
+    "process-scroll": {
+      "type": "process-scroll",
+      "blocks": {
+        "ps-1": { "type": "step", "settings": { "label": "01", "title": "Premium Sesame Seeds", "body": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>" } },
+        "ps-2": { "type": "step", "settings": { "label": "02", "title": "Traditional Stone-Grinding", "body": "<p>Our tahini is slowly stone-ground the traditional way — cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>" } },
+        "ps-3": { "type": "step", "settings": { "label": "03", "title": "Small Batch Production", "body": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention — quality over volume, every single time.</p>" } },
+        "ps-4": { "type": "step", "settings": { "label": "04", "title": "Zero Additives, Ever", "body": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>" } },
+        "ps-5": { "type": "step", "settings": { "label": "05", "title": "Shipped Fresh to Your Door", "body": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest.</p>" } }
+      },
+      "block_order": ["ps-1", "ps-2", "ps-3", "ps-4", "ps-5"],
+      "settings": { "eyebrow": "OUR PROCESS", "heading": "Crafted with Intention", "bg": "canvas" }
+    },
+    "why-balsam": {
+      "type": "why-balsam",
+      "blocks": {
+        "wb-seeds": { "type": "accordion_item", "settings": { "title": "Premium Sesame Seeds", "content": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>" } },
+        "wb-grind": { "type": "accordion_item", "settings": { "title": "Traditional Stone-Grinding", "content": "<p>Our tahini is slowly stone-ground the traditional way — cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>" } },
+        "wb-batch": { "type": "accordion_item", "settings": { "title": "Small Batch Production", "content": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention — quality over volume, every single time.</p>" } },
+        "wb-clean": { "type": "accordion_item", "settings": { "title": "Zero Additives, Ever", "content": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>" } },
+        "wb-ship": { "type": "accordion_item", "settings": { "title": "Shipped Fresh to Your Door", "content": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest — never sitting in a warehouse for months.</p>" } }
+      },
+      "block_order": ["wb-seeds", "wb-grind", "wb-batch", "wb-clean", "wb-ship"],
+      "settings": {
+        "eyebrow": "OUR PROCESS",
+        "heading": "Why Balsam Tahini?",
+        "intro": "Stone-ground in small batches from premium sesame seeds. No preservatives, no additives. Just pure, natural tahini the way it was meant to be.",
+        "cta_label": "Our story",
+        "bg": "cream"
+      }
+    },
+    "recipes-carousel": {
+      "type": "recipes-carousel",
+      "settings": {
+        "blog": "recipes",
+        "eyebrow": "FROM OUR KITCHEN",
+        "heading": "Recipes Using This Product",
+        "articles_count": 6,
+        "show_tags": true,
+        "cta_label": "View all recipes",
+        "cta_url": "/blogs/recipes",
+        "bg": "canvas"
+      }
+    }
+  },
+  "order": [
+    "main-product",
+    "product-details",
+    "review-spotlight",
+    "google-reviews",
+    "process-scroll",
+    "why-balsam",
+    "recipes-carousel"
+  ]
+}

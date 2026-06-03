@@ -1,3 +1,7 @@
+<!-- Variant data for JS -->
+<script id="product-variants-json" type="application/json">{{ product.variants | json }}</script>
+<script id="product-options-json" type="application/json">{{ product.options | json }}</script>
+
 <section class="main-product section" id="product-{{ product.id }}">
   <div class="container">
 
@@ -14,9 +18,10 @@
       </ol>
     </nav>
 
+    <!-- ── 2-column product layout ── -->
     <div class="product-layout">
 
-      <!-- Media column -->
+      <!-- Left: Media -->
       <div class="product-layout__media">
         <div class="product-media">
           {%- assign featured = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
@@ -24,49 +29,83 @@
             <img
               id="product-featured-image"
               src="{{ featured | image_url: width: 900 }}"
-              srcset="
-                {{ featured | image_url: width: 450 }} 450w,
-                {{ featured | image_url: width: 900 }} 900w
-              "
+              srcset="{{ featured | image_url: width: 450 }} 450w, {{ featured | image_url: width: 900 }} 900w"
               sizes="(max-width: 767px) 100vw, 50vw"
               alt="{{ featured.alt | default: product.title | escape }}"
-              width="900"
-              height="900"
+              width="900" height="900"
               loading="eager"
               class="product-media__main"
             >
           {%- else -%}
             {{ 'product-1' | placeholder_svg_tag: 'product-media__placeholder' }}
           {%- endif -%}
-
           {%- if product.variants.first.sku != blank -%}
-            <span class="product-media__batch eyebrow">Batch {{ product.variants.first.sku }}</span>
+            <span class="product-media__batch eyebrow" id="product-sku-badge">Batch {{ product.variants.first.sku }}</span>
           {%- endif -%}
         </div>
 
         {%- if product.images.size > 1 -%}
-          <div class="product-thumbnails">
-            {%- for image in product.images limit: 5 -%}
+          <div class="product-thumbnails" id="product-thumbnails">
+            {%- for image in product.images limit: 6 -%}
               <button
                 class="product-thumbnail{% if forloop.first %} product-thumbnail--active{% endif %}"
                 type="button"
                 aria-label="{{ image.alt | default: product.title | escape }}"
                 data-image-src="{{ image | image_url: width: 900 }}"
+                data-thumb-index="{{ forloop.index0 }}"
               >
-                <img
-                  src="{{ image | image_url: width: 120 }}"
-                  alt="{{ image.alt | default: product.title | escape }}"
-                  width="120"
-                  height="120"
-                  loading="lazy"
-                >
+                <img src="{{ image | image_url: width: 120 }}" alt="" width="120" height="120" loading="lazy">
               </button>
             {%- endfor -%}
           </div>
         {%- endif -%}
+
+        <!-- Certification badges — left column so they stay fixed -->
+        {%- assign cert_blocks_left = section.blocks | where: 'type', 'certification' -%}
+        {%- if cert_blocks_left.size > 0 or true -%}
+          <div class="pd-details__badges pd-details__badges--media">
+            {%- if cert_blocks_left.size > 0 -%}
+              {%- for block in cert_blocks_left -%}
+                <div class="pd-details__badge">
+                  <div class="pd-details__badge-circle" aria-hidden="true">
+                    {%- case block.settings.icon -%}
+                      {%- when 'kosher' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="14" y1="8" x2="10" y2="12"/><line x1="10" y1="12" x2="14" y2="16"/></svg>
+                      {%- when 'halal' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="16.5" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
+                      {%- when 'non_gmo' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7zM12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/></svg>
+                      {%- when 'non_irradiated' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 9v-4M12 19v-4M9 12H5M19 12h-4"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                      {%- when 'no_preservatives' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                      {%- when 'sugar_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                      {%- when 'organic', 'vegan' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8"/><path d="M12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/><path d="M12 12c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7z"/></svg>
+                      {%- else -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    {%- endcase -%}
+                  </div>
+                  <span class="pd-details__badge-label">{{ block.settings.label }}</span>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- assign default_certs = 'Kosher,Halal,Non-GMO,No Preservatives,Sugar Free,Vegan' | split: ',' -%}
+              {%- for cert in default_certs -%}
+                {%- assign ci = forloop.index0 -%}
+                <div class="pd-details__badge">
+                  <div class="pd-details__badge-circle" aria-hidden="true">
+                    {%- if ci == 0 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="14" y1="8" x2="10" y2="12"/><line x1="10" y1="12" x2="14" y2="16"/></svg>
+                    {%- elsif ci == 1 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="16.5" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
+                    {%- elsif ci == 2 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7zM12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/></svg>
+                    {%- elsif ci == 3 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                    {%- elsif ci == 4 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                    {%- else -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8"/><path d="M12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/><path d="M12 12c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7z"/></svg>
+                    {%- endif -%}
+                  </div>
+                  <span class="pd-details__badge-label">{{ cert }}</span>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
       </div>
 
-      <!-- Details column -->
+      <!-- Right: Details -->
       <div class="product-layout__details">
 
         {%- if settings.show_stock_badge -%}
@@ -75,17 +114,10 @@
 
         <h1 class="product-name">{{ product.title }}</h1>
 
-        <!-- Review strip -->
-        <div class="review-strip">
-          <span class="stars" aria-hidden="true">
-            {%- for i in (1..5) -%}★{%- endfor -%}
-          </span>
-          <span class="review-strip__count">{{ product.metafields.reviews.rating_count | default: 0 }} reviews</span>
-          <span class="review-strip__verified eyebrow">{{ 'products.verified_by' | t }}</span>
+        <!-- Price (wrapped for dynamic JS updates) -->
+        <div id="product-price-display">
+          {%- render 'price', product: product, variant: product.selected_or_first_available_variant -%}
         </div>
-
-        <!-- Price -->
-        {%- render 'price', product: product, variant: product.selected_or_first_available_variant -%}
 
         <hr class="divider">
 
@@ -94,16 +126,68 @@
           {%- render 'variant-selector', product: product -%}
         {%- endunless -%}
 
+        <!-- ── Subscribe & Save toggle ── -->
+        {%- if product.selling_plan_groups.size > 0 -%}
+          <div class="purchase-type" id="purchase-type">
+            <label class="purchase-type__opt purchase-type__opt--active" id="pt-onetime-label">
+              <input type="radio" name="purchase-type" value="onetime" checked class="visually-hidden" id="pt-onetime">
+              <div class="purchase-type__inner">
+                <span class="purchase-type__name">One-Time Purchase</span>
+                <span class="purchase-type__price" id="pt-onetime-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+              </div>
+            </label>
+            <label class="purchase-type__opt" id="pt-subscribe-label">
+              <input type="radio" name="purchase-type" value="subscribe" class="visually-hidden" id="pt-subscribe">
+              <div class="purchase-type__inner">
+                <div class="purchase-type__name-row">
+                  <span class="purchase-type__name">Subscribe &amp; Save</span>
+                  <span class="purchase-type__save-badge">SAVE 10%</span>
+                </div>
+                <span class="purchase-type__price" id="pt-sub-price">
+                  {%- assign sub_price = product.selected_or_first_available_variant.price | times: 0.9 | round -%}
+                  {{ sub_price | money }}
+                </span>
+                <select class="purchase-type__freq" id="selling-plan-select">
+                  {%- for group in product.selling_plan_groups -%}
+                    {%- for plan in group.selling_plans -%}
+                      <option value="{{ plan.id }}">{{ plan.name }}</option>
+                    {%- endfor -%}
+                  {%- endfor -%}
+                </select>
+              </div>
+            </label>
+          </div>
+        {%- else -%}
+          <!-- Subscribe & Save placeholder (no selling plans yet) -->
+          <div class="purchase-type purchase-type--static" id="purchase-type">
+            <div class="purchase-type__opt purchase-type__opt--active purchase-type__opt--only">
+              <div class="purchase-type__inner">
+                <span class="purchase-type__name">One-Time Purchase</span>
+                <span class="purchase-type__price" id="pt-onetime-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+              </div>
+            </div>
+            <div class="purchase-type__opt purchase-type__opt--coming">
+              <div class="purchase-type__inner">
+                <div class="purchase-type__name-row">
+                  <span class="purchase-type__name">Subscribe &amp; Save</span>
+                  <span class="purchase-type__save-badge">COMING SOON</span>
+                </div>
+                <span class="purchase-type__sub-note">Auto-delivery at a discount</span>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+
         <!-- Add to cart form -->
         {%- form 'product', product, class: 'product-form', id: 'product-form' -%}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-
+          <input type="hidden" name="id" id="variant-hidden-id" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="selling_plan" id="selling-plan-input" value="" disabled>
           <div class="product-form__qty-row">
             {%- render 'quantity-stepper' -%}
-
             <button
               type="submit"
               class="btn btn-primary product-form__atc{% unless product.selected_or_first_available_variant.available %} btn--disabled{% endunless %}"
+              id="product-atc-btn"
               {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
             >
               {%- if product.selected_or_first_available_variant.available -%}
@@ -115,203 +199,649 @@
           </div>
         {%- endform -%}
 
-        <!-- Description -->
-        {%- if product.description != blank -%}
-          <div class="product-description">
-            {{ product.description }}
+        <!-- Benefit bullets -->
+        {%- assign benefit_blocks = section.blocks | where: 'type', 'benefit' -%}
+        {%- if benefit_blocks.size > 0 -%}
+          <div class="pd-why">
+            {%- if section.settings.why_heading != blank -%}
+              <h3 class="pd-why__heading">{{ section.settings.why_heading }}</h3>
+            {%- endif -%}
+            <ul class="pd-why__list" role="list">
+              {%- for block in benefit_blocks -%}
+                <li class="pd-why__item" {{ block.shopify_attributes }}>
+                  <span class="pd-why__icon" aria-hidden="true">
+                    {%- case block.settings.icon -%}
+                      {%- when 'leaf' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                      {%- when 'thumbs_up' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                      {%- when 'award' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/><path d="M9 8l2 2 4-4"/></svg>
+                      {%- when 'truck' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                      {%- when 'shield' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                      {%- else -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    {%- endcase -%}
+                  </span>
+                  <span class="pd-why__text">{{ block.settings.text }}</span>
+                </li>
+              {%- endfor -%}
+            </ul>
           </div>
         {%- endif -%}
 
+        <!-- Categories -->
+        {%- assign all_collections = product.collections -%}
+        {%- if all_collections.size > 0 -%}
+          <div class="pd-cats">
+            <p class="pd-cats__label">{{ section.settings.categories_label | default: 'CATEGORIES' }}</p>
+            <div class="pd-cats__tags">
+              {%- assign cat_limit = section.settings.categories_max | default: 5 -%}
+              {%- assign shown = 0 -%}
+              {%- for col in all_collections -%}
+                {%- unless col.handle == 'frontpage' or col.handle == 'all' -%}
+                  {%- if shown < cat_limit -%}
+                    <a href="{{ col.url }}" class="pd-cats__tag">{{ col.title }}</a>
+                    {%- assign shown = shown | plus: 1 -%}
+                  {%- endif -%}
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+
+      </div><!-- /.product-layout__details -->
+    </div><!-- /.product-layout -->
+
+    <!-- ── Description + Certifications band ── -->
+    <!-- ── Pairs Well With ── -->
+    {%- assign pairs_blocks = section.blocks | where: 'type', 'pairs_product' -%}
+    {%- assign pairs_coll = collections[section.settings.pairs_collection] -%}
+    {%- if pairs_blocks.size > 0 or pairs_coll != blank -%}
+      <div class="product-pairs section--cream" style="margin-top:var(--space-16);padding:var(--space-12) 0;border-radius:var(--radius-lg);">
+        <p class="eyebrow" style="text-align:center;margin-bottom:var(--space-3);">GOES GREAT WITH</p>
+        <h2 class="section-title" style="text-align:center;margin-bottom:var(--space-10);">{{ section.settings.pairs_heading | default: 'Pairs Well With' }}</h2>
+        <div class="product-pairs__grid">
+          {%- if pairs_blocks.size > 0 -%}
+            {%- for block in pairs_blocks -%}
+              {%- assign pair_product = all_products[block.settings.product] -%}
+              {%- if pair_product != blank -%}
+                {% render 'product-card', product: pair_product %}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- elsif pairs_coll != blank -%}
+            {%- for p in pairs_coll.products limit: 4 -%}
+              {% render 'product-card', product: p %}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
       </div>
-    </div>
+    {%- endif -%}
+
   </div>
 </section>
 
 {% schema %}
 {
   "name": "Product",
-  "settings": [],
+  "max_blocks": 24,
+  "settings": [
+    { "type": "text", "id": "why_heading", "label": "\"Why Balsam?\" heading", "default": "Why Balsam?" },
+    { "type": "text", "id": "categories_label", "label": "Categories label", "default": "CATEGORIES" },
+    { "type": "range", "id": "categories_max", "label": "Max categories", "min": 2, "max": 8, "step": 1, "default": 5 },
+    { "type": "text", "id": "cert_heading", "label": "Certifications heading", "default": "Our Certifications" },
+    { "type": "text", "id": "pairs_heading", "label": "Pairs Well With heading", "default": "Pairs Well With" },
+    { "type": "collection", "id": "pairs_collection", "label": "Pairs collection (auto)" }
+  ],
+  "blocks": [
+    {
+      "type": "certification",
+      "name": "Certification badge",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "certified",
+          "options": [
+            { "value": "kosher", "label": "Kosher" }, { "value": "halal", "label": "Halal" },
+            { "value": "non_gmo", "label": "Non-GMO" }, { "value": "certified", "label": "Certified" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Badge label", "default": "Certified" }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Benefit bullet",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "leaf",
+          "options": [
+            { "value": "leaf", "label": "Leaf" }, { "value": "thumbs_up", "label": "Thumbs up" },
+            { "value": "award", "label": "Award" }, { "value": "truck", "label": "Truck" },
+            { "value": "shield", "label": "Shield" }
+          ]
+        },
+        { "type": "text", "id": "text", "label": "Benefit text", "default": "Stone-ground from premium sesame seeds" }
+      ]
+    },
+    {
+      "type": "pairs_product",
+      "name": "Pairs Well With product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Product"
+      "name": "Product",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "leaf", "text": "Single origin sesame, stone-ground in small batches" } },
+        { "type": "benefit", "settings": { "icon": "thumbs_up", "text": "Over 2,000 five-star reviews" } },
+        { "type": "benefit", "settings": { "icon": "award", "text": "Guaranteed to wow you or we'll replace it" } },
+        { "type": "benefit", "settings": { "icon": "truck", "text": "Free shipping on orders over $40" } }
+      ]
     }
   ]
 }
 {% endschema %}
 
 <style>
-  .breadcrumb {
-    margin-bottom: var(--space-8);
-  }
+  /* ── Breadcrumb ── */
+  .breadcrumb { margin-bottom: var(--space-8); }
+  .breadcrumb__list { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); list-style: none; font-size: var(--text-xs); color: var(--muted); }
+  .breadcrumb__link { color: var(--muted); transition: color var(--motion-fast) var(--ease-standard); }
+  .breadcrumb__link:hover { color: var(--fg); }
+  .breadcrumb__current { color: var(--fg-2); font-weight: 600; }
 
-  .breadcrumb__list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2);
-    list-style: none;
-    font-size: var(--text-xs);
-    color: var(--muted);
-  }
+  /* ── Layout ── */
+  .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12); align-items: start; }
 
-  .breadcrumb__link {
-    color: var(--muted);
-    transition: color var(--motion-fast) var(--ease-standard);
-  }
+  /* ── Media ── */
+  .product-layout__media { display: flex; flex-direction: column; }
+  .product-media { position: relative; }
+  .product-media__main { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: var(--radius-lg); }
+  .product-media__placeholder { width: 100%; aspect-ratio: 1/1; border-radius: var(--radius-lg); background: var(--border-soft); }
+  .product-media__batch { position: absolute; bottom: var(--space-4); left: var(--space-4); background: var(--surface-warm); color: var(--fg); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); font-size: var(--text-xs); }
+  .product-thumbnails { display: flex; gap: var(--space-2); margin-top: var(--space-3); overflow-x: auto; scrollbar-width: none; }
+  .product-thumbnails::-webkit-scrollbar { display: none; }
+  .product-thumbnail { flex-shrink: 0; width: 72px; height: 72px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); overflow: hidden; cursor: pointer; transition: border-color 0.15s; background: none; padding: 0; }
+  .product-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+  .product-thumbnail--active, .product-thumbnail:hover { border-color: var(--accent); }
 
-  .breadcrumb__link:hover {
-    color: var(--fg);
-  }
+  /* ── Details ── */
+  .product-layout__details { display: flex; flex-direction: column; gap: var(--space-6); }
+  .review-strip { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .review-strip__count { font-size: var(--text-sm); font-weight: 600; color: var(--fg-2); }
+  .review-strip__verified { padding: var(--space-1) var(--space-2); background: var(--border-soft); border-radius: var(--radius-pill); }
 
-  .breadcrumb__current {
-    color: var(--fg-2);
-    font-weight: 600;
-  }
-
-  /* Layout */
-  .product-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-12);
-    align-items: start;
-  }
-
-  /* Media */
-  .product-media {
-    position: relative;
-  }
-
-  .product-media__main {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: var(--radius-lg);
-  }
-
-  .product-media__placeholder {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: var(--radius-lg);
-    background-color: var(--border-soft);
-  }
-
-  .product-media__batch {
-    position: absolute;
-    bottom: var(--space-4);
-    left: var(--space-4);
-    background-color: var(--surface-warm);
-    color: var(--fg);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-pill);
-    font-size: var(--text-xs);
-  }
-
-  .product-thumbnails {
-    display: flex;
-    gap: var(--space-2);
-    margin-top: var(--space-3);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .product-thumbnail {
-    flex-shrink: 0;
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color var(--motion-fast) var(--ease-standard);
-    background: none;
-    padding: 0;
-  }
-
-  .product-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .product-thumbnail--active,
-  .product-thumbnail:hover {
-    border-color: var(--accent);
-  }
-
-  /* Details column */
-  .product-layout__details {
+  /* ── Subscribe & Save toggle ── */
+  .purchase-type {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-3);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .purchase-type__opt {
+    display: flex;
+    align-items: center;
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    gap: var(--space-3);
+  }
+  .purchase-type__opt:last-child { border-bottom: none; }
+  .purchase-type__opt::before {
+    content: '';
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .purchase-type__opt--active { background: rgba(27,67,50,0.04); }
+  .purchase-type__opt--active::before { border-color: var(--accent); background: var(--accent); box-shadow: inset 0 0 0 3px var(--surface); }
+  .purchase-type__opt--coming { opacity: 0.55; cursor: default; }
+  .purchase-type__opt--only { cursor: default; }
+  .purchase-type--static .purchase-type__opt--active::before { background: var(--accent); }
+  .purchase-type__inner { flex: 1; }
+  .purchase-type__name { font-size: var(--text-sm); font-weight: 600; color: var(--fg); }
+  .purchase-type__name-row { display: flex; align-items: center; gap: var(--space-2); }
+  .purchase-type__save-badge {
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+    padding: 2px 8px; background: var(--accent); color: #fff;
+    border-radius: var(--radius-pill); text-transform: uppercase;
+  }
+  .purchase-type__price { display: block; font-size: var(--text-sm); color: var(--muted); margin-top: 2px; }
+  .purchase-type__sub-note { display: block; font-size: var(--text-xs); color: var(--muted); margin-top: 2px; }
+  .purchase-type__freq {
+    display: block; margin-top: var(--space-2);
+    font-size: var(--text-sm); font-weight: 500; color: var(--fg);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 4px 10px;
+    cursor: pointer;
   }
 
-  /* Review strip */
-  .review-strip {
+  /* ── Form ── */
+  .product-form__qty-row { display: flex; gap: var(--space-4); align-items: stretch; }
+  .product-form__atc { flex: 1; }
+  .btn--disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── Why Balsam bullets ── */
+  .pd-why { padding-top: var(--space-2); }
+  .pd-why__heading { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--fg); margin-bottom: 16px; letter-spacing: var(--tracking-display); }
+  .pd-why__list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .pd-why__item { display: flex; align-items: center; gap: 14px; }
+  .pd-why__icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
+  .pd-why__text { font-size: 0.95rem; color: var(--fg-2); line-height: 1.4; }
+
+  /* ── Categories ── */
+  .pd-cats { padding-top: var(--space-2); border-top: 1px solid var(--border); }
+  .pd-cats__label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); margin-bottom: 10px; }
+  .pd-cats__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pd-cats__tag { display: inline-block; padding: 7px 14px; border: 1.5px solid var(--accent); border-radius: 7px; font-size: 0.85rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: background 0.2s, color 0.2s; }
+  .pd-cats__tag:hover { background: var(--accent); color: #fff; }
+
+  /* ── Description band ── */
+  .product-desc-band { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .product-desc-band__body { max-width: 720px; font-size: var(--text-base); color: var(--fg-2); line-height: var(--leading-body); }
+  .product-desc-band__body p { margin-bottom: var(--space-4); }
+  .product-desc-band__body p:last-child { margin-bottom: 0; }
+  .product-desc-band--split { display: grid; grid-template-columns: 1fr 320px; gap: 56px; align-items: start; }
+  .pd-certs { background: #FAFAF8; border: 1px solid #E5E7EB; border-radius: 14px; padding: 28px 22px; }
+  .pd-certs__heading { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--fg); margin-bottom: 22px; }
+  .pd-certs__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 8px; }
+  .pd-certs__item { display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; }
+  .pd-certs__icon-wrap { width: 54px; height: 54px; border: 1.5px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); transition: background 0.2s, color 0.2s; }
+  .pd-certs__item:hover .pd-certs__icon-wrap { background: var(--accent); color: #fff; }
+  .pd-certs__label { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--fg-2); line-height: 1.3; }
+
+  /* ── Pairs Well With ── */
+  .product-pairs__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
+
+  /* ── Certification badge row ── */
+  .pd-cert-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+  }
+  .pd-cert-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px 6px 10px;
+    background: var(--fg);
+    color: #fff;
+    border-radius: var(--radius-pill);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .pd-cert-badge svg { flex-shrink: 0; }
+
+  /* ── ATC Toast ── */
+  .atc-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 500;
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    flex-wrap: wrap;
-  }
-
-  .review-strip__count {
+    background: var(--fg);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
     font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--fg-2);
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
   }
-
-  .review-strip__verified {
-    padding: var(--space-1) var(--space-2);
-    background-color: var(--border-soft);
-    border-radius: var(--radius-pill);
+  .atc-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
   }
+  .atc-toast[hidden] { display: none; }
+  .atc-toast__icon { flex-shrink: 0; color: #4ADE80; }
+  .atc-toast__link { color: rgba(255,255,255,0.75); text-decoration: underline; text-underline-offset: 2px; margin-left: var(--space-2); transition: color 0.15s; }
+  .atc-toast__link:hover { color: #fff; }
+  .atc-toast__close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.6); padding: 2px; margin-left: var(--space-1); display: flex; align-items: center; border-radius: 50%; transition: color 0.15s; }
+  .atc-toast__close:hover { color: #fff; }
 
-  /* Form */
-  .product-form__qty-row {
-    display: flex;
-    gap: var(--space-4);
-    align-items: stretch;
+  /* ── Recently Viewed ── */
+  .recently-viewed { margin-top: var(--space-16); padding-top: var(--space-12); border-top: 1px solid var(--border); }
+  .recently-viewed[hidden] { display: none; }
+  .rv-pdp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
   }
+  @media (max-width: 959px) { .rv-pdp-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 479px) { .rv-pdp-grid { grid-template-columns: 1fr; } }
 
-  .product-form__atc {
-    flex: 1;
+  /* ── Responsive ── */
+  @media (max-width: 959px) {
+    .product-desc-band--split { grid-template-columns: 1fr; gap: 32px; }
+    .pd-certs__grid { grid-template-columns: repeat(4, 1fr); }
+    .product-pairs__grid { grid-template-columns: repeat(3, 1fr); }
   }
-
-  .btn--disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Description */
-  .product-description {
-    font-size: var(--text-base);
-    color: var(--fg-2);
-    line-height: var(--leading-body);
-  }
-
-  .product-description p + p {
-    margin-top: var(--space-4);
-  }
-
   @media (max-width: 767px) {
-    .product-layout {
-      grid-template-columns: 1fr;
-      gap: var(--space-8);
-    }
+    .product-layout { grid-template-columns: 1fr; gap: var(--space-8); }
+    .pd-certs__grid { grid-template-columns: repeat(3, 1fr); }
+    .product-pairs__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
   }
 </style>
 
 <script>
-  (function () {
-    const mainImg = document.getElementById('product-featured-image');
-    if (!mainImg) return;
+(function () {
+  /* ── Variant data ── */
+  var variantData  = JSON.parse(document.getElementById('product-variants-json').textContent);
+  var productOpts  = JSON.parse(document.getElementById('product-options-json').textContent);
+  var productHandle = {{ product.handle | json }};
+  var productTitle  = {{ product.title | json }};
+  var productUrl    = {{ product.url | json }};
 
-    document.querySelectorAll('.product-thumbnail').forEach((thumb) => {
-      thumb.addEventListener('click', () => {
-        document.querySelectorAll('.product-thumbnail').forEach((t) => t.classList.remove('product-thumbnail--active'));
-        thumb.classList.add('product-thumbnail--active');
-        const src = thumb.dataset.imageSrc;
-        if (src) mainImg.src = src;
+  function formatMoney(cents) {
+    if (!cents && cents !== 0) return '';
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  function getSelectedVariant() {
+    var selectedOpts = [];
+    productOpts.forEach(function (name) {
+      var inp = document.querySelector('.variant-selector input[name="options[' + name + ']"]:checked');
+      selectedOpts.push(inp ? inp.value : null);
+    });
+    return variantData.find(function (v) {
+      return selectedOpts.every(function (val, i) {
+        return val === null || v['option' + (i + 1)] === val;
       });
     });
+  }
+
+  function updateVariantUI(variant) {
+    if (!variant) return;
+
+    /* Hidden form ID */
+    var hiddenId = document.getElementById('variant-hidden-id');
+    if (hiddenId) hiddenId.value = variant.id;
+
+    /* Price display */
+    var priceWrap = document.getElementById('product-price-display');
+    if (priceWrap && variant.price) {
+      var html = '';
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        html = '<div class="price">'
+          + '<s class="price__compare" style="color:var(--muted);font-size:0.9em;margin-right:8px;">' + formatMoney(variant.compare_at_price) + '</s>'
+          + '<span class="price__current" style="font-size:1.35rem;font-weight:700;color:var(--fg);">' + formatMoney(variant.price) + '</span>'
+          + '<span class="price__save-badge" style="margin-left:8px;font-size:0.7rem;font-weight:700;letter-spacing:0.05em;background:var(--accent);color:#fff;padding:3px 8px;border-radius:20px;">SAVE ' + Math.round((1 - variant.price / variant.compare_at_price) * 100) + '%</span>'
+          + '</div>';
+      } else {
+        html = '<div class="price"><span class="price__current" style="font-size:1.35rem;font-weight:700;color:var(--fg);">' + formatMoney(variant.price) + '</span></div>';
+      }
+      priceWrap.innerHTML = html;
+    }
+
+    /* Subscribe & Save prices */
+    var oneTimePrice = document.getElementById('pt-onetime-price');
+    var subPrice = document.getElementById('pt-sub-price');
+    if (oneTimePrice) oneTimePrice.textContent = formatMoney(variant.price);
+    if (subPrice) subPrice.textContent = formatMoney(Math.round(variant.price * 0.9));
+
+    /* Main image */
+    if (variant.featured_image) {
+      var mainImg = document.getElementById('product-featured-image');
+      if (mainImg) {
+        var imgSrc = variant.featured_image.src.replace(/(\.[a-z]+)(\?.*)?$/, '_900x900$1');
+        mainImg.src = variant.featured_image.src;
+        /* Highlight the matching thumbnail */
+        var thumbs = document.querySelectorAll('.product-thumbnail');
+        thumbs.forEach(function (t) { t.classList.remove('product-thumbnail--active'); });
+        var matchThumb = document.querySelector('.product-thumbnail[data-thumb-index="' + variant.featured_image.position + '"]');
+        if (!matchThumb && thumbs.length > 0) matchThumb = thumbs[0];
+        if (matchThumb) matchThumb.classList.add('product-thumbnail--active');
+      }
+    }
+
+    /* ATC button */
+    var atcBtn = document.getElementById('product-atc-btn');
+    if (atcBtn) {
+      atcBtn.disabled = !variant.available;
+      atcBtn.classList.toggle('btn--disabled', !variant.available);
+      atcBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
+    }
+
+    /* Variant card/pill states */
+    document.querySelectorAll('.variant-card').forEach(function (card) {
+      var inp = card.querySelector('input');
+      if (inp) card.classList.toggle('variant-card--selected', inp.checked);
+    });
+    document.querySelectorAll('.variant-pill').forEach(function (pill) {
+      var inp = pill.querySelector('input');
+      if (inp) pill.classList.toggle('variant-pill--selected', inp.checked);
+    });
+
+    /* URL update */
+    var url = new URL(window.location.href);
+    url.searchParams.set('variant', variant.id);
+    history.replaceState({}, '', url.toString());
+  }
+
+  /* Listen for variant option changes */
+  document.addEventListener('change', function (e) {
+    if (e.target.closest && e.target.closest('.variant-selector')) {
+      var v = getSelectedVariant();
+      if (v) updateVariantUI(v);
+    }
+  });
+
+  /* ── Thumbnail click ── */
+  document.querySelectorAll('.product-thumbnail').forEach(function (thumb) {
+    thumb.addEventListener('click', function () {
+      document.querySelectorAll('.product-thumbnail').forEach(function (t) { t.classList.remove('product-thumbnail--active'); });
+      thumb.classList.add('product-thumbnail--active');
+      var src = thumb.dataset.imageSrc;
+      var mainImg = document.getElementById('product-featured-image');
+      if (src && mainImg) mainImg.src = src;
+    });
+  });
+
+  /* ── AJAX Add to Cart ── */
+  var productForm = document.getElementById('product-form');
+  var atcToast    = document.getElementById('atc-toast');
+  var atcToastTxt = document.getElementById('atc-toast-text');
+  var toastClose  = document.getElementById('atc-toast-close');
+  var toastTimer;
+
+  function showToast(title) {
+    if (!atcToast) return;
+    if (atcToastTxt) atcToastTxt.textContent = '"' + title + '" added to cart';
+    atcToast.hidden = false;
+    requestAnimationFrame(function () {
+      atcToast.classList.add('is-visible');
+    });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(hideToast, 4000);
+  }
+
+  function hideToast() {
+    if (!atcToast) return;
+    atcToast.classList.remove('is-visible');
+    atcToast.addEventListener('transitionend', function handler() {
+      atcToast.hidden = true;
+      atcToast.removeEventListener('transitionend', handler);
+    });
+  }
+
+  if (toastClose) toastClose.addEventListener('click', hideToast);
+
+  function updateHeaderCartCount(count) {
+    document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+      el.textContent = count;
+      el.hidden = count === 0;
+    });
+  }
+
+  if (productForm) {
+    productForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var atcBtn = document.getElementById('product-atc-btn');
+      var origText = atcBtn ? atcBtn.textContent : 'Add to Cart';
+      if (atcBtn) { atcBtn.disabled = true; atcBtn.textContent = 'Adding…'; }
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: new FormData(productForm)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (item) {
+          showToast(item.title || productTitle);
+          /* update cart count badge */
+          fetch('/cart.js')
+            .then(function (r) { return r.json(); })
+            .then(function (cart) { updateHeaderCartCount(cart.item_count); })
+            .catch(function () {});
+        })
+        .catch(function () {
+          /* fallback: submit normally */
+          productForm.submit();
+        })
+        .finally(function () {
+          if (atcBtn) {
+            setTimeout(function () {
+              atcBtn.disabled = false;
+              atcBtn.textContent = origText;
+            }, 1200);
+          }
+        });
+    });
+  }
+
+  /* ── Subscribe & Save toggle ── */
+  var ptOnetime   = document.getElementById('pt-onetime');
+  var ptSubscribe = document.getElementById('pt-subscribe');
+  var ptOnetimeLabel   = document.getElementById('pt-onetime-label');
+  var ptSubscribeLabel = document.getElementById('pt-subscribe-label');
+  var sellingPlanInput = document.getElementById('selling-plan-input');
+  var sellingPlanSelect = document.getElementById('selling-plan-select');
+
+  function applyPurchaseType() {
+    var isSubscribe = ptSubscribe && ptSubscribe.checked;
+    if (ptOnetimeLabel)   ptOnetimeLabel.classList.toggle('purchase-type__opt--active', !isSubscribe);
+    if (ptSubscribeLabel) ptSubscribeLabel.classList.toggle('purchase-type__opt--active', isSubscribe);
+    if (sellingPlanInput) {
+      if (isSubscribe && sellingPlanSelect) {
+        sellingPlanInput.value = sellingPlanSelect.value;
+        sellingPlanInput.disabled = false;
+      } else {
+        sellingPlanInput.value = '';
+        sellingPlanInput.disabled = true;
+      }
+    }
+  }
+
+  if (ptOnetime)   ptOnetime.addEventListener('change', applyPurchaseType);
+  if (ptSubscribe) ptSubscribe.addEventListener('change', applyPurchaseType);
+  if (sellingPlanSelect) sellingPlanSelect.addEventListener('change', function () {
+    if (sellingPlanInput) sellingPlanInput.value = sellingPlanSelect.value;
+  });
+
+  /* ── Recently Viewed — track current product ── */
+  (function () {
+    var KEY = 'balsam-recently-viewed';
+    var MAX = 8;
+    try {
+      var stored = JSON.parse(localStorage.getItem(KEY) || '[]');
+      /* Remove current product if already there */
+      stored = stored.filter(function (p) { return p.handle !== productHandle; });
+      /* Add current to front with full data for proper card rendering */
+      var featured = {{ product.featured_image | image_url: width: 600 | json }};
+      stored.unshift({
+        handle: productHandle,
+        title: productTitle,
+        url: productUrl,
+        image: featured,
+        price: {{ product.price | json }},
+        compare_at: {{ product.compare_at_price | json }},
+        product_id: {{ product.selected_or_first_available_variant.id | json }},
+        description: {{ product.description | strip_html | truncate: 120 | json }},
+        variants: [{{ product.selected_or_first_available_variant | json }}]
+      });
+      if (stored.length > MAX) stored = stored.slice(0, MAX);
+      localStorage.setItem(KEY, JSON.stringify(stored));
+    } catch(e) {}
   })();
+
+  /* ── Recently Viewed — render on page ── */
+  (function () {
+    var KEY = 'balsam-recently-viewed';
+    var rvWrap = document.getElementById('recently-viewed');
+    var rvGrid = document.getElementById('recently-viewed-grid');
+    if (!rvWrap || !rvGrid) return;
+
+    function fmt(cents) { return '$' + (cents / 100).toFixed(2).replace(/\.00$/, ''); }
+    function esc(str) { return (str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function buildCard(p) {
+      var url      = p.url || ('/products/' + p.handle);
+      var price    = typeof p.price === 'number' ? fmt(p.price) : '';
+      var variants = Array.isArray(p.variants) && p.variants.length ? p.variants : [];
+      var isMulti  = variants.length > 1;
+      var badge    = (p.compare_at && p.compare_at > p.price)
+        ? '<span class="pc-badge pc-badge--sale">Save ' + Math.round((1 - p.price / p.compare_at) * 100) + '%</span>' : '';
+      var desc     = p.description ? '<p class="product-card__desc">' + esc(p.description) + '</p>' : '';
+      var wlBtn    = '<button class="product-card__wishlist" type="button" aria-label="Add to wishlist" aria-pressed="false"'
+        + ' data-product-id="' + esc(String(p.product_id || '')) + '"'
+        + ' data-product-handle="' + esc(p.handle || '') + '"'
+        + ' data-product-title="' + esc(p.title || '') + '"'
+        + ' data-product-price="' + (p.price || 0) + '"'
+        + ' data-product-image="' + esc(p.image || '') + '"'
+        + ' data-product-url="' + esc(url) + '">'
+        + '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        + '</button>';
+      var atcBtn   = '<button class="pc-add-btn' + (isMulti ? '' : ' pc-add-btn--single') + '" type="button" aria-expanded="false" data-default-price="' + price + '">'
+        + '<span class="pc-add-btn__inner"><span class="pc-add-btn__verb">ADD</span><span class="pc-add-btn__sep" aria-hidden="true"> — </span><span class="pc-add-btn__price">' + price + '</span></span>'
+        + (isMulti ? '<span class="pc-add-btn__chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' : '')
+        + '</button>';
+      return '<a href="' + url + '" class="product-card__image-link" tabindex="-1" aria-hidden="true">'
+          + '<div class="product-card__image-wrap">'
+            + (p.image ? '<img src="' + p.image + '" alt="' + esc(p.title || '') + '" loading="lazy" class="product-card__img" width="600" height="600">' : '')
+            + wlBtn
+          + '</div></a>'
+        + '<div class="product-card__body">'
+          + '<a href="' + url + '" class="product-card__name">' + esc(p.title || '') + '</a>'
+          + badge + desc
+          + '<div class="pc-add">'
+            + '<script type="application/json" class="pc-variants-json">' + JSON.stringify(variants) + '<\/script>'
+            + atcBtn
+            + '<div class="pc-variant-panel" hidden></div>'
+          + '</div>'
+        + '</div>';
+    }
+
+    try {
+      var stored = JSON.parse(localStorage.getItem(KEY) || '[]');
+      var others = stored.filter(function (p) { return p.handle !== productHandle; });
+      if (others.length === 0) return;
+      rvWrap.hidden = false;
+      others.slice(0, 4).forEach(function (p) {
+        var article = document.createElement('article');
+        article.className = 'product-card';
+        article.setAttribute('aria-label', p.title || '');
+        article.setAttribute('role', 'listitem');
+        article.innerHTML = buildCard(p);
+        rvGrid.appendChild(article);
+      });
+    } catch(e) {}
+  })();
+})();
 </script>

@@ -1,0 +1,490 @@
+<section class="wholesale-page section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="wholesale-page__hero">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="wholesale-page__heading">{{ section.settings.heading | default: 'Wholesale' }}</h1>
+      {%- if section.settings.intro != blank -%}
+        <p class="wholesale-page__intro">{{ section.settings.intro }}</p>
+      {%- endif -%}
+      <div class="wholesale-page__hero-actions">
+        <a href="#wholesale-form" class="btn btn-primary">Apply to wholesale</a>
+        {%- if section.settings.faire_url != blank -%}
+          <a href="{{ section.settings.faire_url }}" target="_blank" rel="noopener" class="btn btn-ghost">Order on Faire</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Benefits -->
+  {%- if section.blocks.size > 0 -%}
+    {%- assign benefit_blocks = section.blocks | where: 'type', 'benefit' -%}
+    {%- if benefit_blocks.size > 0 -%}
+      <div class="wholesale-benefits">
+        <div class="container">
+          <div class="wholesale-benefits__grid">
+            {%- for block in benefit_blocks -%}
+              <div class="wholesale-benefit" {{ block.shopify_attributes }}>
+                <div class="wholesale-benefit__icon-wrap">
+                  {%- case block.settings.icon -%}
+                    {%- when 'percent' -%}
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 18L18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    {%- when 'truck' -%}
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                    {%- when 'box' -%}
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    {%- when 'handshake' -%}
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/></svg>
+                    {%- when 'chart' -%}
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    {%- else -%}
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                  {%- endcase -%}
+                </div>
+                <div class="wholesale-benefit__body">
+                  <h3 class="wholesale-benefit__title">{{ block.settings.title }}</h3>
+                  {%- if block.settings.body != blank -%}
+                    <p class="wholesale-benefit__text">{{ block.settings.body }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="container">
+
+    <!-- Faire section -->
+    {%- if section.settings.faire_url != blank or section.settings.faire_heading != blank -%}
+      <div class="wholesale-faire">
+        <div class="wholesale-faire__body">
+          {%- if section.settings.faire_eyebrow != blank -%}
+            <p class="eyebrow">{{ section.settings.faire_eyebrow }}</p>
+          {%- endif -%}
+          <h2 class="wholesale-faire__heading">{{ section.settings.faire_heading | default: 'Shop Wholesale on Faire' }}</h2>
+          {%- if section.settings.faire_body != blank -%}
+            <p class="wholesale-faire__text">{{ section.settings.faire_body }}</p>
+          {%- endif -%}
+          <div class="wholesale-faire__perks">
+            {%- assign faire_perk_blocks = section.blocks | where: 'type', 'faire_perk' -%}
+            {%- for block in faire_perk_blocks -%}
+              {%- if block.settings.text != blank -%}
+                <div class="wholesale-faire__perk" {{ block.shopify_attributes }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>{{ block.settings.text }}</span>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if section.settings.faire_url != blank -%}
+            <a href="{{ section.settings.faire_url }}" target="_blank" rel="noopener" class="btn btn-primary">
+              Order on Faire →
+            </a>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.faire_image != blank -%}
+          <div class="wholesale-faire__img-wrap">
+            <img
+              src="{{ section.settings.faire_image | image_url: width: 800 }}"
+              srcset="{{ section.settings.faire_image | image_url: width: 600 }} 600w, {{ section.settings.faire_image | image_url: width: 800 }} 800w"
+              sizes="(max-width: 959px) 100vw, 45vw"
+              alt="Balsam Tahini wholesale"
+              width="800" height="600"
+              loading="lazy"
+              class="wholesale-faire__img"
+            >
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Application form -->
+    <div class="wholesale-form-section" id="wholesale-form">
+      <div class="wholesale-form-section__header">
+        <h2 class="wholesale-form-section__heading">{{ section.settings.form_heading | default: 'Apply to Become a Wholesale Partner' }}</h2>
+        {%- if section.settings.form_subheading != blank -%}
+          <p class="wholesale-form-section__sub">{{ section.settings.form_subheading }}</p>
+        {%- endif -%}
+      </div>
+      <div class="wholesale-form-section__wrap">
+        {%- form 'contact' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="contact-form__success">
+              <div class="contact-form__success-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="11" stroke="var(--accent)" stroke-width="1.5"/>
+                  <path d="M7.5 12l3 3 5.5-5.5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h2 class="contact-form__success-heading">Application received!</h2>
+              <p>Thank you for your interest. We'll review your application and get back to you within 2–3 business days.</p>
+            </div>
+          {%- else -%}
+            {%- if form.errors -%}
+              <div class="contact-form__errors">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <input type="hidden" name="contact[tags]" value="wholesale-application">
+            <div class="wholesale-form__fields">
+              <div class="wholesale-form__row wholesale-form__row--half">
+                <div class="contact-form__field">
+                  <label class="contact-form__label" for="WsFormName">Full name <span aria-hidden="true">*</span></label>
+                  <input type="text" id="WsFormName" name="contact[name]" autocomplete="name" class="contact-form__input" value="{{ form.name }}" required>
+                </div>
+                <div class="contact-form__field">
+                  <label class="contact-form__label" for="WsFormEmail">Email address <span aria-hidden="true">*</span></label>
+                  <input type="email" id="WsFormEmail" name="contact[email]" autocomplete="email" class="contact-form__input" value="{{ form.email }}" required>
+                </div>
+              </div>
+              <div class="wholesale-form__row wholesale-form__row--half">
+                <div class="contact-form__field">
+                  <label class="contact-form__label" for="WsFormBusiness">Business name <span aria-hidden="true">*</span></label>
+                  <input type="text" id="WsFormBusiness" name="contact[business_name]" class="contact-form__input" required>
+                </div>
+                <div class="contact-form__field">
+                  <label class="contact-form__label" for="WsFormWebsite">Website or Instagram</label>
+                  <input type="text" id="WsFormWebsite" name="contact[website]" class="contact-form__input" placeholder="https://">
+                </div>
+              </div>
+              <div class="contact-form__field">
+                <label class="contact-form__label" for="WsFormType">Business type <span aria-hidden="true">*</span></label>
+                <select id="WsFormType" name="contact[business_type]" class="contact-form__input contact-form__select" required>
+                  <option value="" disabled selected>Select one…</option>
+                  <option>Grocery / Specialty food store</option>
+                  <option>Restaurant or café</option>
+                  <option>Online retailer</option>
+                  <option>Corporate gifting</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="contact-form__field">
+                <label class="contact-form__label" for="WsFormMessage">Tell us about your business</label>
+                <textarea id="WsFormMessage" name="contact[body]" class="contact-form__textarea" rows="5" placeholder="Where are you located? What do you sell? How did you hear about us?">{{ form.body }}</textarea>
+              </div>
+              <button type="submit" class="btn btn-primary wholesale-form__submit">Submit application</button>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Hero */
+  .wholesale-page__hero {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  .wholesale-page__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.1;
+  }
+  .wholesale-page__intro {
+    font-size: 1.1rem;
+    color: var(--fg-2);
+    line-height: 1.7;
+  }
+  .wholesale-page__hero-actions {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  /* Benefits */
+  .wholesale-benefits {
+    background: var(--surface-warm);
+    padding-block: var(--space-12);
+    margin-bottom: var(--space-16);
+  }
+  .wholesale-benefits__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+  .wholesale-benefit {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+  .wholesale-benefit__icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+  .wholesale-benefit__title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: var(--space-1);
+  }
+  .wholesale-benefit__text { font-size: 0.9rem; color: var(--fg-2); line-height: 1.6; }
+
+  /* Faire section */
+  .wholesale-faire {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-16);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .wholesale-faire__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .wholesale-faire__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.2;
+  }
+  .wholesale-faire__text { font-size: 1.05rem; color: var(--fg-2); line-height: 1.7; }
+  .wholesale-faire__perks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .wholesale-faire__perk {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: 0.95rem;
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .wholesale-faire__img-wrap {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+  .wholesale-faire__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Form section */
+  .wholesale-form-section {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .wholesale-form-section__header {
+    text-align: center;
+    margin-bottom: var(--space-10);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .wholesale-form-section__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.2;
+  }
+  .wholesale-form-section__sub { font-size: 1.05rem; color: var(--fg-2); line-height: 1.6; }
+  .wholesale-form-section__wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-10);
+  }
+  .wholesale-form__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .wholesale-form__row--half {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  /* Shared form field styles (also used by contact page) */
+  .contact-form__field { display: flex; flex-direction: column; gap: var(--space-2); }
+  .contact-form__label { font-size: 0.85rem; font-weight: 600; color: var(--fg); }
+  .contact-form__label span { color: var(--accent); }
+  .contact-form__input,
+  .contact-form__textarea,
+  .contact-form__select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: border-color var(--motion-fast) var(--ease-standard);
+    appearance: none;
+  }
+  .contact-form__input:focus,
+  .contact-form__textarea:focus,
+  .contact-form__select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .contact-form__textarea { resize: vertical; min-height: 120px; }
+  .wholesale-form__submit { width: 100%; margin-top: var(--space-2); }
+  .contact-form__errors {
+    background: #fff5f5;
+    border: 1px solid #fca5a5;
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    font-size: 0.9rem;
+    color: #dc2626;
+    margin-bottom: var(--space-4);
+  }
+  .contact-form__success {
+    text-align: center;
+    padding: var(--space-12) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .contact-form__success-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--surface-warm);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .contact-form__success-heading {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .contact-form__success p { font-size: 1rem; color: var(--fg-2); line-height: 1.6; }
+
+  @media (max-width: 1023px) {
+    .wholesale-benefits__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+  }
+  @media (max-width: 959px) {
+    .wholesale-faire { grid-template-columns: 1fr; gap: var(--space-8); }
+    .wholesale-faire__img-wrap { order: -1; }
+  }
+  @media (max-width: 767px) {
+    .wholesale-benefits__grid { grid-template-columns: 1fr; }
+    .wholesale-form-section__wrap { padding: var(--space-7); }
+    .wholesale-form__row--half { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 639px) {
+    .wholesale-page__hero-actions { flex-direction: column; width: 100%; }
+    .wholesale-page__hero-actions .btn { width: 100%; }
+    .wholesale-form-section__wrap { padding: var(--space-6); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Wholesale Page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHOLESALE PARTNERS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Bring Balsam to Your Shelves" },
+    { "type": "textarea", "id": "intro", "label": "Intro text", "default": "We partner with grocery stores, restaurants, cafés, and specialty retailers across Canada. Stock the purest tahini your customers have ever tasted." },
+    { "type": "url", "id": "faire_url", "label": "Faire store URL (optional)" },
+    { "type": "header", "content": "Faire section" },
+    { "type": "text", "id": "faire_eyebrow", "label": "Faire eyebrow", "default": "ALREADY ON FAIRE?" },
+    { "type": "text", "id": "faire_heading", "label": "Faire heading", "default": "Shop Wholesale on Faire" },
+    { "type": "textarea", "id": "faire_body", "label": "Faire body text", "default": "Faire makes ordering easy — net 60 payment terms, free returns on your first order, and instant access to our full product catalog." },
+    { "type": "image_picker", "id": "faire_image", "label": "Faire section image" },
+    { "type": "header", "content": "Application form" },
+    { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Apply to Become a Wholesale Partner" },
+    { "type": "textarea", "id": "form_subheading", "label": "Form subheading", "default": "Fill out the form below and we'll be in touch within 2–3 business days." },
+    { "type": "select", "id": "bg", "label": "Background", "options": [{"value":"canvas","label":"White"},{"value":"cream","label":"Cream"}], "default": "canvas" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon",
+          "options": [
+            {"value":"percent","label":"Percent / Margins"},
+            {"value":"truck","label":"Truck / Shipping"},
+            {"value":"box","label":"Box / Product"},
+            {"value":"handshake","label":"Check / Support"},
+            {"value":"chart","label":"Chart / Growth"}
+          ],
+          "default": "percent"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Competitive margins" },
+        { "type": "textarea", "id": "body", "label": "Description", "default": "We offer wholesale pricing that lets you price competitively while maintaining healthy margins." }
+      ]
+    },
+    {
+      "type": "faire_perk",
+      "name": "Faire perk",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Perk text", "default": "Free returns on your first order" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wholesale Page",
+      "settings": {
+        "eyebrow": "WHOLESALE PARTNERS",
+        "heading": "Bring Balsam to Your Shelves",
+        "intro": "We partner with grocery stores, restaurants, cafés, and specialty retailers across Canada. Stock the purest tahini your customers have ever tasted.",
+        "faire_eyebrow": "ALREADY ON FAIRE?",
+        "faire_heading": "Shop Wholesale on Faire",
+        "faire_body": "Faire makes ordering easy — net 60 payment terms, free returns on your first order, and instant access to our full product catalog.",
+        "form_heading": "Apply to Become a Wholesale Partner",
+        "form_subheading": "Fill out the form below and we'll be in touch within 2–3 business days.",
+        "bg": "canvas"
+      },
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "percent", "title": "Competitive margins", "body": "Wholesale pricing that lets you price competitively while maintaining healthy margins on every jar." } },
+        { "type": "benefit", "settings": { "icon": "truck", "title": "Fast fulfillment", "body": "Orders ship from our Mississauga facility within 1–2 business days, with flexible MOQ for new partners." } },
+        { "type": "benefit", "settings": { "icon": "handshake", "title": "Dedicated support", "body": "A dedicated wholesale contact to help with orders, reorders, and merchandising questions — any time." } },
+        { "type": "faire_perk", "settings": { "text": "Free returns on your first order" } },
+        { "type": "faire_perk", "settings": { "text": "Net 60 payment terms" } },
+        { "type": "faire_perk", "settings": { "text": "Full product catalog access" } },
+        { "type": "faire_perk", "settings": { "text": "No minimum for first-time buyers" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

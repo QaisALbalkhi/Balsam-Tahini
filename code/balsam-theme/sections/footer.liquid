@@ -1,83 +1,143 @@
 <footer class="site-footer" role="contentinfo">
-  <div class="footer__main container">
-    <div class="footer__brand">
-      {%- if settings.footer_logo -%}
+  <div class="footer__main">
+    <div class="footer__inner">
+
+      <!-- Col 1: Brand + social -->
+      <div class="footer__brand">
         <img
-          src="{{ settings.footer_logo | image_url: width: 200 }}"
-          alt="{{ settings.footer_logo.alt | default: shop.name }}"
-          width="120"
-          height="auto"
+          src="{{ 'balsam-logo.svg' | asset_url }}"
+          alt="{{ shop.name }}"
+          class="footer__logo"
+          width="180"
+          height="90"
           loading="lazy"
         >
-      {%- elsif settings.logo -%}
-        <img
-          src="{{ settings.logo | image_url: width: 200 }}"
-          alt="{{ settings.logo.alt | default: shop.name }}"
-          width="120"
-          height="auto"
-          loading="lazy"
-        >
-      {%- else -%}
-        <span class="footer__brand-name">{{ shop.name }}</span>
-      {%- endif -%}
 
-      {%- if settings.footer_tagline != blank -%}
-        <div class="footer__tagline">{{ settings.footer_tagline }}</div>
-      {%- endif -%}
+        {%- if section.settings.tagline != blank -%}
+          <p class="footer__tagline">{{ section.settings.tagline }}</p>
+        {%- elsif settings.footer_tagline != blank -%}
+          <p class="footer__tagline">{{ settings.footer_tagline }}</p>
+        {%- endif -%}
 
-      <div class="footer__social">
-        {%- if settings.footer_instagram_url != blank -%}
-          <a href="{{ settings.footer_instagram_url }}" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-            </svg>
-          </a>
-        {%- endif -%}
-        {%- if settings.footer_facebook_url != blank -%}
-          <a href="{{ settings.footer_facebook_url }}" class="footer__social-link" aria-label="Facebook" target="_blank" rel="noopener">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        {%- endif -%}
-        {%- if settings.footer_tiktok_url != blank -%}
-          <a href="{{ settings.footer_tiktok_url }}" class="footer__social-link" aria-label="TikTok" target="_blank" rel="noopener">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        {%- endif -%}
+        <div class="footer__social">
+          {%- if section.settings.instagram_url != blank -%}
+            <a href="{{ section.settings.instagram_url }}" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.tiktok_url != blank -%}
+            <a href="{{ section.settings.tiktok_url }}" class="footer__social-link" aria-label="TikTok" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.pinterest_url != blank -%}
+            <a href="{{ section.settings.pinterest_url }}" class="footer__social-link" aria-label="Pinterest" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.64 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.135-1.867 3.135-4.563 0-2.386-1.715-4.054-4.163-4.054-2.836 0-4.5 2.127-4.5 4.326 0 .856.33 1.775.742 2.277a.3.3 0 0 1 .069.284c-.076.315-.244.995-.277 1.134-.044.183-.145.222-.334.134-1.25-.58-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="currentColor"/>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          {%- if section.settings.facebook_url != blank -%}
+            <a href="{{ section.settings.facebook_url }}" class="footer__social-link" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
       </div>
-    </div>
 
-    <nav class="footer__nav" aria-label="Footer navigation">
-      {%- if linklists[settings.footer_menu].links.size > 0 -%}
-        <div class="footer__nav-group">
-          <h3 class="footer__nav-heading">{{ linklists[settings.footer_menu].title }}</h3>
+      <!-- Col 2: Shop links -->
+      {%- if linklists[section.settings.shop_menu].links.size > 0 -%}
+        <nav class="footer__nav-col" aria-label="{{ linklists[section.settings.shop_menu].title }}">
+          <h3 class="footer__col-heading">{{ linklists[section.settings.shop_menu].title | upcase }}</h3>
           <ul class="footer__nav-list" role="list">
-            {%- for link in linklists[settings.footer_menu].links -%}
+            {%- for link in linklists[section.settings.shop_menu].links -%}
               <li><a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a></li>
             {%- endfor -%}
           </ul>
-        </div>
+        </nav>
       {%- endif -%}
-    </nav>
-  </div>
 
-  <div class="footer__bottom container">
-    <p class="footer__copyright">
-      {{ 'footer.copyright' | t: year: 'now' | date: '%Y', shop: shop.name }}
-    </p>
+      <!-- Col 3: Quick links -->
+      {%- if linklists[section.settings.quick_menu].links.size > 0 -%}
+        <nav class="footer__nav-col" aria-label="{{ linklists[section.settings.quick_menu].title }}">
+          <h3 class="footer__col-heading">{{ linklists[section.settings.quick_menu].title | upcase }}</h3>
+          <ul class="footer__nav-list" role="list">
+            {%- for link in linklists[section.settings.quick_menu].links -%}
+              <li><a href="{{ link.url }}" class="footer__nav-link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
 
-    {%- if linklists[settings.footer_legal_menu].links.size > 0 -%}
-      <ul class="footer__legal-list" role="list">
-        {%- for link in linklists[settings.footer_legal_menu].links -%}
-          <li><a href="{{ link.url }}" class="footer__legal-link">{{ link.title }}</a></li>
-        {%- endfor -%}
-      </ul>
-    {%- endif -%}
+      <!-- Col 4: Newsletter -->
+      <div class="footer__newsletter">
+        {%- if section.settings.nl_heading != blank -%}
+          <h3 class="footer__col-heading">{{ section.settings.nl_heading | upcase }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.nl_desc != blank -%}
+          <p class="footer__nl-desc">{{ section.settings.nl_desc }}</p>
+        {%- endif -%}
+
+        {%- form 'customer', id: 'footer-nl-form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="footer__nl-success">Thanks for subscribing!</p>
+          {%- else -%}
+            <div class="footer__nl-row">
+              <label for="footer-nl-email" class="visually-hidden">Email address</label>
+              <input
+                type="email"
+                id="footer-nl-email"
+                name="contact[email]"
+                placeholder="{{ section.settings.nl_placeholder | default: 'your@email.com' }}"
+                required
+                autocomplete="email"
+                class="footer__nl-input"
+              >
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <button type="submit" class="footer__nl-btn">
+                {{ section.settings.nl_btn | default: 'SUBSCRIBE' }} →
+              </button>
+            </div>
+            {%- if form.errors -%}
+              <p class="footer__nl-error">{{ form.errors | default_errors }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+
+    </div><!-- /.footer__inner -->
+  </div><!-- /.footer__main -->
+
+  <!-- Bottom bar -->
+  <div class="footer__bottom">
+    <div class="footer__inner footer__bottom-inner">
+      <p class="footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+        {%- if section.settings.city != blank -%}
+          &nbsp;&middot;&nbsp;{{ section.settings.city }}
+        {%- endif -%}
+      </p>
+
+      {%- if linklists[section.settings.legal_menu].links.size > 0 -%}
+        <ul class="footer__legal-list" role="list">
+          {%- for link in linklists[section.settings.legal_menu].links -%}
+            <li><a href="{{ link.url }}" class="footer__legal-link">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
   </div>
 </footer>
 
@@ -85,7 +145,95 @@
 {
   "name": "Footer",
   "limit": 1,
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "The mighty sesame seed — and the small batch of nuts, oils & spreads it inspired."
+    },
+    {
+      "type": "text",
+      "id": "city",
+      "label": "City (shown in copyright)",
+      "default": "Mississauga, ON"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "shop_menu",
+      "label": "Shop column menu"
+    },
+    {
+      "type": "link_list",
+      "id": "quick_menu",
+      "label": "Quick links menu"
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal links (bottom bar)"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "nl_heading",
+      "label": "Newsletter heading",
+      "default": "Join our mailing list"
+    },
+    {
+      "type": "text",
+      "id": "nl_desc",
+      "label": "Newsletter description",
+      "default": "Recipes, new spreads, and farmer stories — once a month, never spammy."
+    },
+    {
+      "type": "text",
+      "id": "nl_placeholder",
+      "label": "Email placeholder",
+      "default": "your@email.com"
+    },
+    {
+      "type": "text",
+      "id": "nl_btn",
+      "label": "Subscribe button label",
+      "default": "SUBSCRIBE"
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ],
   "presets": [
     {
       "name": "Footer"
@@ -95,37 +243,65 @@
 {% endschema %}
 
 <style>
+  /* ── Shell ─────────────────────────────────────────── */
   .site-footer {
-    background-color: var(--fg);
-    color: var(--surface);
+    background-color: #0F2219;
+    color: rgba(255, 255, 255, 0.85);
     margin-top: auto;
   }
 
+  .footer__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-inline: 40px;
+  }
+
+  /* ── Main 4-column grid ────────────────────────────── */
   .footer__main {
+    padding-block: 64px 56px;
+  }
+
+  .footer__inner {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: var(--space-12);
-    padding-block: var(--space-12);
+    grid-template-columns: 1.6fr 1fr 1fr 1.6fr;
+    gap: 48px;
+  }
+
+  /* ── Brand column ──────────────────────────────────── */
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer__logo {
+    width: 72px;
+    height: auto;
+    display: block;
+    margin-bottom: 20px;
   }
 
   .footer__brand-name {
     font-family: var(--font-display);
-    font-size: var(--text-xl);
+    font-size: 1.25rem;
     font-weight: 700;
-    letter-spacing: var(--tracking-display);
+    color: #ffffff;
+    margin-bottom: 16px;
   }
 
   .footer__tagline {
-    margin-top: var(--space-3);
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.6);
-    line-height: var(--leading-body);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+    max-width: 240px;
+    margin: 0 0 24px;
   }
 
+  /* ── Social icons ──────────────────────────────────── */
   .footer__social {
     display: flex;
-    gap: var(--space-3);
-    margin-top: var(--space-6);
+    gap: 10px;
+    margin-top: auto;
   }
 
   .footer__social-link {
@@ -134,100 +310,210 @@
     justify-content: center;
     width: 40px;
     height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-sm);
-    transition: color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   }
 
   .footer__social-link:hover {
-    color: var(--surface);
-    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.08);
   }
 
-  .footer__nav {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-8);
+  /* ── Nav columns ───────────────────────────────────── */
+  .footer__nav-col {
+    display: flex;
+    flex-direction: column;
   }
 
-  .footer__nav-heading {
-    font-size: var(--text-xs);
+  .footer__col-heading {
+    font-family: var(--font-body, 'Open Sans', sans-serif);
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
-    margin-bottom: var(--space-4);
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 20px;
   }
 
   .footer__nav-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: 12px;
   }
 
   .footer__nav-link {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.7);
-    transition: color var(--motion-fast) var(--ease-standard);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: color 0.2s ease;
   }
 
   .footer__nav-link:hover {
-    color: var(--surface);
+    color: rgba(255, 255, 255, 0.95);
   }
 
+  /* ── Newsletter column ─────────────────────────────── */
+  .footer__newsletter {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__nl-desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+    margin-bottom: 20px;
+  }
+
+  .footer__nl-row {
+    display: flex;
+    gap: 0;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .footer__nl-input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .footer__nl-input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .footer__nl-input:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .footer__nl-btn {
+    padding: 12px 18px;
+    background: #2D6A4F;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+  }
+
+  .footer__nl-btn:hover {
+    background: #1B4332;
+  }
+
+  .footer__nl-success {
+    font-size: 0.875rem;
+    color: #52B788;
+    padding: 10px 0;
+  }
+
+  .footer__nl-error {
+    font-size: 0.8rem;
+    color: #f87171;
+    margin-top: 8px;
+  }
+
+  /* ── Bottom bar ────────────────────────────────────── */
   .footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-block: 20px;
+  }
+
+  .footer__bottom-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-block: var(--space-6);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .footer__copyright {
-    font-size: var(--text-xs);
-    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.35);
   }
 
   .footer__legal-list {
     display: flex;
-    gap: var(--space-6);
+    gap: 20px;
     list-style: none;
   }
 
   .footer__legal-link {
-    font-size: var(--text-xs);
-    color: rgba(255, 255, 255, 0.45);
-    transition: color var(--motion-fast) var(--ease-standard);
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.35);
+    text-decoration: none;
+    transition: color 0.2s ease;
   }
 
   .footer__legal-link:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.7);
   }
 
-  @media (max-width: 767px) {
-    .footer__main {
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 1023px) {
+    .footer__inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 48px;
+    }
+
+    .footer__newsletter {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .footer__inner {
       grid-template-columns: 1fr;
-      gap: var(--space-8);
-      padding-block: var(--space-8);
+      gap: 36px;
+      padding-inline: 24px;
     }
 
-    .footer__nav {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6);
+    .footer__newsletter {
+      grid-column: span 1;
     }
 
-    .footer__bottom {
+    .footer__main {
+      padding-block: 48px 40px;
+    }
+
+    .footer__bottom-inner {
       flex-direction: column;
-      gap: var(--space-4);
+      gap: 12px;
       text-align: center;
+      padding-inline: 24px;
     }
 
     .footer__legal-list {
       flex-wrap: wrap;
       justify-content: center;
-      gap: var(--space-4);
+      gap: 12px 20px;
     }
+  }
+
+  /* Accessibility */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
   }
 </style>

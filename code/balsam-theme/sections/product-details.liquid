@@ -1,0 +1,475 @@
+<section class="pd-details section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+  <div class="container">
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="pd-details__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="pd-details__layout">
+
+      <!-- Left: image + badges -->
+      <div class="pd-details__media">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 800 }}"
+            srcset="{{ section.settings.image | image_url: width: 400 }} 400w, {{ section.settings.image | image_url: width: 800 }} 800w"
+            sizes="(max-width: 959px) 100vw, 50vw"
+            alt="{{ section.settings.heading | escape }}"
+            width="800" height="800"
+            loading="lazy"
+            class="pd-details__img"
+          >
+        {%- else -%}
+          {%- assign pimg = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+          {%- if pimg -%}
+            <img
+              src="{{ pimg | image_url: width: 800 }}"
+              srcset="{{ pimg | image_url: width: 400 }} 400w, {{ pimg | image_url: width: 800 }} 800w"
+              sizes="(max-width: 959px) 100vw, 50vw"
+              alt="{{ product.title | escape }}"
+              width="800" height="800"
+              loading="lazy"
+              class="pd-details__img"
+            >
+          {%- endif -%}
+        {%- endif -%}
+
+        <!-- Badges inside left column — fixed regardless of right column height -->
+        {%- assign badge_blocks_media = section.blocks | where: 'type', 'badge' -%}
+        {%- if badge_blocks_media.size > 0 -%}
+          <div class="pd-details__badges pd-details__badges--media">
+            {%- for block in badge_blocks_media -%}
+              <div class="pd-details__badge" {{ block.shopify_attributes }}>
+                <div class="pd-details__badge-circle" aria-hidden="true">
+                  {%- case block.settings.icon -%}
+                    {%- when 'kosher' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="14" y1="8" x2="10" y2="12"/><line x1="10" y1="12" x2="14" y2="16"/></svg>
+                    {%- when 'halal' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="16.5" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
+                    {%- when 'non_gmo' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7zM12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/></svg>
+                    {%- when 'no_preservatives' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                    {%- when 'sugar_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                    {%- when 'vegan' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8"/><path d="M12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/><path d="M12 12c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7z"/></svg>
+                    {%- else -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  {%- endcase -%}
+                </div>
+                <span class="pd-details__badge-label">{{ block.settings.label }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Right: accordion -->
+      <div class="pd-details__accordion">
+        {%- assign accordion_blocks = section.blocks | where: 'type', 'ingredients' -%}
+        {%- assign accordion_blocks2 = section.blocks | where: 'type', 'nutrition' -%}
+        {%- assign accordion_blocks3 = section.blocks | where: 'type', 'benefit' -%}
+        {%- for block in section.blocks -%}
+          {%- unless block.type == 'badge' -%}
+          {%- assign is_open = block.settings.open_default -%}
+          <div class="pd-details__item" {{ block.shopify_attributes }}>
+
+            <button
+              class="pd-details__trigger"
+              type="button"
+              aria-expanded="{{ is_open }}"
+              aria-controls="pdd-body-{{ block.id }}"
+            >
+              {%- if block.type == 'benefit' -%}
+                <span class="pd-details__icon-bg" aria-hidden="true">
+                  {%- case block.settings.icon -%}
+                    {%- when 'lightbulb' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+                    {%- when 'trending_up' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    {%- when 'sun' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    {%- when 'waves' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+                    {%- when 'leaf' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                    {%- when 'heart' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    {%- when 'shield' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    {%- when 'zap' -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    {%- else -%}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  {%- endcase -%}
+                </span>
+              {%- endif -%}
+
+              <span class="pd-details__title">{{ block.settings.title }}</span>
+
+              {%- if block.type == 'nutrition' and block.settings.serving_size != blank -%}
+                <span class="pd-details__serving-inline">{{ block.settings.serving_size }}</span>
+              {%- endif -%}
+
+              <svg class="pd-details__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+
+            <div class="pd-details__body" id="pdd-body-{{ block.id }}"{% unless is_open %} hidden{% endunless %}>
+              {%- if block.type == 'ingredients' -%}
+                <p class="pd-details__ingredient-text">{{ block.settings.ingredient_list }}</p>
+
+              {%- elsif block.type == 'nutrition' -%}
+                {%- if block.settings.nutrition_rows != blank -%}
+                  <div class="pd-details__nutrition-list">
+                    {%- assign rows = block.settings.nutrition_rows | newline_to_br | split: '<br />' -%}
+                    {%- for row in rows -%}
+                      {%- assign row_clean = row | strip -%}
+                      {%- if row_clean != blank -%}
+                        {%- assign parts = row_clean | split: ': ' -%}
+                        <div class="pd-details__nutrition-row">
+                          <span class="pd-details__nutrition-label">{{ parts[0] }}</span>
+                          <span class="pd-details__nutrition-value">{{ parts[1] }}</span>
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+              {%- elsif block.type == 'benefit' -%}
+                <div class="pd-details__benefit-body rte">{{ block.settings.body }}</div>
+              {%- endif -%}
+            </div>
+
+          </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+
+    </div>
+
+    {%- comment -%}Badges moved to left column inside pd-details__media{%- endcomment -%}
+    {%- if false -%}
+      <div class="pd-details__badges">
+        {%- for block in section.blocks -%}
+          <div class="pd-details__badge" {{ block.shopify_attributes }}>
+            <div class="pd-details__badge-circle" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'kosher' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="14" y1="8" x2="10" y2="12"/><line x1="10" y1="12" x2="14" y2="16"/></svg>
+                {%- when 'halal' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="16.5" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
+                {%- when 'non_gmo' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7zM12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/></svg>
+                {%- when 'gluten_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 2 2 4 2 7s-1 5-2 7c-1-2-2-4-2-7s1-5 2-7z"/><path d="M12 9c2-1 4-1 6 0"/><path d="M12 13c-2-1-4-1-6 0"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- when 'sugar_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- when 'dairy_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l1 5H7L8 2z"/><path d="M7 7v13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V7"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- when 'soy_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="4" ry="7"/><path d="M12 5C8 3 4 5 4 9s3 5 8 3"/><path d="M12 5c4-2 8 0 8 4s-3 5-8 3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- when 'nut_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- when 'vegan' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8"/><path d="M12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/><path d="M12 12c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7z"/></svg>
+                {%- when 'organic' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                {%- when 'lab_tested' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/></svg>
+                {%- when 'no_preservatives' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- when 'keto' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2"/></svg>
+                {%- when 'paleo' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-4 4-6 8-4 13 1 2 3 3 4 3s3-1 4-3c2-5 0-9-4-13z"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                {%- else -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {%- endcase -%}
+            </div>
+            <span class="pd-details__badge-label">{{ block.settings.label }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Details",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "select", "id": "bg", "label": "Background", "default": "canvas",
+      "options": [
+        { "value": "canvas", "label": "White" },
+        { "value": "cream", "label": "Cream" }
+      ]
+    },
+    { "type": "text", "id": "heading", "label": "Section heading", "default": "What's Inside" },
+    { "type": "image_picker", "id": "image", "label": "Image (uses product image if blank)" }
+  ],
+  "blocks": [
+    {
+      "type": "ingredients",
+      "name": "Ingredients",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Ingredients" },
+        { "type": "textarea", "id": "ingredient_list", "label": "Ingredient list", "default": "Premium sesame seeds (100%)" },
+        { "type": "checkbox", "id": "open_default", "label": "Open by default", "default": true }
+      ]
+    },
+    {
+      "type": "nutrition",
+      "name": "Nutrition",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Nutrition" },
+        { "type": "text", "id": "serving_size", "label": "Serving size (shown right of title)", "default": "Per 30g serving" },
+        { "type": "textarea", "id": "nutrition_rows", "label": "Nutrition rows — one per line, format: Label: Value",
+          "default": "Calories: 180\nTotal Fat: 16g\nSaturated Fat: 2g\nSodium: 5mg\nTotal Carbs: 6g\nDietary Fiber: 2g\nProtein: 5g\nCalcium: 80mg\nIron: 2.5mg"
+        },
+        { "type": "checkbox", "id": "open_default", "label": "Open by default", "default": true }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "check_circle",
+          "options": [
+            { "value": "check_circle", "label": "Check circle" },
+            { "value": "lightbulb", "label": "Lightbulb" },
+            { "value": "trending_up", "label": "Trending up" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "waves", "label": "Waves" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "zap", "label": "Zap" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Pure & Natural" },
+        { "type": "richtext", "id": "body", "label": "Description", "default": "<p>Made with only the finest ingredients, sourced ethically and crafted with care.</p>" },
+        { "type": "checkbox", "id": "open_default", "label": "Open by default", "default": false }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "organic",
+          "options": [
+            { "value": "organic", "label": "Organic / Certified" },
+            { "value": "kosher", "label": "Kosher" },
+            { "value": "halal", "label": "Halal" },
+            { "value": "non_gmo", "label": "Non-GMO" },
+            { "value": "gluten_free", "label": "Gluten Free" },
+            { "value": "sugar_free", "label": "Sugar Free" },
+            { "value": "dairy_free", "label": "Dairy Free" },
+            { "value": "soy_free", "label": "Soy Free" },
+            { "value": "nut_free", "label": "Nut Free" },
+            { "value": "vegan", "label": "Vegan / Plant-Based" },
+            { "value": "lab_tested", "label": "Lab Tested" },
+            { "value": "no_preservatives", "label": "No Preservatives" },
+            { "value": "keto", "label": "Keto" },
+            { "value": "paleo", "label": "Paleo" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Certified Organic" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Details",
+      "blocks": [
+        { "type": "ingredients", "settings": { "title": "Ingredients", "ingredient_list": "Premium sesame seeds (100%)", "open_default": true } },
+        { "type": "nutrition", "settings": { "title": "Nutrition", "serving_size": "Per 30g serving", "nutrition_rows": "Calories: 180\nTotal Fat: 16g\nSaturated Fat: 2g\nSodium: 5mg\nTotal Carbs: 6g\nDietary Fiber: 2g\nProtein: 5g\nCalcium: 80mg\nIron: 2.5mg", "open_default": true } },
+        { "type": "badge", "settings": { "icon": "kosher", "label": "Kosher" } },
+        { "type": "badge", "settings": { "icon": "halal", "label": "Halal" } },
+        { "type": "badge", "settings": { "icon": "non_gmo", "label": "Non-GMO" } },
+        { "type": "badge", "settings": { "icon": "no_preservatives", "label": "No Preservatives" } },
+        { "type": "badge", "settings": { "icon": "sugar_free", "label": "Sugar Free" } },
+        { "type": "badge", "settings": { "icon": "vegan", "label": "Vegan" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .pd-details__heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--fg);
+    text-align: center;
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+    margin-bottom: var(--space-12);
+  }
+
+  .pd-details__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: start;
+  }
+
+  .pd-details__img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    display: block;
+  }
+
+  /* Accordion */
+  .pd-details__accordion { display: flex; flex-direction: column; }
+
+  .pd-details__item { border-bottom: 2px solid var(--border); }
+  .pd-details__item:first-child { border-top: 2px solid var(--border); }
+
+  .pd-details__trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-5) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  /* Circular icon — benefit items only */
+  .pd-details__icon-bg {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--surface-warm, #F5F0E8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    transition: background 0.2s, color 0.2s;
+  }
+  .pd-details__trigger:hover .pd-details__icon-bg,
+  .pd-details__trigger[aria-expanded="true"] .pd-details__icon-bg {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .pd-details__title {
+    flex: 1;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--fg);
+  }
+
+  /* Serving size — right side of nutrition trigger */
+  .pd-details__serving-inline {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .pd-details__chevron {
+    flex-shrink: 0;
+    color: var(--fg-2);
+    transition: transform 0.25s;
+    margin-left: 4px;
+  }
+  .pd-details__trigger[aria-expanded="true"] .pd-details__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Body panels */
+  .pd-details__body { padding: 0 0 22px 0; }
+  .pd-details__body[hidden] { display: none; }
+
+  .pd-details__ingredient-text {
+    font-size: 1.05rem;
+    color: var(--fg-2);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .pd-details__nutrition-list { display: flex; flex-direction: column; }
+  .pd-details__nutrition-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .pd-details__nutrition-row:last-child { border-bottom: none; }
+  .pd-details__nutrition-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--fg);
+  }
+  .pd-details__nutrition-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .pd-details__benefit-body {
+    font-size: 0.9rem;
+    color: var(--fg-2);
+    line-height: 1.65;
+  }
+  .pd-details__benefit-body p { margin-bottom: var(--space-2); }
+  .pd-details__benefit-body p:last-child { margin-bottom: 0; }
+
+  /* Left column — flex column so badges sit under image */
+  .pd-details__media {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  /* Badges — in left column under image */
+  .pd-details__badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-6) var(--space-8);
+    margin-top: var(--space-12);
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border);
+  }
+
+  .pd-details__badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .pd-details__badge-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-2);
+    transition: border-color var(--motion-fast) var(--ease-standard),
+                color var(--motion-fast) var(--ease-standard),
+                background var(--motion-fast) var(--ease-standard);
+  }
+  .pd-details__badge:hover .pd-details__badge-circle {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--surface-warm);
+  }
+
+  .pd-details__badge-label {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+    text-align: center;
+    max-width: 80px;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 959px) {
+    .pd-details__layout { grid-template-columns: 1fr; gap: var(--space-10); }
+    .pd-details__heading { font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: var(--space-10); }
+    .pd-details__badges { gap: var(--space-6) var(--space-8); }
+  }
+</style>
+
+<script>
+(function () {
+  document.querySelectorAll('.pd-details__trigger').forEach(function (trigger) {
+    trigger.addEventListener('click', function () {
+      var expanded = trigger.getAttribute('aria-expanded') === 'true';
+      var body = document.getElementById(trigger.getAttribute('aria-controls'));
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      if (body) body.hidden = expanded;
+    });
+  });
+})();
+</script>

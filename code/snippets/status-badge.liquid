@@ -1,0 +1,100 @@
+{% comment %}
+  Renders a status badge.
+  Usage: {% render 'status-badge', type: 'in_stock', ships_in: '24H' %}
+  Types: in_stock | most_loved | bulk | save
+  Optional: ships_in (string), label (string override), percent (number for save/bulk)
+{% endcomment %}
+
+{%- liquid
+  case type
+    when 'in_stock'
+      assign badge_label = label | default: 'IN STOCK'
+      assign badge_class = 'status-badge--in-stock'
+      assign show_dot = true
+    when 'most_loved'
+      assign badge_label = label | default: 'MOST LOVED'
+      assign badge_class = 'status-badge--most-loved'
+      assign show_dot = false
+    when 'bulk'
+      assign badge_label = label | default: 'BULK'
+      if percent
+        assign badge_label = 'BULK -' | append: percent | append: '%'
+      endif
+      assign badge_class = 'status-badge--bulk'
+      assign show_dot = false
+    when 'save'
+      assign badge_label = 'SAVE'
+      if percent
+        assign badge_label = 'SAVE ' | append: percent | append: '%'
+      endif
+      assign badge_class = 'status-badge--save'
+      assign show_dot = false
+    else
+      assign badge_label = label | default: type | upcase
+      assign badge_class = ''
+      assign show_dot = false
+  endcase
+-%}
+
+<span class="status-badge {{ badge_class }}">
+  {%- if show_dot -%}
+    <span class="status-badge__dot" aria-hidden="true"></span>
+  {%- endif -%}
+  <span class="status-badge__label">{{ badge_label }}</span>
+  {%- if ships_in and type == 'in_stock' -%}
+    <span class="status-badge__ships" aria-label="Ships in {{ ships_in }}">· SHIPS IN {{ ships_in }}</span>
+  {%- endif -%}
+</span>
+
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  /* In Stock */
+  .status-badge--in-stock {
+    background-color: var(--surface-warm);
+    color: var(--fg);
+  }
+
+  .status-badge__dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--success);
+    border-radius: var(--radius-pill);
+    flex-shrink: 0;
+  }
+
+  .status-badge__ships {
+    color: var(--muted);
+  }
+
+  /* Most Loved */
+  .status-badge--most-loved {
+    background-color: var(--accent);
+    color: var(--accent-on);
+  }
+
+  /* Bulk */
+  .status-badge--bulk {
+    background-color: var(--fg);
+    color: var(--surface);
+  }
+
+  /* Save */
+  .status-badge--save {
+    background-color: var(--warn);
+    color: var(--surface);
+  }
+</style>

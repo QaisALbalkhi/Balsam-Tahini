@@ -115,3 +115,45 @@
     outline: none;
   }
 </style>
+
+<script>
+(function () {
+  document.querySelectorAll('.qty-stepper').forEach(function (stepper) {
+    var input  = stepper.querySelector('.qty-stepper__input');
+    var decBtn = stepper.querySelector('[data-qty-dec]');
+    var incBtn = stepper.querySelector('[data-qty-inc]');
+    if (!input || !decBtn || !incBtn) return;
+    /* guard — skip if already bound (prevents double-fire from legacy balsam-theme.js) */
+    if (decBtn.dataset.qtyBound) return;
+    decBtn.dataset.qtyBound = '1';
+    incBtn.dataset.qtyBound = '1';
+
+    function updateBtns() {
+      var val = parseInt(input.value, 10) || 1;
+      var min = parseInt(input.min, 10) || 1;
+      var max = input.max !== '' ? parseInt(input.max, 10) : Infinity;
+      decBtn.disabled = val <= min;
+      incBtn.disabled = val >= max;
+    }
+
+    decBtn.addEventListener('click', function () {
+      var val = parseInt(input.value, 10) || 1;
+      var min = parseInt(input.min, 10) || 1;
+      input.value = Math.max(val - 1, min);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      updateBtns();
+    });
+
+    incBtn.addEventListener('click', function () {
+      var val = parseInt(input.value, 10) || 1;
+      var max = input.max !== '' ? parseInt(input.max, 10) : Infinity;
+      input.value = Math.min(val + 1, max);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      updateBtns();
+    });
+
+    input.addEventListener('input', updateBtns);
+    updateBtns();
+  });
+})();
+</script>
