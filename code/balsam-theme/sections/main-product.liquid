@@ -341,15 +341,19 @@
 {% endschema %}
 
 <style>
+  /* ── Override section rhythm for product page ── */
+  .main-product.section { padding-top: var(--space-5); }
+  @media (max-width: 767px) { .main-product.section { padding-top: var(--space-3); } }
+
   /* ── Breadcrumb ── */
-  .breadcrumb { margin-bottom: var(--space-8); }
+  .breadcrumb { margin-bottom: var(--space-3); }
   .breadcrumb__list { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); list-style: none; font-size: var(--text-xs); color: var(--muted); }
   .breadcrumb__link { color: var(--muted); transition: color var(--motion-fast) var(--ease-standard); }
   .breadcrumb__link:hover { color: var(--fg); }
   .breadcrumb__current { color: var(--fg-2); font-weight: 600; }
 
   /* ── Layout ── */
-  .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12); align-items: start; }
+  .product-layout { display: grid; grid-template-columns: min(50%, calc(100vh - 200px)) 1fr; gap: var(--space-10); align-items: start; }
 
   /* ── Media ── */
   .product-layout__media { display: flex; flex-direction: column; }
@@ -364,7 +368,7 @@
   .product-thumbnail--active, .product-thumbnail:hover { border-color: var(--accent); }
 
   /* ── Details ── */
-  .product-layout__details { display: flex; flex-direction: column; gap: var(--space-6); }
+  .product-layout__details { display: flex; flex-direction: column; gap: var(--space-4); }
   .review-strip { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
   .review-strip__count { font-size: var(--text-sm); font-weight: 600; color: var(--fg-2); }
   .review-strip__verified { padding: var(--space-1) var(--space-2); background: var(--border-soft); border-radius: var(--radius-pill); }
@@ -381,7 +385,7 @@
   .purchase-type__opt {
     display: flex;
     align-items: center;
-    padding: var(--space-4) var(--space-5);
+    padding: 10px var(--space-4);
     cursor: pointer;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -534,7 +538,7 @@
     .product-pairs__grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 767px) {
-    .product-layout { grid-template-columns: 1fr; gap: var(--space-8); }
+    .product-layout { grid-template-columns: 1fr; gap: var(--space-6); }
     .pd-certs__grid { grid-template-columns: repeat(3, 1fr); }
     .product-pairs__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
   }
