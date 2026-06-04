@@ -9,7 +9,8 @@
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
-  overflow-x: clip; /* prevent any element from triggering page-level horizontal scroll */
+  overflow-x: hidden; /* fallback: iOS Safari < 15.4 / Chrome < 90 don't support clip */
+  overflow-x: clip;   /* preferred: clips without creating a scroll container */
 }
 
 body {
