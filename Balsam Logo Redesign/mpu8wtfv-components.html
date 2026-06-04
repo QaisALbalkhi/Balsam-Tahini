@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Balsam – Reference Components</title>
+    <meta name="description" content="Reference fixture for design-systems/balsam: natural food e-commerce system fusing Balsam Tahini's forest green palette with Burlap & Barrel's artisan component patterns." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg:           #FAFAF8;
+        --surface:      #FFFFFF;
+        --surface-warm: #F5F0E8;
+        --fg:           #22292F;
+        --fg-2:         #3D4246;
+        --muted:        #666666;
+        --meta:         #666666;
+        --border:       #E8ECEF;
+        --border-soft:  #F3F5F7;
+        --accent:       #1B4332;
+        --accent-on:    #FFFFFF;
+        --accent-hover: #2D6A4F;
+        --accent-active:#1A3D2E;
+        --success:      #52B788;
+        --warn:         #D97706;
+        --danger:       #DC2626;
+        --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+        --font-body:    "Open Sans", Inter, system-ui, sans-serif;
+        --font-mono:    "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+        --text-xs:      12px;
+        --text-sm:      14px;
+        --text-base:    16px;
+        --text-lg:      18px;
+        --text-xl:      24px;
+        --text-2xl:     36px;
+        --text-3xl:     48px;
+        --text-4xl:     60px;
+        --leading-body:  1.6;
+        --leading-tight: 1.1;
+        --tracking-display: -0.02em;
+        --space-1:  4px;
+        --space-2:  8px;
+        --space-3:  12px;
+        --space-4:  16px;
+        --space-5:  20px;
+        --space-6:  24px;
+        --space-8:  32px;
+        --space-12: 48px;
+        --section-y-desktop: 88px;
+        --section-y-tablet:  60px;
+        --section-y-phone:   40px;
+        --radius-sm:   6px;
+        --radius-md:   10px;
+        --radius-lg:   16px;
+        --radius-pill: 9999px;
+        --elev-flat:   none;
+        --elev-ring:   0 0 0 1px var(--border);
+        --elev-raised: 0 4px 24px rgba(27, 67, 50, 0.10);
+        --focus-ring:  0 0 0 4px rgba(27, 67, 50, 0.28);
+        --motion-fast: 160ms;
+        --motion-base: 260ms;
+        --ease-standard: cubic-bezier(0.23, 1, 0.32, 1);
+        --container-max:            1200px;
+        --container-gutter-desktop: 40px;
+        --container-gutter-tablet:  24px;
+        --container-gutter-phone:   16px;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: var(--text-base); line-height: var(--leading-body); -webkit-font-smoothing: antialiased; }
+      h1, h2, h3, h4, p { margin: 0; }
+      a { color: inherit; text-decoration: none; }
+
+      .container { max-width: var(--container-max); margin-inline: auto; padding-inline: var(--container-gutter-desktop); }
+      .section { padding-block: var(--section-y-desktop); }
+      .section + .section { border-top: 1px solid var(--border-soft); }
+      .section-label { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: var(--space-6); }
+
+      @media (max-width: 1023px) { .container { padding-inline: var(--container-gutter-tablet); } .section { padding-block: var(--section-y-tablet); } }
+      @media (max-width: 639px) { .container { padding-inline: var(--container-gutter-phone); } .section { padding-block: var(--section-y-phone); } }
+
+      /* ── Announcement Banner ───────────────────────────────────── */
+      .banner {
+        background: var(--accent);
+        color: var(--accent-on);
+        font-family: var(--font-body);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        padding: var(--space-3) var(--space-6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        text-align: center;
+      }
+      .banner a { color: var(--accent-on); font-weight: 700; text-decoration: underline; margin-left: var(--space-2); }
+
+      /* ── Navigation Bar ────────────────────────────────────────── */
+      .nav {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        gap: var(--space-6);
+      }
+      .nav-logo {
+        font-family: var(--font-display);
+        font-size: var(--text-xl);
+        font-weight: 700;
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+      .nav-links {
+        display: flex;
+        gap: var(--space-6);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .nav-links a {
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--fg-2);
+        padding-bottom: 2px;
+        border-bottom: 2px solid transparent;
+        transition: color var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+      }
+      .nav-links a:hover, .nav-links a.active { color: var(--accent); border-bottom-color: var(--accent); }
+      .nav-icons { display: flex; align-items: center; gap: var(--space-4); }
+      .nav-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md); cursor: pointer; transition: background var(--motion-fast) var(--ease-standard); color: var(--fg-2); }
+      .nav-icon:hover { background: var(--border-soft); color: var(--fg); }
+      .cart-icon { position: relative; }
+      .cart-badge { position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; background: var(--accent); color: var(--accent-on); font-size: 10px; font-weight: 700; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center; }
+
+      /* ── Product Hero ──────────────────────────────────────────── */
+      .pdp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-12); align-items: start; }
+      .pdp-image-wrap { position: relative; border-radius: var(--radius-lg); overflow: hidden; background: var(--surface-warm); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+      .pdp-image-placeholder { width: 100%; height: 100%; min-height: 440px; background: linear-gradient(135deg, var(--surface-warm) 0%, color-mix(in oklab, var(--surface-warm), var(--border) 30%) 100%); display: flex; align-items: center; justify-content: center; }
+      .pdp-image-inner { text-align: center; padding: var(--space-12); }
+      .pdp-product-jar { width: 180px; height: 240px; background: color-mix(in oklab, var(--warn), transparent 70%); border-radius: 12px 12px 8px 8px; margin: 0 auto var(--space-4); position: relative; }
+      .pdp-product-jar::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: color-mix(in oklab, var(--warn), white 40%); border-radius: 0 0 8px 8px; }
+      .pdp-image-label { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 700; color: var(--fg-2); letter-spacing: 0.08em; }
+      .batch-pill { position: absolute; top: var(--space-4); left: var(--space-4); background: var(--surface-warm); color: var(--fg); font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 700; padding: var(--space-2) var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--border); letter-spacing: 0.06em; }
+      .pdp-details { padding-block: var(--space-4); }
+      .instock-badge { display: inline-flex; align-items: center; gap: var(--space-2); background: var(--surface-warm); color: var(--fg-2); font-family: var(--font-body); font-size: var(--text-xs); font-weight: 700; padding: var(--space-2) var(--space-3); border-radius: var(--radius-pill); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: var(--space-5); border: 1px solid var(--border); }
+      .instock-badge::before { content: ""; width: 8px; height: 8px; background: var(--success); border-radius: var(--radius-pill); flex-shrink: 0; }
+      .pdp-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; line-height: var(--leading-tight); letter-spacing: var(--tracking-display); margin-bottom: var(--space-4); }
+      .pdp-title em { font-style: italic; color: var(--accent); }
+      .pdp-desc { color: var(--fg-2); font-size: var(--text-base); line-height: var(--leading-body); margin-bottom: var(--space-6); max-width: 480px; }
+
+      /* ── Review Strip ──────────────────────────────────────────── */
+      .review-strip { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6); flex-wrap: wrap; }
+      .stars { display: flex; gap: 2px; }
+      .star { width: 16px; height: 16px; color: var(--warn); }
+      .star svg { width: 100%; height: 100%; fill: currentColor; }
+      .star.empty { color: var(--border); }
+      .review-count { font-size: var(--text-sm); font-weight: 600; color: var(--fg-2); text-decoration: underline; cursor: pointer; }
+      .verified-badge { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--text-xs); color: var(--muted); background: var(--border-soft); padding: 3px var(--space-2); border-radius: var(--radius-pill); }
+
+      /* ── Price Block ───────────────────────────────────────────── */
+      .price-block { margin-bottom: var(--space-6); }
+      .price-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-2); }
+      .price-sale { font-size: 28px; font-weight: 700; color: var(--fg); }
+      .price-original { font-size: var(--text-lg); font-weight: 400; color: var(--muted); text-decoration: line-through; }
+      .save-badge { background: var(--warn); color: #fff; font-size: var(--text-xs); font-weight: 700; padding: 4px var(--space-2); border-radius: var(--radius-sm); text-transform: uppercase; letter-spacing: 0.06em; }
+      .installments { font-size: var(--text-sm); color: var(--muted); }
+      .shop-pay { display: inline-flex; align-items: center; gap: 4px; background: #5a31f4; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+
+      /* ── Variant Selector ──────────────────────────────────────── */
+      .variants-label { font-size: var(--text-sm); font-weight: 700; color: var(--fg); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-3); display: flex; justify-content: space-between; align-items: center; }
+      .variants-bulk { font-size: var(--text-xs); color: var(--muted); font-weight: 400; letter-spacing: 0; text-transform: none; }
+      .variant-grid { display: flex; gap: var(--space-3); margin-bottom: var(--space-6); flex-wrap: wrap; }
+      .variant-card { position: relative; padding: var(--space-4); border: 2px solid var(--border); border-radius: var(--radius-md); background: var(--surface); cursor: pointer; min-width: 160px; flex: 1; transition: border-color var(--motion-fast) var(--ease-standard); }
+      .variant-card:hover { border-color: var(--accent-hover); }
+      .variant-card.selected { border-color: var(--accent); }
+      .variant-badge { position: absolute; top: -12px; right: var(--space-3); font-size: 10px; font-weight: 700; padding: 3px var(--space-2); border-radius: var(--radius-pill); text-transform: uppercase; letter-spacing: 0.06em; }
+      .variant-badge.loved { background: var(--accent); color: var(--accent-on); }
+      .variant-badge.bulk { background: var(--fg); color: #fff; }
+      .variant-swatch { width: 16px; height: 16px; border-radius: 3px; background: var(--surface-warm); border: 1px solid var(--border); margin-bottom: var(--space-2); }
+      .variant-weight { font-size: var(--text-base); font-weight: 700; color: var(--fg); margin-bottom: var(--space-1); }
+      .variant-meta { font-size: var(--text-xs); color: var(--muted); }
+
+      /* ── Add to Cart ───────────────────────────────────────────── */
+      .atc-row { display: flex; gap: var(--space-3); margin-bottom: var(--space-8); }
+      .qty-stepper { display: flex; align-items: center; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+      .qty-btn { width: 44px; height: 52px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; font-size: var(--text-lg); color: var(--fg-2); transition: background var(--motion-fast) var(--ease-standard); }
+      .qty-btn:hover { background: var(--border-soft); }
+      .qty-num { width: 44px; text-align: center; font-size: var(--text-base); font-weight: 600; color: var(--fg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 52px; display: flex; align-items: center; justify-content: center; }
+      .btn-atc { flex: 1; height: 52px; background: var(--fg); color: #fff; border: none; border-radius: var(--radius-md); font-family: var(--font-body); font-size: var(--text-sm); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-2); transition: background var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard); }
+      .btn-atc:hover { background: #232627; box-shadow: var(--elev-raised); }
+      .btn-atc:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+      /* ── Product Card ──────────────────────────────────────────── */
+      .card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
+      @media (max-width: 1023px) { .card-grid { grid-template-columns: repeat(2, 1fr); } .pdp { grid-template-columns: 1fr; } .variant-grid { flex-wrap: wrap; } }
+      @media (max-width: 639px) { .card-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); } }
+
+      .product-card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; transition: box-shadow var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard); cursor: pointer; }
+      .product-card:hover { box-shadow: var(--elev-raised); transform: translateY(-2px); }
+      .card-image { aspect-ratio: 4/3; background: var(--surface-warm); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+      .card-image-placeholder { width: 64px; height: 80px; background: color-mix(in oklab, var(--warn), transparent 60%); border-radius: 8px 8px 4px 4px; }
+      .card-wishlist { position: absolute; top: var(--space-3); right: var(--space-3); width: 32px; height: 32px; background: rgba(255,255,255,0.9); border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .card-wishlist svg { width: 16px; height: 16px; stroke: var(--fg-2); fill: none; stroke-width: 1.5; }
+      .card-body { padding: var(--space-4); }
+      .card-name { font-size: var(--text-sm); font-weight: 600; color: var(--fg); margin-bottom: var(--space-2); }
+      .card-price { font-size: var(--text-sm); font-weight: 700; color: var(--fg); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2); }
+      .card-price-original { font-weight: 400; color: var(--muted); text-decoration: line-through; }
+      .card-stars { display: flex; align-items: center; gap: var(--space-1); }
+      .card-star { width: 12px; height: 12px; color: var(--warn); }
+      .card-star svg { width: 100%; height: 100%; fill: currentColor; }
+      .card-rating-count { font-size: var(--text-xs); color: var(--muted); }
+
+      /* ── Token Swatches ────────────────────────────────────────── */
+      .swatch-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+      .swatch { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+      .swatch-block { width: 56px; height: 56px; border-radius: var(--radius-md); border: 1px solid var(--border); }
+      .swatch-name { font-size: 10px; color: var(--muted); font-family: var(--font-mono); text-align: center; max-width: 60px; }
+      .swatch-hex { font-size: 9px; color: var(--meta); font-family: var(--font-mono); text-align: center; }
+    </style>
+  </head>
+  <body>
+
+    <!-- ── Announcement Banner ─────────────────────────────────── -->
+    <div class="banner">
+      🌿 Free shipping on orders over $100 &nbsp;|&nbsp; CA Made in Mississauga, ON
+      <a href="#">Shop now →</a>
+    </div>
+
+    <!-- ── Navigation Bar ─────────────────────────────────────── -->
+    <nav class="nav">
+      <div class="container nav-inner">
+        <span class="nav-logo">Balsam</span>
+        <ul class="nav-links">
+          <li><a href="#" class="active">All Spreads</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">Bundle &amp; Save</a></li>
+          <li><a href="#">Recipes</a></li>
+          <li><a href="#">Our Story</a></li>
+        </ul>
+        <div class="nav-icons">
+          <div class="nav-icon" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <div class="nav-icon" aria-label="Account">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="nav-icon cart-icon" aria-label="Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span class="cart-badge">2</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── Product Hero (PDP) ──────────────────────────────────── -->
+    <section class="section" style="background: var(--bg);">
+      <div class="container">
+        <p class="section-label">Product Detail Page</p>
+        <div class="pdp">
+          <div class="pdp-image-wrap">
+            <div class="pdp-image-placeholder">
+              <div class="pdp-image-inner">
+                <div class="pdp-product-jar"></div>
+                <p class="pdp-image-label">100% WALNUT BUTTER</p>
+              </div>
+            </div>
+            <span class="batch-pill">Stone-ground in Mississauga · Batch #2026-04</span>
+          </div>
+
+          <div class="pdp-details">
+            <div class="instock-badge">In Stock · Ships in 24h</div>
+            <h1 class="pdp-title">Walnut Butter <em>Spread</em></h1>
+            <p class="pdp-desc">One ingredient. The world's most omega-3 dense tree nut, stone-ground in small batches until it pours like honey.</p>
+
+            <!-- Review Strip -->
+            <div class="review-strip">
+              <div class="stars">
+                <span class="star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+              </div>
+              <span style="font-size: var(--text-sm); font-weight: 700;">4.9</span>
+              <a class="review-count" href="#">142 reviews</a>
+              <span class="verified-badge">★ Verified by Shop</span>
+            </div>
+
+            <!-- Price Block -->
+            <div class="price-block">
+              <div class="price-row">
+                <span class="price-sale">$19.99</span>
+                <span class="price-original">$24.99</span>
+                <span class="save-badge">Save 20%</span>
+              </div>
+              <p class="installments">Or 4 payments of <strong>$5.00</strong> with <span class="shop-pay">shop Pay</span> · interest-free</p>
+            </div>
+
+            <!-- Variant Selector -->
+            <div>
+              <div class="variants-label">
+                Choose your size
+                <span class="variants-bulk">Bulk saves up to 60% per gram</span>
+              </div>
+              <div class="variant-grid">
+                <div class="variant-card">
+                  <div class="variant-swatch" style="background: #8B5E3C;"></div>
+                  <div class="variant-weight">170 g</div>
+                  <div class="variant-meta">$14.99 · 4–6 servings</div>
+                </div>
+                <div class="variant-card selected">
+                  <span class="variant-badge loved">Most Loved</span>
+                  <div class="variant-swatch" style="background: #8B5E3C;"></div>
+                  <div class="variant-weight">310 g</div>
+                  <div class="variant-meta">$19.99 · 8–10 servings</div>
+                </div>
+                <div class="variant-card">
+                  <span class="variant-badge bulk">Bulk · -60%</span>
+                  <div class="variant-swatch" style="background: #8B5E3C;"></div>
+                  <div class="variant-weight">5 kg</div>
+                  <div class="variant-meta">$129 · for cafés &amp; pros</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add to Cart -->
+            <div class="atc-row">
+              <div class="qty-stepper" aria-label="Quantity">
+                <button class="qty-btn">–</button>
+                <div class="qty-num">1</div>
+                <button class="qty-btn">+</button>
+              </div>
+              <button class="btn-atc" aria-label="Add to cart">
+                Add to cart · $19.99 →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Product Card Grid ────────────────────────────────────── -->
+    <section class="section" style="background: var(--surface-warm);">
+      <div class="container">
+        <p class="section-label">Product Collection</p>
+        <h2 style="font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; letter-spacing: var(--tracking-display); margin-bottom: var(--space-8);">All Spreads</h2>
+        <div class="card-grid">
+
+          <div class="product-card">
+            <div class="card-image">
+              <div class="card-image-placeholder" style="background: color-mix(in oklab, #D97706, transparent 60%);"></div>
+              <div class="card-wishlist" aria-label="Add to wishlist">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-name">100% Walnut Butter Spread</div>
+              <div class="card-price">
+                $19.99
+                <span class="card-price-original">$24.99</span>
+              </div>
+              <div class="card-stars">
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-rating-count">(142)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image">
+              <div class="card-image-placeholder" style="background: color-mix(in oklab, #52B788, transparent 60%);"></div>
+              <div class="card-wishlist" aria-label="Add to wishlist">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Organic Tahini Spread</div>
+              <div class="card-price">$14.99</div>
+              <div class="card-stars">
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star empty"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-rating-count">(87)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image">
+              <div class="card-image-placeholder" style="background: color-mix(in oklab, #1B4332, transparent 60%);"></div>
+              <div class="card-wishlist" aria-label="Add to wishlist">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Pistachio Butter Bundle</div>
+              <div class="card-price">
+                $34.99
+                <span class="save-badge" style="font-size: 10px;">Bundle</span>
+              </div>
+              <div class="card-stars">
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-rating-count">(51)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-image">
+              <div class="card-image-placeholder" style="background: color-mix(in oklab, #6C7275, transparent 60%);"></div>
+              <div class="card-wishlist" aria-label="Add to wishlist">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-name">Black Sesame Spread</div>
+              <div class="card-price">$16.99</div>
+              <div class="card-stars">
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-star empty"><svg viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6z"/></svg></span>
+                <span class="card-rating-count">(29)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Color Palette Reference ──────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <p class="section-label">Token Reference</p>
+        <h2 style="font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-6);">Color Palette</h2>
+        <div class="swatch-row">
+          <div class="swatch"><div class="swatch-block" style="background: #1B4332; border: none;"></div><div class="swatch-name">--accent</div><div class="swatch-hex">#1B4332</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #2D6A4F; border: none;"></div><div class="swatch-name">--accent-hover</div><div class="swatch-hex">#2D6A4F</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #52B788; border: none;"></div><div class="swatch-name">--success</div><div class="swatch-hex">#52B788</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #D97706; border: none;"></div><div class="swatch-name">--warn</div><div class="swatch-hex">#D97706</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #FAFAF8;"></div><div class="swatch-name">--bg</div><div class="swatch-hex">#FAFAF8</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #F5F0E8;"></div><div class="swatch-name">--surface-warm</div><div class="swatch-hex">#F5F0E8</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #FFFFFF;"></div><div class="swatch-name">--surface</div><div class="swatch-hex">#FFFFFF</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #141718; border: none;"></div><div class="swatch-name">--fg</div><div class="swatch-hex">#141718</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #343839; border: none;"></div><div class="swatch-name">--fg-2</div><div class="swatch-hex">#343839</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #6C7275; border: none;"></div><div class="swatch-name">--muted</div><div class="swatch-hex">#6C7275</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #E8ECEF;"></div><div class="swatch-name">--border</div><div class="swatch-hex">#E8ECEF</div></div>
+          <div class="swatch"><div class="swatch-block" style="background: #F3F5F7;"></div><div class="swatch-name">--border-soft</div><div class="swatch-hex">#F3F5F7</div></div>
+        </div>
+      </div>
+    </section>
+
+  </body>
+</html>

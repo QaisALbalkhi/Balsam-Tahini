@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "od-design-system-project/v1",
+  "id": "balsam",
+  "name": "Balsam",
+  "category": "Food & Artisan",
+  "description": "Natural food e-commerce system fusing Balsam Tahini's deep forest green palette with Burlap & Barrel's clean artisan component patterns.",
+  "source": {
+    "type": "local",
+    "origin": "hand-authored"
+  },
+  "files": {
+    "design": "DESIGN.md",
+    "tokens": "tokens.css",
+    "components": "components.html"
+  },
+  "importMode": "normalized",
+  "craft": {
+    "applies": [
+      "color",
+      "accessibility-baseline"
+    ],
+    "suggested": [
+      "color",
+      "accessibility-baseline"
+    ],
+    "exemptions": []
+  }
+}
