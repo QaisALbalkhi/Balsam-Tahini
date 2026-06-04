@@ -16,21 +16,16 @@ Key tokens to always use (never hardcode values):
 - `--font-display` Playfair Display — Editorial headlines only
 - `--font-body` Open Sans — All UI/commerce copy
 
-## Deployment (ALWAYS do ALL THREE after every change to balsam-theme files)
+## Deployment (ALWAYS do BOTH after every change to balsam-theme files)
 
-### 1. Push to Shopify live theme
-```
-shopify theme push --store x6x3pi-cg.myshopify.com --theme 153077973046 --only <changed files>
-```
-
-### 2. Push `code/balsam-theme/` to its own repo
+### 1. Push `code/balsam-theme/` to its own repo
 ```
 cd code/balsam-theme
 git add -A && git commit -m "..." && git push origin main
 ```
 Repo: https://github.com/QaisALbalkhi/balsam-theme.git
 
-### 3. Push the full project folder to the main repo
+### 2. Push the full project folder to the main repo
 ```
 git add -A && git commit -m "..." && git push origin main
 ```
