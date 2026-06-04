@@ -9,6 +9,7 @@
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip; /* prevent any element from triggering page-level horizontal scroll */
 }
 
 body {
@@ -264,6 +265,11 @@ button, input, select, textarea {
   display: inline-flex;
   gap: 2px;
   color: var(--warn);
+}
+
+/* ── Overflow lock (applied by JS when drawers/nav open) ────────── */
+.overflow-hidden {
+  overflow: hidden;
 }
 
 /* ── Page layout ───────────────────────────────────────────────── */
