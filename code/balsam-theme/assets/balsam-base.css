@@ -36,6 +36,11 @@ button, input, select, textarea {
   font: inherit;
 }
 
+/* ── Touch: eliminate 300ms tap delay across all interactive elements ── */
+a, button, [role="button"], input, select, textarea, label {
+  touch-action: manipulation;
+}
+
 /* ── Container ─────────────────────────────────────────────────── */
 .container {
   width: 100%;
@@ -277,7 +282,8 @@ button, input, select, textarea {
 .page-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh;    /* fallback for browsers without dvh support */
+  min-height: 100dvh;   /* preferred: excludes mobile URL bar from height */
 }
 
 .page-wrapper main {
