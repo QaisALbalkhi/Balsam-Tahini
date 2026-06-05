@@ -803,6 +803,19 @@
         mainImg.src = src;
         mainImg.srcset = src;
       }
+      /* If this image belongs to a variant, switch to that variant (updates price, ATC, URL) */
+      var thumbIdx = parseInt(thumb.dataset.thumbIndex, 10);
+      var matchedVariant = variantData.find(function (v) {
+        return v.featured_image && (v.featured_image.position - 1) === thumbIdx;
+      });
+      if (matchedVariant) {
+        productOpts.forEach(function (name, i) {
+          var val = matchedVariant['option' + (i + 1)];
+          var inp = document.querySelector('.variant-selector input[name="options[' + name + ']"][value="' + val + '"]');
+          if (inp && !inp.checked) inp.checked = true;
+        });
+        updateVariantUI(matchedVariant);
+      }
     });
   });
 
