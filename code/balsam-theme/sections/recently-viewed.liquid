@@ -129,6 +129,7 @@
     object-fit: cover;
     display: block;
   }
+  .rv-slot .product-card__wishlist { display: none; }
   .rv-slot .product-card__body {
     padding: 16px 18px 20px;
     display: flex;
@@ -247,21 +248,9 @@
       + (isMulti ? '<span class="pc-add-btn__chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' : '')
       + '</button>';
 
-    /* Wishlist button */
-    var wlBtn = '<button class="product-card__wishlist" type="button" aria-label="Add to wishlist" aria-pressed="false"'
-      + ' data-product-id="'     + esc(String(p.product_id || '')) + '"'
-      + ' data-product-handle="' + esc(p.handle || '')    + '"'
-      + ' data-product-title="'  + esc(p.title || '')     + '"'
-      + ' data-product-price="'  + (p.price || 0)         + '"'
-      + ' data-product-image="'  + esc(p.image || '')     + '"'
-      + ' data-product-url="'    + esc(url)               + '">'
-      + '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      + '</button>';
-
     return '<a href="' + url + '" class="product-card__image-link" tabindex="-1" aria-hidden="true">'
         + '<div class="product-card__image-wrap">'
           + (p.image ? '<img src="' + p.image + '" alt="' + esc(p.title || '') + '" loading="lazy" class="product-card__img" width="600" height="600">' : '')
-          + wlBtn
         + '</div>'
       + '</a>'
       + '<div class="product-card__body">'

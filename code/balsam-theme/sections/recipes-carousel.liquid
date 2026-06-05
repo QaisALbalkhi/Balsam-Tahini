@@ -123,7 +123,11 @@
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding-inline: var(--container-gutter-desktop, 40px);
+    padding-inline-start: max(
+      var(--container-gutter-desktop, 40px),
+      calc((100vw - var(--container-max, 1200px)) / 2 + var(--container-gutter-desktop, 40px))
+    );
+    padding-inline-end: var(--container-gutter-desktop, 40px);
     padding-bottom: var(--space-4);
     cursor: grab;
   }
