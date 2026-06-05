@@ -89,48 +89,6 @@
           </div>
         {%- endif -%}
 
-        <!-- Certification badges — left column so they stay fixed -->
-        {%- assign cert_blocks_left = section.blocks | where: 'type', 'certification' -%}
-        {%- if cert_blocks_left.size > 0 or true -%}
-          <div class="pd-details__badges pd-details__badges--media">
-            {%- if cert_blocks_left.size > 0 -%}
-              {%- for block in cert_blocks_left -%}
-                <div class="pd-details__badge">
-                  <div class="pd-details__badge-circle" aria-hidden="true">
-                    {%- case block.settings.icon -%}
-                      {%- when 'kosher' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="14" y1="8" x2="10" y2="12"/><line x1="10" y1="12" x2="14" y2="16"/></svg>
-                      {%- when 'halal' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="16.5" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
-                      {%- when 'non_gmo' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7zM12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/></svg>
-                      {%- when 'non_irradiated' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 9v-4M12 19v-4M9 12H5M19 12h-4"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
-                      {%- when 'no_preservatives' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
-                      {%- when 'sugar_free' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
-                      {%- when 'organic', 'vegan' -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8"/><path d="M12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/><path d="M12 12c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7z"/></svg>
-                      {%- else -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    {%- endcase -%}
-                  </div>
-                  <span class="pd-details__badge-label">{{ block.settings.label }}</span>
-                </div>
-              {%- endfor -%}
-            {%- else -%}
-              {%- assign default_certs = 'Kosher,Halal,Non-GMO,No Preservatives,Sugar Free,Vegan' | split: ',' -%}
-              {%- for cert in default_certs -%}
-                {%- assign ci = forloop.index0 -%}
-                <div class="pd-details__badge">
-                  <div class="pd-details__badge-circle" aria-hidden="true">
-                    {%- if ci == 0 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="10" y1="8" x2="10" y2="16"/><line x1="14" y1="8" x2="10" y2="12"/><line x1="10" y1="12" x2="14" y2="16"/></svg>
-                    {%- elsif ci == 1 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><circle cx="16.5" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
-                    {%- elsif ci == 2 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7zM12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/></svg>
-                    {%- elsif ci == 3 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M11 3v5.5L7 16a1 1 0 0 0 .9 1.5h8.2A1 1 0 0 0 17 16l-4-7.5V3"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
-                    {%- elsif ci == 4 -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12h6"/><line x1="4" y1="20" x2="20" y2="4"/></svg>
-                    {%- else -%}<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M12 20v-8"/><path d="M12 12C12 8.7 9.5 6 6 5c0 4.5 3 7.5 6 7z"/><path d="M12 12c0-3.3 2.5-6 6-7 0 4.5-3 7.5-6 7z"/></svg>
-                    {%- endif -%}
-                  </div>
-                  <span class="pd-details__badge-label">{{ cert }}</span>
-                </div>
-              {%- endfor -%}
-            {%- endif -%}
-          </div>
-        {%- endif -%}
 
       </div>
 
@@ -382,11 +340,25 @@
 
   /* ── Media ── */
   .product-layout__media { display: flex; flex-direction: column; }
-  .product-media { position: relative; }
-  .product-media__main { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: var(--radius-lg); }
-  .product-media__placeholder { width: 100%; aspect-ratio: 1/1; border-radius: var(--radius-lg); background: var(--border-soft); }
+  .product-media {
+    position: relative;
+    width: 100%;
+    max-width: 60vh;
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+  .product-media__main,
+  .product-media__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-media__placeholder { background: var(--border-soft); }
   .product-media__batch { position: absolute; bottom: var(--space-4); left: var(--space-4); background: var(--surface-warm); color: var(--fg); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); font-size: var(--text-xs); }
-  .product-thumbnails { display: flex; gap: var(--space-2); margin-top: var(--space-3); overflow-x: auto; scrollbar-width: none; }
+  .product-thumbnails { display: flex; gap: var(--space-2); margin-top: var(--space-3); overflow-x: auto; scrollbar-width: none; max-width: 60vh; margin-inline: auto; }
   .product-thumbnails::-webkit-scrollbar { display: none; }
   .product-thumbnail { flex-shrink: 0; width: 72px; height: 72px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); overflow: hidden; cursor: pointer; transition: border-color 0.15s; background: none; padding: 0; }
   .product-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
@@ -566,6 +538,8 @@
     .product-layout { grid-template-columns: 1fr; gap: var(--space-5); }
     .pd-certs__grid { grid-template-columns: repeat(3, 1fr); }
     .product-pairs__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    .product-media { max-width: 45vh; }
+    .product-thumbnails { max-width: 45vh; margin-inline: auto; }
   }
 </style>
 
