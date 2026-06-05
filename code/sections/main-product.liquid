@@ -154,7 +154,7 @@
               {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
             >
               {%- if product.selected_or_first_available_variant.available -%}
-                {{ 'products.add_to_cart' | t }}
+                {{ 'products.add_to_cart' | t }} — <span id="atc-btn-price">{{ product.selected_or_first_available_variant.price | money }}</span>
               {%- else -%}
                 {{ 'products.sold_out' | t }}
               {%- endif -%}
@@ -765,7 +765,16 @@
     if (atcBtn) {
       atcBtn.disabled = !variant.available;
       atcBtn.classList.toggle('btn--disabled', !variant.available);
-      atcBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
+      if (variant.available) {
+        var priceSpan = document.getElementById('atc-btn-price');
+        if (priceSpan) {
+          priceSpan.textContent = formatMoney(variant.price);
+        } else {
+          atcBtn.innerHTML = 'Add to Cart — <span id="atc-btn-price">' + formatMoney(variant.price) + '</span>';
+        }
+      } else {
+        atcBtn.innerHTML = 'Sold Out';
+      }
     }
 
     /* Variant card/pill states */
@@ -859,8 +868,8 @@
     productForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var atcBtn = document.getElementById('product-atc-btn');
-      var origText = atcBtn ? atcBtn.textContent : 'Add to Cart';
-      if (atcBtn) { atcBtn.disabled = true; atcBtn.textContent = 'Adding…'; }
+      var origHTML = atcBtn ? atcBtn.innerHTML : 'Add to Cart';
+      if (atcBtn) { atcBtn.disabled = true; atcBtn.innerHTML = 'Adding…'; }
 
       fetch('/cart/add.js', {
         method: 'POST',
@@ -886,7 +895,7 @@
           if (atcBtn) {
             setTimeout(function () {
               atcBtn.disabled = false;
-              atcBtn.textContent = origText;
+              atcBtn.innerHTML = origHTML;
               atcBtn.classList.remove('btn--added');
             }, 1800);
           }
