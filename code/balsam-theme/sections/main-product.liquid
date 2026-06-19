@@ -255,42 +255,58 @@
         {%- form 'product', product, class: 'product-form', id: 'product-form' -%}
           <input type="hidden" name="id" id="variant-hidden-id" value="{{ product.selected_or_first_available_variant.id }}">
           <input type="hidden" name="selling_plan" id="selling-plan-input" value="" disabled>
+
+          <!-- Quantity — labeled, visually secondary -->
           <div class="product-form__qty-row">
+            <span class="product-form__qty-label">Quantity</span>
             {%- render 'quantity-stepper' -%}
-            <button
-              type="submit"
-              class="btn btn-primary product-form__atc{% unless product.selected_or_first_available_variant.available %} btn--disabled{% endunless %}"
-              id="product-atc-btn"
-              {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
-            >
-              {%- if product.selected_or_first_available_variant.available -%}
-                {{ 'products.add_to_cart' | t }} — <span id="atc-btn-price">{{ product.selected_or_first_available_variant.price | money }}</span>
-              {%- else -%}
-                {{ 'products.sold_out' | t }}
-              {%- endif -%}
-            </button>
+          </div>
+
+          <!-- Primary CTA — full width, visually dominant -->
+          <button
+            type="submit"
+            class="product-form__atc{% unless product.selected_or_first_available_variant.available %} product-form__atc--sold-out{% endunless %}"
+            id="product-atc-btn"
+            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+          >
+            {%- if product.selected_or_first_available_variant.available -%}
+              <span class="product-form__atc-label">{{ 'products.add_to_cart' | t }}</span>
+              <span class="product-form__atc-sep" aria-hidden="true">—</span>
+              <span class="product-form__atc-price" id="atc-btn-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+            {%- else -%}
+              {{ 'products.sold_out' | t }}
+            {%- endif -%}
+          </button>
+
+          <!-- Trust strip — immediate reassurance below CTA -->
+          <div class="product-form__trust-strip" aria-label="Product guarantees">
+            <div class="pf-trust__item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              <span>Made in Canada</span>
+            </div>
+            <span class="pf-trust__sep" aria-hidden="true">·</span>
+            <div class="pf-trust__item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>Ships in 24h</span>
+            </div>
+            <span class="pf-trust__sep" aria-hidden="true">·</span>
+            <div class="pf-trust__item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              <span>30-Day Guarantee</span>
+            </div>
           </div>
         {%- endform -%}
 
-        <!-- Payment icons -->
+        <!-- Express payment — de-emphasised, below primary CTA -->
         <div class="pd-payment">
+          <div class="pd-payment__divider"><span>or pay with</span></div>
           <div class="pd-payment__icons">
-            <!-- Google Pay -->
             <svg class="pd-payment__icon" viewBox="0 0 48 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Google Pay"><text x="2" y="15" font-family="Arial" font-size="11" font-weight="700" fill="#5F6368">G</text><text x="10" y="15" font-family="Arial" font-size="11" fill="#5F6368">Pay</text></svg>
-            <!-- Apple Pay -->
             <svg class="pd-payment__icon" viewBox="0 0 48 20" xmlns="http://www.w3.org/2000/svg" aria-label="Apple Pay"><text x="2" y="14" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#000"> Pay</text></svg>
-            <!-- Amex -->
             <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="24" rx="4" fill="#2557D6"/><text x="4" y="16" font-family="Arial" font-size="7" font-weight="800" fill="#fff">AMEX</text></svg>
-            <!-- Mastercard -->
             <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="24" rx="4" fill="#252525"/><circle cx="14" cy="12" r="7" fill="#EB001B"/><circle cx="24" cy="12" r="7" fill="#F79E1B"/><path d="M19 7.3a7 7 0 0 1 0 9.4A7 7 0 0 1 19 7.3z" fill="#FF5F00"/></svg>
-            <!-- Shop Pay -->
             <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Shop Pay"><rect width="38" height="24" rx="4" fill="#5A31F4"/><text x="4" y="16" font-family="Arial" font-size="7" font-weight="700" fill="#fff">Shop</text></svg>
-            <!-- Visa -->
             <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="24" rx="4" fill="#fff" stroke="#E6E6E6"/><text x="6" y="17" font-family="Arial" font-size="12" font-weight="800" fill="#1A1F71">VISA</text></svg>
-          </div>
-          <div class="pd-guarantee">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-            <span>{{ section.settings.guarantee_text | default: '30 Day Satisfaction Guarantee' }}</span>
           </div>
         </div>
 
@@ -384,7 +400,7 @@
         <span class="sticky-atc__price" id="sticky-atc-price">{{ product.selected_or_first_available_variant.price | money }}</span>
       </div>
     </div>
-    <button class="btn btn-primary sticky-atc__btn" id="sticky-atc-btn" type="button">
+    <button class="product-form__atc sticky-atc__btn" id="sticky-atc-btn" type="button">
       {{ 'products.add_to_cart' | t }}
     </button>
   </div>
@@ -599,9 +615,110 @@
     cursor: pointer;
   }
 
-  /* ── Form ── */
-  .product-form__qty-row { display: flex; gap: var(--space-4); align-items: stretch; }
-  .product-form__atc { flex: 1; }
+  /* ── Form: Quantity row ── */
+  .product-form__qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .product-form__qty-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+  }
+
+  /* ── Primary ATC button — premium green DTC ── */
+  .product-form__atc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 64px;
+    padding: 0 var(--space-6);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: var(--font-body, 'Open Sans', sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: linear-gradient(160deg, #2D6A4F 0%, #1B4332 55%, #143628 100%);
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.10),
+      0 4px 14px rgba(27,67,50,0.28),
+      0 10px 32px rgba(27,67,50,0.14),
+      inset 0 1px 0 rgba(255,255,255,0.13);
+    transition: box-shadow 0.22s ease, transform 0.18s ease, background 0.22s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Inner vignette adds tactile depth */
+  .product-form__atc::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.08) 100%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  .product-form__atc:hover:not(:disabled) {
+    background: linear-gradient(160deg, #346152 0%, #1f4d3c 55%, #163828 100%);
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.13),
+      0 6px 20px rgba(27,67,50,0.34),
+      0 14px 44px rgba(27,67,50,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.16);
+    transform: translateY(-1px);
+  }
+  .product-form__atc:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow:
+      0 1px 2px rgba(0,0,0,0.10),
+      0 2px 6px rgba(27,67,50,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.10);
+    transition-duration: 0.08s;
+  }
+  .product-form__atc:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 3px #fff,
+      0 0 0 5px var(--accent),
+      0 4px 14px rgba(27,67,50,0.28);
+  }
+  .product-form__atc:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .product-form__atc-label { font-weight: 700; letter-spacing: 0.04em; }
+  .product-form__atc-sep  { opacity: 0.45; font-weight: 300; }
+  .product-form__atc-price { font-weight: 700; opacity: 0.9; }
+
+  /* ── Trust strip — right below ATC ── */
+  .product-form__trust-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .pf-trust__item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--fg-2);
+    white-space: nowrap;
+  }
+  .pf-trust__item svg { color: var(--accent); flex-shrink: 0; }
+  .pf-trust__sep { color: var(--border); font-size: 0.75rem; }
+
   .btn--disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* ── Description bullets ── */
@@ -703,19 +820,46 @@
     .pd-tabs__body { padding: 20px 20px 24px; }
   }
 
-  /* ── Payment icons + Guarantee ── */
-  .pd-payment { display: flex; flex-direction: column; gap: var(--space-2); align-items: center; }
+  /* ── Payment icons — de-emphasised express checkout section ── */
+  .pd-payment {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+  }
+  .pd-payment__divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pd-payment__divider::before,
+  .pd-payment__divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
   .pd-payment__icons {
-    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
   }
   .pd-payment__icon {
-    height: 28px; width: auto; min-width: 44px;
-    border: 1px solid var(--border); border-radius: 5px;
-    background: #fff; display: block;
-  }
-  .pd-guarantee {
-    display: flex; align-items: center; gap: 7px;
-    font-size: var(--text-sm); font-weight: 600; color: var(--accent);
+    height: 24px;
+    width: auto;
+    min-width: 40px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    display: block;
+    opacity: 0.75;
   }
 
   /* ── Trust badges ── */
@@ -944,9 +1088,11 @@
     left: 0;
     right: 0;
     z-index: 200;
-    background: #fff;
-    border-top: 1px solid var(--border);
-    box-shadow: 0 -4px 24px rgba(0,0,0,0.10);
+    background: rgba(250,250,248,0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(27,67,50,0.10);
+    box-shadow: 0 -2px 20px rgba(0,0,0,0.09);
     transform: translateY(100%);
     transition: transform 0.3s var(--ease-standard);
     pointer-events: none;
@@ -997,14 +1143,19 @@
     font-weight: 600;
     color: var(--accent);
   }
+  /* Sticky bar button: compact override of product-form__atc */
   .sticky-atc__btn {
     flex-shrink: 0;
     white-space: nowrap;
-    padding: var(--space-3) var(--space-6);
+    width: auto;
+    min-height: 48px;
+    padding: 0 var(--space-6);
+    font-size: var(--text-sm);
+    border-radius: 10px;
   }
   @media (max-width: 767px) {
     .sticky-atc__title { font-size: var(--text-xs); }
-    .sticky-atc__btn { padding: var(--space-3) var(--space-4); font-size: var(--text-sm); }
+    .sticky-atc__btn { min-height: 44px; padding: 0 var(--space-4); }
   }
 </style>
 
