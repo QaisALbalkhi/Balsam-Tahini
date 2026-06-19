@@ -43,20 +43,7 @@
         <div class="gr-track" id="gr-track-{{ section.id }}" role="list">
           {%- for block in section.blocks -%}
             {%- if block.type == 'review' -%}
-              <div class="gr-card{% if block.settings.photo != blank %} gr-card--has-photo{% endif %}" role="listitem" {{ block.shopify_attributes }}>
-
-                {%- if block.settings.photo != blank -%}
-                  <div class="gr-card__photo-wrap">
-                    <img
-                      src="{{ block.settings.photo | image_url: width: 720 }}"
-                      srcset="{{ block.settings.photo | image_url: width: 400 }} 400w, {{ block.settings.photo | image_url: width: 720 }} 720w"
-                      alt="Photo from {{ block.settings.reviewer_name | default: 'customer' | escape }}"
-                      width="720" height="480"
-                      loading="lazy"
-                      class="gr-card__photo"
-                    >
-                  </div>
-                {%- endif -%}
+              <div class="gr-card" role="listitem" {{ block.shopify_attributes }}>
 
                 <div class="gr-card__top">
                   <div class="gr-card__avatar" aria-hidden="true">
@@ -84,6 +71,20 @@
                 </div>
 
                 <p class="gr-card__text">{{ block.settings.text }}</p>
+
+                {%- if block.settings.photo != blank -%}
+                  <div class="gr-card__photo-wrap">
+                    <img
+                      src="{{ block.settings.photo | image_url: width: 720 }}"
+                      srcset="{{ block.settings.photo | image_url: width: 400 }} 400w, {{ block.settings.photo | image_url: width: 720 }} 720w"
+                      alt="Photo from {{ block.settings.reviewer_name | default: 'customer' | escape }}"
+                      width="720" height="480"
+                      loading="lazy"
+                      class="gr-card__photo"
+                    >
+                  </div>
+                {%- endif -%}
+
               </div>
             {%- endif -%}
           {%- endfor -%}
@@ -140,7 +141,7 @@
     padding-inline: var(--container-gutter-desktop, 40px);
   }
 
-  /* Review card */
+  /* Review card — height is purely content-driven */
   .gr-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -151,16 +152,18 @@
     gap: var(--space-3);
     transition: box-shadow 0.2s, transform 0.2s;
     overflow: hidden;
+    height: fit-content;
+    align-self: start;
   }
   .gr-card:hover { box-shadow: var(--elev-raised); transform: translateY(-3px); }
 
-  /* Photo — padded inside card, rounded corners */
+  /* Photo — below text, padded, rounded */
   .gr-card__photo-wrap {
     aspect-ratio: 4 / 3;
     overflow: hidden;
     border-radius: var(--radius-md, 8px);
     background: var(--border-soft);
-    margin-bottom: var(--space-2);
+    margin-top: var(--space-1);
     flex-shrink: 0;
   }
   .gr-card__photo {
@@ -218,7 +221,7 @@
   .gr-card__date { font-size: var(--text-xs); color: var(--muted); margin-top: 1px; }
   .gr-card__google-icon { flex-shrink: 0; }
   .gr-card__stars { display: flex; align-items: center; gap: 2px; }
-  .gr-card__text { font-size: var(--text-sm); color: var(--fg-2); line-height: 1.65; flex: 1; }
+  .gr-card__text { font-size: var(--text-sm); color: var(--fg-2); line-height: 1.65; }
 
   /* Nav arrows — mobile carousel only */
   .gr-nav { display: none; }
