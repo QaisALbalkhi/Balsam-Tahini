@@ -12,10 +12,58 @@
     "main-product": {
       "type": "main-product",
       "blocks": {
-        "pairs_product_UGVipY": {
+        "pairs_product_6jApjL": {
           "type": "pairs_product",
           "settings": {
             "product": ""
+          }
+        },
+        "desc_bullet_7rM9aK": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "desc_bullet_kBVkxn": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "desc_bullet_wcmMed": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "desc_bullet_H6DdzJ": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "inline_review_XVdULm": {
+          "type": "inline_review",
+          "settings": {
+            "text": "Absolutely love this tahini! Rich, smooth, and completely addictive.",
+            "reviewer_name": "Sarah M.",
+            "rating": 5
+          }
+        },
+        "inline_review_ctk3RG": {
+          "type": "inline_review",
+          "settings": {
+            "text": "Absolutely love this tahini! Rich, smooth, and completely addictive.",
+            "reviewer_name": "Sarah M.",
+            "rating": 5
           }
         },
         "trust_badge_EEDjJf": {
@@ -49,75 +97,43 @@
         "accordion_4fPW6H": {
           "type": "accordion",
           "settings": {
-            "title": "Product Description",
-            "content": ""
+            "title": "Details",
+            "content": "<p>This product is make on</p>"
           }
         },
         "accordion_T8hLPH": {
           "type": "accordion",
           "settings": {
-            "title": "Product Description",
+            "title": "Nutrition",
             "content": ""
           }
         },
         "accordion_LA9tpp": {
           "type": "accordion",
           "settings": {
-            "title": "Product Description",
+            "title": "FAQ",
             "content": ""
-          }
-        },
-        "desc_bullet_7rM9aK": {
-          "type": "desc_bullet",
-          "settings": {
-            "emoji": "✅",
-            "bold_text": "Stone-ground from premium sesame",
-            "body_text": "for a rich, authentic flavour in every spoonful."
-          }
-        },
-        "desc_bullet_wcmMed": {
-          "type": "desc_bullet",
-          "settings": {
-            "emoji": "✅",
-            "bold_text": "Stone-ground from premium sesame",
-            "body_text": "for a rich, authentic flavour in every spoonful."
-          }
-        },
-        "desc_bullet_kBVkxn": {
-          "type": "desc_bullet",
-          "settings": {
-            "emoji": "✅",
-            "bold_text": "Stone-ground from premium sesame",
-            "body_text": "for a rich, authentic flavour in every spoonful."
-          }
-        },
-        "desc_bullet_H6DdzJ": {
-          "type": "desc_bullet",
-          "settings": {
-            "emoji": "✅",
-            "bold_text": "Stone-ground from premium sesame",
-            "body_text": "for a rich, authentic flavour in every spoonful."
           }
         }
       },
       "block_order": [
-        "pairs_product_UGVipY",
+        "pairs_product_6jApjL",
+        "desc_bullet_7rM9aK",
+        "desc_bullet_kBVkxn",
+        "desc_bullet_wcmMed",
+        "desc_bullet_H6DdzJ",
+        "inline_review_XVdULm",
+        "inline_review_ctk3RG",
         "trust_badge_EEDjJf",
         "trust_badge_dC9NbU",
         "trust_badge_ihV3Lt",
         "certification_TwLJHH",
         "accordion_4fPW6H",
         "accordion_T8hLPH",
-        "accordion_LA9tpp",
-        "desc_bullet_7rM9aK",
-        "desc_bullet_wcmMed",
-        "desc_bullet_kBVkxn",
-        "desc_bullet_H6DdzJ"
+        "accordion_LA9tpp"
       ],
       "settings": {
         "why_heading": "Why Balsam?",
-        "categories_label": "CATEGORIES",
-        "categories_max": 5,
         "cert_heading": "Our Certifications",
         "pairs_heading": "Pairs Well With",
         "pairs_collection": "",
@@ -239,6 +255,16 @@
         "bg": "cream"
       }
     },
+    "pairs-carousel": {
+      "type": "pairs-carousel",
+      "settings": {
+        "eyebrow": "GOES GREAT WITH",
+        "heading_italic": "Try it with",
+        "heading": "Pairs Well With",
+        "products_limit": 6,
+        "show_price": true
+      }
+    },
     "recipes-carousel": {
       "type": "recipes-carousel",
       "settings": {
@@ -255,6 +281,7 @@
   },
   "order": [
     "main-product",
+    "pairs-carousel",
     "recently_viewed_7kyrHz",
     "google_reviews_KgRRnK",
     "recipes-carousel"

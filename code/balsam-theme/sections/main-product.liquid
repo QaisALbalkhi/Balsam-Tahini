@@ -360,30 +360,6 @@
       </div><!-- /.product-layout__details -->
     </div><!-- /.product-layout -->
 
-    <!-- ── Description + Certifications band ── -->
-    <!-- ── Pairs Well With ── -->
-    {%- assign pairs_blocks = section.blocks | where: 'type', 'pairs_product' -%}
-    {%- assign pairs_coll = collections[section.settings.pairs_collection] -%}
-    {%- if pairs_blocks.size > 0 or pairs_coll != blank -%}
-      <div class="product-pairs section--cream" style="margin-top:var(--space-16);padding:var(--space-12) 0;border-radius:var(--radius-lg);">
-        <p class="eyebrow" style="text-align:center;margin-bottom:var(--space-3);">GOES GREAT WITH</p>
-        <h2 class="section-title" style="text-align:center;margin-bottom:var(--space-10);">{{ section.settings.pairs_heading | default: 'Pairs Well With' }}</h2>
-        <div class="product-pairs__grid">
-          {%- if pairs_blocks.size > 0 -%}
-            {%- for block in pairs_blocks -%}
-              {%- assign pair_product = all_products[block.settings.product] -%}
-              {%- if pair_product != blank -%}
-                {% render 'product-card', product: pair_product %}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- elsif pairs_coll != blank -%}
-            {%- for p in pairs_coll.products limit: 4 -%}
-              {% render 'product-card', product: p %}
-            {%- endfor -%}
-          {%- endif -%}
-        </div>
-      </div>
-    {%- endif -%}
 
   </div>
 </section>
@@ -421,9 +397,7 @@
   "settings": [
     { "type": "text", "id": "why_heading", "label": "\"Why Balsam?\" heading", "default": "Why Balsam?" },
 { "type": "text", "id": "cert_heading", "label": "Certifications heading", "default": "Our Certifications" },
-    { "type": "text", "id": "pairs_heading", "label": "Pairs Well With heading", "default": "Pairs Well With" },
-    { "type": "collection", "id": "pairs_collection", "label": "Pairs collection (auto)" },
-    { "type": "text", "id": "guarantee_text", "label": "Guarantee badge text", "default": "30 Day Satisfaction Guarantee" }
+{ "type": "text", "id": "guarantee_text", "label": "Guarantee badge text", "default": "30 Day Satisfaction Guarantee" }
   ],
   "blocks": [
     {
@@ -766,8 +740,6 @@
   .pd-certs__item:hover .pd-certs__icon-wrap { background: var(--accent); color: #fff; }
   .pd-certs__label { font-size: 0.63rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--fg-2); line-height: 1.3; }
 
-  /* ── Pairs Well With ── */
-  .product-pairs__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
 
   /* ── Certification badge row ── */
   .pd-cert-badges {
@@ -910,12 +882,10 @@
   @media (max-width: 959px) {
     .product-desc-band--split { grid-template-columns: 1fr; gap: 32px; }
     .pd-certs__grid { grid-template-columns: repeat(4, 1fr); }
-    .product-pairs__grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 767px) {
     .product-layout { grid-template-columns: 1fr; gap: 0; }
     .pd-certs__grid { grid-template-columns: repeat(3, 1fr); }
-    .product-pairs__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
     .product-media { max-width: 100%; }
     .product-thumbnails { max-width: 100%; margin-inline: auto; }
     /* Image not sticky on mobile */
