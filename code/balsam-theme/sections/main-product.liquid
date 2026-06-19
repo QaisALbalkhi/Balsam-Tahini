@@ -716,74 +716,51 @@
   .pd-why__icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
   .pd-why__text { font-size: 0.95rem; color: var(--fg-2); line-height: 1.4; }
 
-/* ── Tab panel — Warm Stone Pill Design ── */
+/* ── Product tabs ── */
   .pd-tabs {
-    border-radius: 20px;
-    background: var(--surface-warm, #F5F0E8);
-    border: 1px solid rgba(27, 67, 50, 0.10);
-    box-shadow:
-      0 2px 6px rgba(0,0,0,0.05),
-      0 8px 24px rgba(0,0,0,0.06),
-      inset 0 1px 0 rgba(255,255,255,0.55);
+    border-radius: 16px;
+    border: 1px solid var(--border, #E5E7EB);
+    background: #fff;
     overflow: hidden;
   }
 
-  /* Sunken pill tray */
   .pd-tabs__nav {
     display: flex;
-    gap: 5px;
-    padding: 10px 10px 0;
-    background: rgba(0,0,0,0.035);
-    border-bottom: none;
+    gap: 0;
+    padding: 0 4px;
+    background: var(--surface-warm, #F5F0E8);
+    border-bottom: 1px solid var(--border, #E5E7EB);
   }
 
-  /* Tab buttons */
   .pd-tabs__btn {
-    flex: 1;
-    padding: 12px 16px;
+    padding: 13px 18px;
     border: none;
-    border-radius: 12px 12px 0 0;
     background: transparent;
     font-family: var(--font-body, 'Open Sans', sans-serif);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: rgba(34, 41, 47, 0.45);
+    color: var(--fg-2, #6B7280);
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     white-space: nowrap;
-    position: relative;
+    transition: color 0.15s ease;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
   }
-  .pd-tabs__btn:last-child { margin-right: 0; }
-
   .pd-tabs__btn:hover:not(.pd-tabs__btn--active) {
-    background: rgba(255, 255, 255, 0.45);
     color: var(--fg, #22292F);
   }
-
-  /* Active tab — merges flush into body below */
   .pd-tabs__btn--active {
-    background: #fff;
     color: var(--accent, #1B4332);
-    /* shadow only on top + sides, never bottom — bottom is hidden by body overlap */
-    box-shadow:
-      -3px -3px 8px rgba(0,0,0,0.06),
-       3px -3px 8px rgba(0,0,0,0.06);
-    margin-bottom: -1px;
-    padding-bottom: 13px;
-    position: relative;
-    z-index: 1;
+    border-bottom-color: var(--accent, #1B4332);
+    background: transparent;
   }
 
-  /* Content body — border-top hidden under the active tab */
   .pd-tabs__body {
-    padding: 24px 24px 28px;
+    padding: 20px 22px 24px;
     background: #fff;
-    border-top: 1px solid rgba(27, 67, 50, 0.10);
-    position: relative;
   }
-
   .pd-tabs__panel {
     font-size: var(--text-sm);
     color: var(--fg-2, #6B7280);
@@ -793,12 +770,9 @@
   .pd-tabs__panel p:last-child { margin-bottom: 0; }
   .pd-tabs__panel strong { color: var(--fg); font-weight: 700; }
 
-  /* Mobile: tighter padding, full-width readable tabs */
   @media (max-width: 767px) {
-    .pd-tabs { border-radius: 16px; }
-    .pd-tabs__nav { padding: 8px 8px 0; gap: 3px; }
-    .pd-tabs__btn { padding: 11px 10px; font-size: 0.68rem; letter-spacing: 0.07em; }
-    .pd-tabs__body { padding: 20px 20px 24px; }
+    .pd-tabs__btn { padding: 11px 12px; font-size: 0.68rem; }
+    .pd-tabs__body { padding: 18px 18px 22px; }
   }
 
   /* ── Payment icons — de-emphasised express checkout section ── */
