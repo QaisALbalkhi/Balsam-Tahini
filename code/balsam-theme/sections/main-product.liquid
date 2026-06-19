@@ -618,58 +618,85 @@
   .pd-why__icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
   .pd-why__text { font-size: 0.95rem; color: var(--fg-2); line-height: 1.4; }
 
-/* ── Tab panel ── */
+/* ── Tab panel — Warm Stone Pill Design ── */
   .pd-tabs {
-    border: 1.5px solid var(--fg);
-    border-radius: var(--radius-lg);
+    border-radius: 20px;
     background: var(--surface-warm, #F5F0E8);
+    border: 1px solid rgba(27, 67, 50, 0.10);
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.05),
+      0 8px 24px rgba(0,0,0,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.55);
     overflow: hidden;
   }
+
+  /* Sunken pill tray */
   .pd-tabs__nav {
     display: flex;
-    gap: 0;
-    padding: var(--space-3) var(--space-3) 0;
-    border-bottom: 1.5px solid var(--fg);
+    gap: 5px;
+    padding: 10px 10px 0;
+    background: rgba(0,0,0,0.035);
+    border-bottom: none;
   }
+
+  /* Tab buttons */
   .pd-tabs__btn {
     flex: 1;
-    padding: 9px var(--space-3);
-    border: 1.5px solid var(--fg);
-    border-bottom: none;
-    border-right: none;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px 12px 0 0;
     background: transparent;
-    font-family: var(--font-body);
-    font-size: 0.7rem;
+    font-family: var(--font-body, 'Open Sans', sans-serif);
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: var(--fg);
+    color: rgba(34, 41, 47, 0.45);
     cursor: pointer;
-    transition: background 0.18s, color 0.18s;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     white-space: nowrap;
-    border-radius: 6px 6px 0 0;
-    margin-right: var(--space-2);
+    position: relative;
   }
-  .pd-tabs__btn:last-child { margin-right: 0; border-right: 1.5px solid var(--fg); }
+  .pd-tabs__btn:last-child { margin-right: 0; }
+
   .pd-tabs__btn:hover:not(.pd-tabs__btn--active) {
-    background: rgba(27,67,50,0.08);
+    background: rgba(255, 255, 255, 0.45);
+    color: var(--fg, #22292F);
   }
+
+  /* Active tab — elevated white pill */
   .pd-tabs__btn--active {
-    background: var(--accent, #1B4332);
-    color: #fff;
-    border-color: var(--fg);
+    background: #fff;
+    color: var(--accent, #1B4332);
+    box-shadow:
+      0 -1px 0 rgba(27,67,50,0.06) inset,
+      0 2px 10px rgba(0,0,0,0.09),
+      0 1px 3px rgba(0,0,0,0.07);
   }
+
+  /* Content body — seamlessly connected */
   .pd-tabs__body {
-    padding: var(--space-5);
+    padding: 24px 24px 28px;
+    background: #fff;
+    border-top: 1px solid rgba(27, 67, 50, 0.07);
   }
+
   .pd-tabs__panel {
     font-size: var(--text-sm);
-    color: var(--fg-2);
-    line-height: var(--leading-body);
+    color: var(--fg-2, #6B7280);
+    line-height: 1.7;
   }
   .pd-tabs__panel p { margin-bottom: var(--space-3); }
   .pd-tabs__panel p:last-child { margin-bottom: 0; }
   .pd-tabs__panel strong { color: var(--fg); font-weight: 700; }
+
+  /* Mobile: tighter padding, full-width readable tabs */
+  @media (max-width: 767px) {
+    .pd-tabs { border-radius: 16px; }
+    .pd-tabs__nav { padding: 8px 8px 0; gap: 3px; }
+    .pd-tabs__btn { padding: 11px 10px; font-size: 0.68rem; letter-spacing: 0.07em; }
+    .pd-tabs__body { padding: 20px 20px 24px; }
+  }
 
   /* ── Payment icons + Guarantee ── */
   .pd-payment { display: flex; flex-direction: column; gap: var(--space-2); align-items: center; }
