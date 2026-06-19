@@ -1,0 +1,326 @@
+{% style %}
+  .ing-section {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+  }
+  .ing-section--cream { background: var(--surface-warm, #F5F0E8); }
+
+  /* Header */
+  .ing-section__header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+  .ing-section__header .eyebrow { margin-bottom: var(--space-2); }
+  .ing-section__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.15;
+    letter-spacing: var(--tracking-display);
+  }
+  .ing-section__heading em { font-style: italic; }
+
+  /* Grid */
+  .ing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    max-width: 1100px;
+    margin-inline: auto;
+  }
+
+  /* Card */
+  .ing-card {
+    background: var(--surface, #fff);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.22s, transform 0.22s;
+  }
+  .ing-card:hover {
+    box-shadow: var(--elev-raised);
+    transform: translateY(-3px);
+  }
+
+  /* Image */
+  .ing-card__img-wrap {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--surface-warm, #F5F0E8);
+    flex-shrink: 0;
+  }
+  .ing-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease;
+  }
+  .ing-card:hover .ing-card__img { transform: scale(1.06); }
+  .ing-card__img-placeholder {
+    width: 100%; height: 100%;
+    background: var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 2.5rem;
+  }
+
+  /* Content */
+  .ing-card__body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1;
+  }
+  .ing-card__name {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  /* Description — collapsible */
+  .ing-card__desc {
+    font-size: var(--text-sm);
+    color: var(--fg-2);
+    line-height: var(--leading-body);
+    display: none;
+  }
+  .ing-card__desc.is-open { display: block; }
+  .ing-card__desc p { margin-bottom: var(--space-2); }
+  .ing-card__desc p:last-child { margin-bottom: 0; }
+
+  /* Expand toggle button */
+  .ing-card__toggle {
+    align-self: flex-start;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--fg);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.18s;
+    position: relative;
+    margin-top: auto;
+  }
+  .ing-card__toggle:hover { background: var(--accent, #1B4332); }
+  .ing-card__toggle .icon-plus,
+  .ing-card__toggle .icon-minus { position: absolute; transition: opacity 0.18s; }
+  .ing-card__toggle .icon-minus { opacity: 0; }
+  .ing-card--open .ing-card__toggle .icon-plus  { opacity: 0; }
+  .ing-card--open .ing-card__toggle .icon-minus { opacity: 1; }
+
+  /* Show more / less */
+  .ing-more-wrap {
+    text-align: center;
+    margin-top: var(--space-8);
+  }
+  .ing-more-btn {
+    background: none;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+  }
+  .ing-more-btn:hover { background: var(--accent); color: #fff; }
+  .ing-more-btn.is-hidden { display: none; }
+
+  /* Hidden extra cards */
+  .ing-card--hidden { display: none; }
+  .ing-card--hidden.is-visible { display: flex; }
+
+  @media (max-width: 959px) {
+    .ing-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 639px) {
+    .ing-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    .ing-card__name { font-size: 1rem; }
+  }
+{% endstyle %}
+
+<section class="ing-section{% if section.settings.bg == 'cream' %} ing-section--cream{% endif %}" id="ing-section-{{ section.id }}">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="ing-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ing-section__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    <!-- Cards grid -->
+    {%- if section.blocks.size > 0 -%}
+      {%- assign visible_count = section.settings.initial_count | default: 3 -%}
+      <div class="ing-grid" id="ing-grid-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <div
+            class="ing-card{% if forloop.index > visible_count %} ing-card--hidden{% endif %}"
+            id="ing-card-{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            <!-- Image -->
+            <div class="ing-card__img-wrap">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w"
+                  alt="{{ block.settings.name | escape }}"
+                  width="600" height="600"
+                  loading="lazy"
+                  class="ing-card__img"
+                >
+              {%- else -%}
+                <div class="ing-card__img-placeholder">🌿</div>
+              {%- endif -%}
+            </div>
+
+            <!-- Content -->
+            <div class="ing-card__body">
+              {%- if block.settings.name != blank -%}
+                <h3 class="ing-card__name">{{ block.settings.name }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.description != blank -%}
+                <div class="ing-card__desc" id="ing-desc-{{ block.id }}">
+                  {{ block.settings.description }}
+                </div>
+                <button
+                  class="ing-card__toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="ing-desc-{{ block.id }}"
+                  aria-label="More info about {{ block.settings.name | escape }}"
+                >
+                  <!-- Plus icon -->
+                  <svg class="icon-plus" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M13.4 11.4v-5a1 1 0 0 0-2 0v5h-5a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 1 0 0-2h-5Z" fill="#fff"/>
+                  </svg>
+                  <!-- Minus icon -->
+                  <svg class="icon-minus" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 12h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- Show more / less (only if blocks exceed initial_count) -->
+      {%- if section.blocks.size > visible_count -%}
+        <div class="ing-more-wrap">
+          <button class="ing-more-btn" id="ing-show-more-{{ section.id }}" type="button">
+            {{ section.settings.show_more_label | default: 'Show more ingredients' }}
+          </button>
+          <button class="ing-more-btn is-hidden" id="ing-show-less-{{ section.id }}" type="button">
+            {{ section.settings.show_less_label | default: 'Show less' }}
+          </button>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+(function () {
+  /* ── Expand / collapse individual cards ── */
+  document.querySelectorAll('#ing-section-{{ section.id }} .ing-card__toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var card = btn.closest('.ing-card');
+      var desc = document.getElementById(btn.getAttribute('aria-controls'));
+      var isOpen = card.classList.contains('ing-card--open');
+      card.classList.toggle('ing-card--open', !isOpen);
+      if (desc) desc.classList.toggle('is-open', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
+  /* ── Show more / show less ── */
+  var showMore = document.getElementById('ing-show-more-{{ section.id }}');
+  var showLess = document.getElementById('ing-show-less-{{ section.id }}');
+  if (!showMore) return;
+
+  showMore.addEventListener('click', function () {
+    document.querySelectorAll('#ing-grid-{{ section.id }} .ing-card--hidden').forEach(function (card) {
+      card.classList.add('is-visible');
+    });
+    showMore.classList.add('is-hidden');
+    showLess.classList.remove('is-hidden');
+  });
+
+  showLess.addEventListener('click', function () {
+    document.querySelectorAll('#ing-grid-{{ section.id }} .ing-card--hidden').forEach(function (card) {
+      card.classList.remove('is-visible');
+    });
+    showLess.classList.add('is-hidden');
+    showMore.classList.remove('is-hidden');
+    /* Scroll back up to the section */
+    document.getElementById('ing-section-{{ section.id }}').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Ingredient Cards",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHAT'S INSIDE" },
+    { "type": "textarea", "id": "heading", "label": "Heading (use <em> for italic)", "default": "inside our <br><em>organic nut butter</em> variety" },
+    { "type": "range", "id": "initial_count", "label": "Cards visible before 'show more'", "min": 2, "max": 12, "step": 1, "default": 3 },
+    { "type": "text", "id": "show_more_label", "label": "Show more button label", "default": "Show more ingredients" },
+    { "type": "text", "id": "show_less_label", "label": "Show less button label", "default": "Show less" },
+    {
+      "type": "select", "id": "bg", "label": "Background",
+      "options": [
+        { "value": "canvas", "label": "White" },
+        { "value": "cream", "label": "Cream" }
+      ],
+      "default": "canvas"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Ingredient image" },
+        { "type": "text", "id": "name", "label": "Ingredient name", "default": "Sesame Seeds" },
+        { "type": "richtext", "id": "description", "label": "Description (shown on + click)" }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Ingredient Cards",
+      "blocks": [
+        { "type": "ingredient", "settings": { "name": "Sesame Seeds" } },
+        { "type": "ingredient", "settings": { "name": "Pistachios" } },
+        { "type": "ingredient", "settings": { "name": "Macadamias" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

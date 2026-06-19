@@ -289,10 +289,22 @@
         "show_tags": true,
         "cta_label": "Read recipe →"
       }
+    },
+    "ingredient-cards": {
+      "type": "ingredient-cards",
+      "settings": {
+        "eyebrow": "WHAT'S INSIDE",
+        "heading": "inside our <br><em>premium ingredients</em>",
+        "initial_count": 3,
+        "show_more_label": "Show more ingredients",
+        "show_less_label": "Show less",
+        "bg": "canvas"
+      }
     }
   },
   "order": [
     "main-product",
+    "ingredient-cards",
     "pairs-carousel",
     "recently_viewed_7kyrHz",
     "google_reviews_KgRRnK",
