@@ -145,9 +145,9 @@
     }
     .ss2-row:nth-child(even) .ss2-row__text-col,
     .ss2-row:nth-child(even) .ss2-row__media-col { order: unset; }
-    /* On mobile always: media first, text below */
-    .ss2-row__media-col { order: 1; padding: 0; }
-    .ss2-row__text-col  { order: 2; padding: var(--space-2) 0; }
+    /* On mobile always: text first, media below */
+    .ss2-row__text-col  { order: 1; padding: var(--space-2) 0; }
+    .ss2-row__media-col { order: 2; padding: 0; }
     .ss2-row__media-wrap { max-width: 100%; }
     .ss2-row__body { max-width: 100%; }
     .ss2-header { padding: var(--space-10) var(--container-gutter-phone, 20px) 0; }
