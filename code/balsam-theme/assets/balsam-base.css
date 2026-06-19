@@ -9,7 +9,7 @@
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden; /* reliable viewport-level guard against sideways scroll on mobile */
+  overflow-x: clip; /* clip prevents horizontal scroll without creating a scroll container — required for position:sticky to work */
 }
 
 body {
