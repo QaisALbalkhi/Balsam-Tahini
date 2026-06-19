@@ -664,21 +664,26 @@
     color: var(--fg, #22292F);
   }
 
-  /* Active tab — elevated white pill */
+  /* Active tab — merges flush into body below */
   .pd-tabs__btn--active {
     background: #fff;
     color: var(--accent, #1B4332);
+    /* shadow only on top + sides, never bottom — bottom is hidden by body overlap */
     box-shadow:
-      0 -1px 0 rgba(27,67,50,0.06) inset,
-      0 2px 10px rgba(0,0,0,0.09),
-      0 1px 3px rgba(0,0,0,0.07);
+      -3px -3px 8px rgba(0,0,0,0.06),
+       3px -3px 8px rgba(0,0,0,0.06);
+    margin-bottom: -1px;
+    padding-bottom: 13px;
+    position: relative;
+    z-index: 1;
   }
 
-  /* Content body — seamlessly connected */
+  /* Content body — border-top hidden under the active tab */
   .pd-tabs__body {
     padding: 24px 24px 28px;
     background: #fff;
-    border-top: 1px solid rgba(27, 67, 50, 0.07);
+    border-top: 1px solid rgba(27, 67, 50, 0.10);
+    position: relative;
   }
 
   .pd-tabs__panel {
