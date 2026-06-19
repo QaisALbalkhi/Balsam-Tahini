@@ -1,0 +1,390 @@
+{% style %}
+  /* ── Section wrapper ── */
+  .ss-section {
+    background: var(--surface-warm, #F5F0E8);
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ss-header {
+    text-align: center;
+    margin-bottom: var(--space-14);
+  }
+  .ss-header .eyebrow { margin-bottom: var(--space-2); }
+  .ss-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-display);
+  }
+  .ss-heading em { font-style: italic; }
+
+  /* ── 3-column stage ── */
+  .ss-stage {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    gap: 0;
+    align-items: start;
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: var(--container-gutter-desktop, 40px);
+  }
+
+  /* ── Left / Right column ── */
+  .ss-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+  .ss-col--left { text-align: right; padding-right: var(--space-8); }
+  .ss-col--right { text-align: left;  padding-left:  var(--space-8); }
+
+  /* ── Row item ── */
+  .ss-item { display: flex; flex-direction: column; gap: var(--space-4); }
+  .ss-col--left .ss-item { align-items: flex-end; }
+  .ss-col--right .ss-item { align-items: flex-start; }
+
+  .ss-item__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-display);
+    margin: 0;
+  }
+  .ss-item__name em { font-style: italic; }
+
+  .ss-item__badge {
+    display: inline-block;
+    border: 1.5px solid var(--fg);
+    border-radius: var(--radius-pill);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg);
+    padding: 4px 14px;
+    line-height: 1.5;
+  }
+
+  .ss-item__img-wrap {
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--border-soft);
+  }
+  .ss-item__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ss-item__meta {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin: 0;
+  }
+
+  .ss-item__body {
+    font-size: var(--text-sm);
+    color: var(--fg-2);
+    line-height: var(--leading-body);
+    max-width: 300px;
+  }
+  .ss-item__body p { margin-bottom: var(--space-2); }
+  .ss-item__body p:last-child { margin-bottom: 0; }
+
+  /* ── Center sticky spine ── */
+  .ss-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 50vh;
+    transform: translateY(-50%);
+    height: 0; /* doesn't affect flow height */
+    z-index: 2;
+  }
+
+  .ss-spine__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Dotted line above icon */
+  .ss-spine__line {
+    width: 1px;
+    background: none;
+    border-left: 2px dashed var(--fg);
+    opacity: 0.35;
+    flex: 1;
+  }
+  .ss-spine__line--top    { height: 120px; }
+  .ss-spine__line--bottom { height: 120px; }
+
+  /* Vertical edge labels */
+  .ss-spine__label-left,
+  .ss-spine__label-right {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--fg);
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+  }
+  .ss-spine__label-left {
+    left: -60px;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+  }
+  .ss-spine__label-right {
+    right: -60px;
+    writing-mode: vertical-lr;
+  }
+
+  /* Icon wrapper */
+  .ss-spine__icon {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ss-spine__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* ── The full-height dotted spine that runs through the whole stage ── */
+  .ss-stage-line-wrap {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .ss-stage {
+      grid-template-columns: 1fr;
+      padding-inline: var(--container-gutter-phone, 16px);
+    }
+    .ss-col--left,
+    .ss-col--right {
+      text-align: left;
+      padding-inline: 0;
+      align-items: flex-start;
+      gap: var(--space-10);
+    }
+    .ss-col--left .ss-item { align-items: flex-start; }
+    .ss-spine { display: none; }
+    .ss-col--right { border-top: 2px dashed var(--border); padding-top: var(--space-10); }
+    .ss-item__img-wrap { max-width: 100%; }
+    .ss-item__body { max-width: 100%; }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .ss-stage {
+      grid-template-columns: 1fr 80px 1fr;
+      padding-inline: var(--container-gutter-tablet, 24px);
+    }
+    .ss-col--left  { padding-right: var(--space-5); }
+    .ss-col--right { padding-left:  var(--space-5); }
+    .ss-spine__label-left  { left: -48px; }
+    .ss-spine__label-right { right: -48px; }
+  }
+{% endstyle %}
+
+{%- assign left_blocks  = section.blocks | where: 'type', 'left_item'  -%}
+{%- assign right_blocks = section.blocks | where: 'type', 'right_item' -%}
+
+<section class="ss-section" id="ss-section-{{ section.id }}">
+  <div class="container">
+    <div class="ss-header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ss-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="ss-stage">
+
+    <!-- Left column -->
+    <div class="ss-col ss-col--left">
+      {%- for block in left_blocks -%}
+        <div class="ss-item" {{ block.shopify_attributes }}>
+          {%- if block.settings.name != blank -%}
+            <h3 class="ss-item__name">{{ block.settings.name }}</h3>
+          {%- endif -%}
+          {%- if block.settings.badge != blank -%}
+            <span class="ss-item__badge">{{ block.settings.badge }}</span>
+          {%- endif -%}
+          {%- if block.settings.image != blank -%}
+            <div class="ss-item__img-wrap">
+              <img
+                src="{{ block.settings.image | image_url: width: 720 }}"
+                srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 720 }} 720w"
+                alt="{{ block.settings.name | escape }}"
+                width="720" height="540"
+                loading="lazy"
+                class="ss-item__img"
+              >
+            </div>
+          {%- endif -%}
+          {%- if block.settings.meta != blank -%}
+            <p class="ss-item__meta">{{ block.settings.meta }}</p>
+          {%- endif -%}
+          {%- if block.settings.body != blank -%}
+            <div class="ss-item__body">{{ block.settings.body }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <!-- Center sticky spine -->
+    <div style="position:relative;">
+      <!-- Full-height dashed line behind everything -->
+      <div style="position:absolute;left:50%;top:0;bottom:0;width:2px;border-left:2px dashed var(--fg);opacity:0.2;pointer-events:none;"></div>
+
+      <!-- Sticky icon + labels -->
+      <div class="ss-spine">
+        <div class="ss-spine__inner">
+          <div class="ss-spine__line ss-spine__line--top"></div>
+          <div class="ss-spine__icon">
+            {%- if section.settings.spine_image != blank -%}
+              <img
+                src="{{ section.settings.spine_image | image_url: width: 144 }}"
+                alt=""
+                width="72" height="72"
+                loading="lazy"
+              >
+            {%- else -%}
+              <!-- Default: Balsam sesame jar SVG -->
+              <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="36" cy="58" rx="18" ry="7" fill="var(--accent,#1B4332)" opacity=".18"/>
+                <rect x="22" y="20" width="28" height="34" rx="8" fill="var(--accent,#1B4332)"/>
+                <rect x="26" y="14" width="20" height="10" rx="4" fill="var(--accent,#1B4332)" opacity=".7"/>
+                <rect x="30" y="10" width="12" height="6" rx="3" fill="var(--accent,#1B4332)" opacity=".5"/>
+                <rect x="28" y="30" width="16" height="2" rx="1" fill="#fff" opacity=".35"/>
+                <rect x="28" y="35" width="10" height="2" rx="1" fill="#fff" opacity=".25"/>
+                <circle cx="36" cy="26" r="3" fill="#fff" opacity=".4"/>
+              </svg>
+            {%- endif -%}
+          </div>
+          <div class="ss-spine__line ss-spine__line--bottom"></div>
+        </div>
+
+        {%- if section.settings.label_left != blank -%}
+          <span class="ss-spine__label-left">{{ section.settings.label_left }}</span>
+        {%- endif -%}
+        {%- if section.settings.label_right != blank -%}
+          <span class="ss-spine__label-right">{{ section.settings.label_right }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="ss-col ss-col--right">
+      {%- for block in right_blocks -%}
+        <div class="ss-item" {{ block.shopify_attributes }}>
+          {%- if block.settings.name != blank -%}
+            <h3 class="ss-item__name">{{ block.settings.name }}</h3>
+          {%- endif -%}
+          {%- if block.settings.badge != blank -%}
+            <span class="ss-item__badge">{{ block.settings.badge }}</span>
+          {%- endif -%}
+          {%- if block.settings.image != blank -%}
+            <div class="ss-item__img-wrap">
+              <img
+                src="{{ block.settings.image | image_url: width: 720 }}"
+                srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 720 }} 720w"
+                alt="{{ block.settings.name | escape }}"
+                width="720" height="540"
+                loading="lazy"
+                class="ss-item__img"
+              >
+            </div>
+          {%- endif -%}
+          {%- if block.settings.meta != blank -%}
+            <p class="ss-item__meta">{{ block.settings.meta }}</p>
+          {%- endif -%}
+          {%- if block.settings.body != blank -%}
+            <div class="ss-item__body">{{ block.settings.body }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+  </div><!-- /.ss-stage -->
+</section>
+
+{% schema %}
+{
+  "name": "Scroll Story",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "OUR STORY" },
+    { "type": "textarea", "id": "heading", "label": "Heading (supports <em> italic)", "default": "1 Sesame<br><em>Two very different</em> products" },
+    { "type": "image_picker", "id": "spine_image", "label": "Center spine icon (optional, leave blank for default jar)" },
+    { "type": "text", "id": "label_left",  "label": "Left vertical label",  "default": "Tahini" },
+    { "type": "text", "id": "label_right", "label": "Right vertical label", "default": "Spread" }
+  ],
+  "blocks": [
+    {
+      "type": "left_item",
+      "name": "Left column item",
+      "settings": [
+        { "type": "text",         "id": "name",  "label": "Title",           "default": "Stone-Ground Tahini" },
+        { "type": "text",         "id": "badge", "label": "Badge label",     "default": "THE CLASSIC" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text",         "id": "meta",  "label": "Meta line (uppercase small)", "default": "COLD-PRESSED IN SMALL BATCHES" },
+        { "type": "richtext",     "id": "body",  "label": "Description" }
+      ]
+    },
+    {
+      "type": "right_item",
+      "name": "Right column item",
+      "settings": [
+        { "type": "text",         "id": "name",  "label": "Title",           "default": "Pistachio Spread" },
+        { "type": "text",         "id": "badge", "label": "Badge label",     "default": "THE BOLD ONE" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text",         "id": "meta",  "label": "Meta line (uppercase small)", "default": "ROASTED & STONE-GROUND" },
+        { "type": "richtext",     "id": "body",  "label": "Description" }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    {
+      "name": "Scroll Story",
+      "blocks": [
+        { "type": "left_item",  "settings": { "name": "Stone-Ground Tahini", "badge": "THE CLASSIC", "meta": "COLD-PRESSED IN SMALL BATCHES" } },
+        { "type": "right_item", "settings": { "name": "Pistachio Spread",    "badge": "THE BOLD ONE", "meta": "ROASTED & STONE-GROUND" } },
+        { "type": "left_item",  "settings": { "name": "Single Origin Sesame", "badge": "THE SEED", "meta": "SOURCED FROM PREMIUM FARMS" } },
+        { "type": "right_item", "settings": { "name": "100% Pure Pistachios", "badge": "THE NUT",  "meta": "NOTHING ADDED, NOTHING REMOVED" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
