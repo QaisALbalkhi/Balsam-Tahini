@@ -277,6 +277,18 @@
         "cta_url": "/blogs/recipes",
         "bg": "canvas"
       }
+    },
+    "recipes-column-carousel": {
+      "type": "recipes-column-carousel",
+      "settings": {
+        "blog": "recipes",
+        "eyebrow": "FROM OUR KITCHEN",
+        "heading_italic": "Make something with",
+        "heading": "Our Recipes",
+        "articles_count": 6,
+        "show_tags": true,
+        "cta_label": "Read recipe →"
+      }
     }
   },
   "order": [
@@ -284,6 +296,7 @@
     "pairs-carousel",
     "recently_viewed_7kyrHz",
     "google_reviews_KgRRnK",
-    "recipes-carousel"
+    "recipes-carousel",
+    "recipes-column-carousel"
   ]
 }
