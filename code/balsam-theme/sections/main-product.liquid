@@ -1232,13 +1232,13 @@
       /* Add current to front with full data for proper card rendering */
       var featured = {{ product.featured_image | image_url: width: 600 | json }};
       stored.unshift({
+        id: {{ product.id | json }},
         handle: productHandle,
         title: productTitle,
         url: productUrl,
         image: featured,
         price: {{ product.price | json }},
         compare_at: {{ product.compare_at_price | json }},
-        product_id: {{ product.selected_or_first_available_variant.id | json }},
         description: {{ product.description | strip_html | truncate: 120 | json }},
         variants: [{{ product.selected_or_first_available_variant | json }}]
       });
@@ -1266,7 +1266,7 @@
         ? '<span class="pc-badge pc-badge--sale">Save ' + Math.round((1 - p.price / p.compare_at) * 100) + '%</span>' : '';
       var desc     = p.description ? '<p class="product-card__desc">' + esc(p.description) + '</p>' : '';
       var wlBtn    = '<button class="product-card__wishlist" type="button" aria-label="Add to wishlist" aria-pressed="false"'
-        + ' data-product-id="' + esc(String(p.product_id || '')) + '"'
+        + ' data-product-id="' + esc(String(p.id || '')) + '"'
         + ' data-product-handle="' + esc(p.handle || '') + '"'
         + ' data-product-title="' + esc(p.title || '') + '"'
         + ' data-product-price="' + (p.price || 0) + '"'
