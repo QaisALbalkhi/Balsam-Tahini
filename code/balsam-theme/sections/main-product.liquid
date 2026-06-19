@@ -167,9 +167,6 @@
             {%- render 'status-badge', type: 'in_stock', ships_in: settings.ships_in_text -%}
           {%- endif -%}
           <h1 class="product-name">{{ product.title }}</h1>
-          <div id="product-price-display">
-            {%- render 'price', product: product, variant: product.selected_or_first_available_variant -%}
-          </div>
         </div>
 
         <hr class="divider">
