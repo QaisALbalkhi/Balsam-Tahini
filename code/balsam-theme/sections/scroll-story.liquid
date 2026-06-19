@@ -1,51 +1,33 @@
 {% style %}
   /* ── Section ── */
   .ss2 {
-    background: var(--surface-warm, #F5F0E8);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    background: {% if section.settings.bg == 'cream' %}var(--surface-warm, #F5F0E8){% else %}var(--bg, #FAFAF8){% endif %};
   }
 
   /* ── Each row ── */
   .ss2-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 80vh;
-    border-bottom: 1px solid var(--border);
-  }
-  .ss2-row:last-child { border-bottom: none; }
-
-  /* ── Left: image pane ── */
-  .ss2-row__img-pane {
-    position: relative;
-    overflow: hidden;
-    background: var(--border-soft);
-  }
-  .ss2-row__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s ease;
-  }
-  .ss2-row:hover .ss2-row__img { transform: scale(1.04); }
-  .ss2-row__img-placeholder {
-    width: 100%;
-    height: 100%;
-    min-height: 60vh;
-    background: linear-gradient(135deg, var(--surface-warm) 0%, var(--border-soft) 100%);
+    align-items: center;
+    gap: 0;
+    padding: var(--space-14) var(--space-14);
   }
 
-  /* ── Right: text pane ── */
-  .ss2-row__text-pane {
+  /* Alternating: even rows flip to media-left / text-right */
+  .ss2-row:nth-child(even) .ss2-row__text-col { order: 2; }
+  .ss2-row:nth-child(even) .ss2-row__media-col { order: 1; }
+
+  /* ── Text column ── */
+  .ss2-row__text-col {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: var(--space-16) var(--space-12);
-    gap: var(--space-5);
+    align-items: center;
+    text-align: center;
+    padding: var(--space-8) var(--space-10);
+    gap: var(--space-4);
   }
 
-  /* Eyebrow / step number */
   .ss2-row__eyebrow {
     font-size: 0.68rem;
     font-weight: 700;
@@ -54,56 +36,52 @@
     color: var(--muted);
   }
 
-  /* Heading */
   .ss2-row__heading {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: clamp(1.6rem, 3.2vw, 2.6rem);
     font-weight: 700;
     color: var(--fg);
-    line-height: 1.05;
+    line-height: 1.15;
     letter-spacing: var(--tracking-display);
     margin: 0;
   }
   .ss2-row__heading em { font-style: italic; }
 
-  /* Oval badge — exactly like Graza */
   .ss2-row__badge {
     display: inline-block;
     border: 1.5px solid var(--fg);
     border-radius: var(--radius-pill);
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--fg);
-    padding: 5px 18px;
-    align-self: flex-start;
+    padding: 4px 16px;
   }
 
-  /* Meta line */
   .ss2-row__meta {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--fg);
-    margin: 0;
     padding-top: var(--space-2);
     border-top: 1px solid var(--border);
+    width: 100%;
+    text-align: center;
+    margin: 0;
   }
 
-  /* Body */
   .ss2-row__body {
     font-size: var(--text-base);
     color: var(--fg-2);
     line-height: 1.75;
-    max-width: 480px;
+    max-width: 380px;
   }
   .ss2-row__body p { margin-bottom: var(--space-3); }
   .ss2-row__body p:last-child { margin-bottom: 0; }
   .ss2-row__body strong { color: var(--fg); font-weight: 700; }
 
-  /* Optional CTA link */
   .ss2-row__cta {
     display: inline-flex;
     align-items: center;
@@ -112,15 +90,40 @@
     font-weight: 700;
     color: var(--accent);
     text-decoration: none;
-    margin-top: var(--space-2);
     transition: gap 0.18s;
   }
   .ss2-row__cta:hover { gap: 10px; }
 
-  /* ── Section header (above rows) ── */
+  /* ── Media column ── */
+  .ss2-row__media-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+  }
+
+  .ss2-row__media-wrap {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 3 / 4;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--border-soft);
+    position: relative;
+  }
+
+  .ss2-row__img,
+  .ss2-row__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Section header ── */
   .ss2-header {
     text-align: center;
-    padding: var(--space-14) var(--container-gutter-desktop, 40px) 0;
+    padding: var(--space-14) var(--space-14) var(--space-4);
   }
   .ss2-header .eyebrow { margin-bottom: var(--space-2); }
   .ss2-header__heading {
@@ -130,7 +133,6 @@
     color: var(--fg);
     line-height: 1.1;
     letter-spacing: var(--tracking-display);
-    margin-bottom: var(--space-12);
   }
   .ss2-header__heading em { font-style: italic; }
 
@@ -138,25 +140,22 @@
   @media (max-width: 767px) {
     .ss2-row {
       grid-template-columns: 1fr;
-      min-height: unset;
+      padding: var(--space-6) var(--container-gutter-phone, 20px);
+      gap: var(--space-5);
     }
-    .ss2-row__img-pane {
-      aspect-ratio: 4 / 3;
-      min-height: unset;
-    }
-    .ss2-row__text-pane {
-      padding: var(--space-8) var(--container-gutter-phone, 20px);
-      gap: var(--space-4);
-    }
-    .ss2-row__heading { font-size: 1.9rem; }
+    .ss2-row:nth-child(even) .ss2-row__text-col,
+    .ss2-row:nth-child(even) .ss2-row__media-col { order: unset; }
+    /* On mobile always: media first, text below */
+    .ss2-row__media-col { order: 1; padding: 0; }
+    .ss2-row__text-col  { order: 2; padding: var(--space-2) 0; }
+    .ss2-row__media-wrap { max-width: 100%; }
     .ss2-row__body { max-width: 100%; }
-    .ss2-header {
-      padding: var(--space-10) var(--container-gutter-phone, 20px) 0;
-    }
+    .ss2-header { padding: var(--space-10) var(--container-gutter-phone, 20px) 0; }
   }
 
   @media (min-width: 768px) and (max-width: 1023px) {
-    .ss2-row__text-pane { padding: var(--space-10) var(--space-8); }
+    .ss2-row { padding: var(--space-10) var(--space-8); }
+    .ss2-row__text-col { padding: var(--space-6) var(--space-6); }
   }
 {% endstyle %}
 
@@ -177,54 +176,59 @@
     {%- if block.type == 'row' -%}
       <div class="ss2-row" {{ block.shopify_attributes }}>
 
-        <!-- Image — left -->
-        <div class="ss2-row__img-pane">
-          {%- if block.settings.image != blank -%}
-            <img
-              src="{{ block.settings.image | image_url: width: 1200 }}"
-              srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w, {{ block.settings.image | image_url: width: 1200 }} 1200w"
-              sizes="(max-width: 767px) 100vw, 50vw"
-              alt="{{ block.settings.heading | strip_html | escape }}"
-              width="900" height="675"
-              loading="lazy"
-              class="ss2-row__img"
-            >
-          {%- else -%}
-            <div class="ss2-row__img-placeholder"></div>
-          {%- endif -%}
-        </div>
-
-        <!-- Text — right -->
-        <div class="ss2-row__text-pane">
-
+        <!-- Text column -->
+        <div class="ss2-row__text-col">
           {%- if block.settings.eyebrow != blank -%}
             <p class="ss2-row__eyebrow">{{ block.settings.eyebrow }}</p>
           {%- endif -%}
-
           {%- if block.settings.heading != blank -%}
             <h3 class="ss2-row__heading">{{ block.settings.heading }}</h3>
           {%- endif -%}
-
           {%- if block.settings.badge != blank -%}
             <span class="ss2-row__badge">{{ block.settings.badge }}</span>
           {%- endif -%}
-
           {%- if block.settings.meta != blank -%}
             <p class="ss2-row__meta">{{ block.settings.meta }}</p>
           {%- endif -%}
-
           {%- if block.settings.body != blank -%}
             <div class="ss2-row__body">{{ block.settings.body }}</div>
           {%- endif -%}
-
           {%- if block.settings.cta_label != blank and block.settings.cta_url != blank -%}
             <a href="{{ block.settings.cta_url }}" class="ss2-row__cta">
               {{ block.settings.cta_label }}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           {%- endif -%}
-
         </div>
+
+        <!-- Media column -->
+        <div class="ss2-row__media-col">
+          <div class="ss2-row__media-wrap">
+            {%- if block.settings.video_url != blank -%}
+              <video
+                src="{{ block.settings.video_url }}"
+                class="ss2-row__video"
+                autoplay muted loop playsinline
+                preload="metadata"
+              ></video>
+            {%- elsif block.settings.video != blank -%}
+              {{- block.settings.video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, class: 'ss2-row__video' -}}
+            {%- elsif block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 840 }}"
+                srcset="{{ block.settings.image | image_url: width: 420 }} 420w, {{ block.settings.image | image_url: width: 840 }} 840w"
+                sizes="(max-width: 767px) 100vw, 40vw"
+                alt="{{ block.settings.heading | strip_html | escape }}"
+                width="420" height="560"
+                loading="lazy"
+                class="ss2-row__img"
+              >
+            {%- else -%}
+              <div style="width:100%;height:100%;background:var(--border-soft);"></div>
+            {%- endif -%}
+          </div>
+        </div>
+
       </div>
     {%- endif -%}
   {%- endfor -%}
@@ -235,22 +239,31 @@
 {
   "name": "Scroll Story",
   "settings": [
-    { "type": "text",     "id": "eyebrow",  "label": "Section eyebrow", "default": "OUR STORY" },
-    { "type": "textarea", "id": "heading",  "label": "Section heading (supports <em> italic)", "default": "1 Sesame<br><em>Two very different</em> products" }
+    { "type": "text",     "id": "eyebrow", "label": "Section eyebrow" },
+    { "type": "textarea", "id": "heading", "label": "Section heading (supports <em> italic)" },
+    { "type": "select", "id": "bg", "label": "Background",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "cream", "label": "Cream" }
+      ],
+      "default": "white"
+    }
   ],
   "blocks": [
     {
       "type": "row",
       "name": "Story row",
       "settings": [
-        { "type": "image_picker", "id": "image",      "label": "Image (left)" },
-        { "type": "text",         "id": "eyebrow",    "label": "Eyebrow / step",    "default": "STEP 01" },
-        { "type": "textarea",     "id": "heading",    "label": "Heading (supports <em> italic)", "default": "<em>Stone-ground</em> Tahini" },
-        { "type": "text",         "id": "badge",      "label": "Oval badge label",  "default": "THE CLASSIC" },
-        { "type": "text",         "id": "meta",       "label": "Meta line (uppercase)", "default": "COLD-PRESSED · SMALL BATCH" },
-        { "type": "richtext",     "id": "body",       "label": "Body text" },
-        { "type": "text",         "id": "cta_label",  "label": "CTA button label" },
-        { "type": "url",          "id": "cta_url",    "label": "CTA link" }
+        { "type": "image_picker", "id": "image",       "label": "Image (if no video)" },
+        { "type": "video",        "id": "video",       "label": "Video (Shopify-hosted)" },
+        { "type": "text",         "id": "video_url",   "label": "Video URL (external .mp4, overrides above)" },
+        { "type": "text",         "id": "eyebrow",     "label": "Eyebrow / step" },
+        { "type": "textarea",     "id": "heading",     "label": "Heading (supports <em> italic)", "default": "<em>Stone-ground</em> Tahini" },
+        { "type": "text",         "id": "badge",       "label": "Oval badge label" },
+        { "type": "text",         "id": "meta",        "label": "Meta line (uppercase)" },
+        { "type": "richtext",     "id": "body",        "label": "Body text" },
+        { "type": "text",         "id": "cta_label",   "label": "CTA label" },
+        { "type": "url",          "id": "cta_url",     "label": "CTA link" }
       ]
     }
   ],
