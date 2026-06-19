@@ -79,6 +79,11 @@ a, button, [role="button"], input, select, textarea, label {
   }
 }
 
+/* Alternating section backgrounds — odd=white, even=cream */
+main > .shopify-section:nth-child(odd)  { background: #FAFAF8; }
+main > .shopify-section:nth-child(even) { background: #F5F0E8; }
+
+/* .section--cream is now just an opt-in override when alternation isn't enough */
 .section--cream {
   background-color: var(--surface-warm);
 }

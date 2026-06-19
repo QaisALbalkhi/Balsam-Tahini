@@ -2,7 +2,7 @@
   .pairs-carousel {
     position: relative;
     overflow: hidden;
-    background: var(--surface-warm, #F5F0E8);
+    background: inherit;
     padding-top: var(--space-16);
     padding-bottom: var(--space-16);
     border-top: 1px solid var(--border);
@@ -131,8 +131,12 @@
     background: var(--fg);
     color: var(--surface-warm, #F5F0E8);
   }
-  .pairs-carousel__nav--prev { left: var(--container-gutter-desktop, 40px); }
-  .pairs-carousel__nav--next { right: var(--container-gutter-desktop, 40px); }
+  .pairs-carousel__nav--prev {
+    left: max(var(--container-gutter-desktop, 40px), calc((100vw - var(--container-max, 1200px)) / 2 + var(--container-gutter-desktop, 40px)));
+  }
+  .pairs-carousel__nav--next {
+    right: max(var(--container-gutter-desktop, 40px), calc((100vw - var(--container-max, 1200px)) / 2 + var(--container-gutter-desktop, 40px)));
+  }
 
   /* Pagination dots (mobile) */
   .pairs-carousel__dots {

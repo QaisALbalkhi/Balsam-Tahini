@@ -2,7 +2,7 @@
 {%- assign recipes_blog = blogs[blog_handle] -%}
 {%- assign article_limit = section.settings.articles_count | default: 6 -%}
 
-<section class="recipes-carousel section{% if section.settings.bg == 'cream' %} section--cream{% endif %}">
+<section class="recipes-carousel section" style="background:inherit">
   <div class="container">
 
     <div class="recipes-carousel__header">
@@ -237,8 +237,12 @@
   }
   .rc-nav:hover { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: var(--elev-raised); }
   .rc-nav[hidden] { display: none; }
-  .rc-nav--prev { left: 8px; }
-  .rc-nav--next { right: 8px; }
+  .rc-nav--prev {
+    left: max(12px, calc((100vw - var(--container-max, 1200px)) / 2 + 12px));
+  }
+  .rc-nav--next {
+    right: max(12px, calc((100vw - var(--container-max, 1200px)) / 2 + 12px));
+  }
 
   @media (max-width: 1023px) {
     .recipes-carousel__track { padding-inline: var(--container-gutter-tablet, 24px); }

@@ -1,7 +1,7 @@
 {% style %}
-  /* ── Section ── */
+  /* ── Section — inherits alternating bg from .shopify-section wrapper ── */
   .ss2 {
-    background: {% if section.settings.bg == 'cream' %}var(--surface-warm, #F5F0E8){% else %}var(--bg, #FAFAF8){% endif %};
+    background: inherit;
   }
 
   /* ── Each row ── */
