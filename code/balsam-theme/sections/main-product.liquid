@@ -294,37 +294,36 @@
           </div>
         </div>
 
-        <!-- Accordion -->
+        <!-- Tab panel -->
         {%- assign accordion_blocks = section.blocks | where: 'type', 'accordion' -%}
         {%- if accordion_blocks.size > 0 -%}
-          <div class="pd-accordion">
-            {%- for block in accordion_blocks -%}
-              <div class="pd-accordion__item" {{ block.shopify_attributes }}>
+          <div class="pd-tabs" id="pd-tabs-{{ section.id }}" role="tablist" aria-label="Product information">
+            <div class="pd-tabs__nav">
+              {%- for block in accordion_blocks -%}
                 <button
-                  class="pd-accordion__trigger"
+                  class="pd-tabs__btn{% if forloop.first %} pd-tabs__btn--active{% endif %}"
                   type="button"
-                  aria-expanded="false"
-                  aria-controls="accordion-panel-{{ block.id }}"
-                  id="accordion-btn-{{ block.id }}"
-                >
-                  <span>{{ block.settings.title }}</span>
-                  <svg class="pd-accordion__chevron" width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
-                    <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
+                  role="tab"
+                  id="pd-tab-btn-{{ block.id }}"
+                  aria-controls="pd-tab-panel-{{ block.id }}"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  {{ block.shopify_attributes }}
+                >{{ block.settings.title }}</button>
+              {%- endfor -%}
+            </div>
+            <div class="pd-tabs__body">
+              {%- for block in accordion_blocks -%}
                 <div
-                  class="pd-accordion__panel"
-                  id="accordion-panel-{{ block.id }}"
-                  role="region"
-                  aria-labelledby="accordion-btn-{{ block.id }}"
-                  hidden
+                  class="pd-tabs__panel"
+                  id="pd-tab-panel-{{ block.id }}"
+                  role="tabpanel"
+                  aria-labelledby="pd-tab-btn-{{ block.id }}"
+                  {% unless forloop.first %}hidden{% endunless %}
                 >
-                  <div class="pd-accordion__body">
-                    {{ block.settings.content }}
-                  </div>
+                  {{ block.settings.content }}
                 </div>
-              </div>
-            {%- endfor -%}
+              {%- endfor -%}
+            </div>
           </div>
         {%- endif -%}
 
@@ -645,43 +644,58 @@
   .pd-why__icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
   .pd-why__text { font-size: 0.95rem; color: var(--fg-2); line-height: 1.4; }
 
-/* ── Accordion ── */
-  .pd-accordion { border-top: 1px solid var(--border); margin-top: var(--space-2); }
-  .pd-accordion__item { border-bottom: 1px solid var(--border); }
-  .pd-accordion__trigger {
+/* ── Tab panel ── */
+  .pd-tabs {
+    border: 1.5px solid var(--fg);
+    border-radius: var(--radius-lg);
+    background: var(--surface-warm, #F5F0E8);
+    overflow: hidden;
+  }
+  .pd-tabs__nav {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: var(--space-4) 0;
-    background: none;
-    border: none;
-    cursor: pointer;
+    gap: 0;
+    padding: var(--space-3) var(--space-3) 0;
+    border-bottom: 1.5px solid var(--fg);
+  }
+  .pd-tabs__btn {
+    flex: 1;
+    padding: 9px var(--space-3);
+    border: 1.5px solid var(--fg);
+    border-bottom: none;
+    border-right: none;
+    background: transparent;
     font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--fg);
-    text-align: left;
-    gap: var(--space-3);
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    white-space: nowrap;
+    border-radius: 6px 6px 0 0;
+    margin-right: var(--space-2);
   }
-  .pd-accordion__trigger:hover { color: var(--accent); }
-  .pd-accordion__chevron {
-    flex-shrink: 0;
-    color: var(--fg-2);
-    transition: transform 0.25s var(--ease-standard);
+  .pd-tabs__btn:last-child { margin-right: 0; border-right: 1.5px solid var(--fg); }
+  .pd-tabs__btn:hover:not(.pd-tabs__btn--active) {
+    background: rgba(27,67,50,0.08);
   }
-  .pd-accordion__trigger[aria-expanded="true"] .pd-accordion__chevron {
-    transform: rotate(180deg);
+  .pd-tabs__btn--active {
+    background: var(--accent, #1B4332);
+    color: #fff;
+    border-color: var(--fg);
   }
-  .pd-accordion__panel { overflow: hidden; }
-  .pd-accordion__body {
-    padding-bottom: var(--space-5);
+  .pd-tabs__body {
+    padding: var(--space-5);
+  }
+  .pd-tabs__panel {
     font-size: var(--text-sm);
     color: var(--fg-2);
     line-height: var(--leading-body);
   }
-  .pd-accordion__body p { margin-bottom: var(--space-3); }
-  .pd-accordion__body p:last-child { margin-bottom: 0; }
+  .pd-tabs__panel p { margin-bottom: var(--space-3); }
+  .pd-tabs__panel p:last-child { margin-bottom: 0; }
+  .pd-tabs__panel strong { color: var(--fg); font-weight: 700; }
 
   /* ── Payment icons + Guarantee ── */
   .pd-payment { display: flex; flex-direction: column; gap: var(--space-2); align-items: center; }
@@ -1387,13 +1401,22 @@
     setInterval(function () { goTo(current + 1); }, 5000);
   })();
 
-  /* ── Accordion ── */
-  document.querySelectorAll('.pd-accordion__trigger').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var expanded = btn.getAttribute('aria-expanded') === 'true';
-      var panel = document.getElementById(btn.getAttribute('aria-controls'));
-      btn.setAttribute('aria-expanded', String(!expanded));
-      if (panel) panel.hidden = expanded;
+  /* ── Tab panel ── */
+  document.querySelectorAll('.pd-tabs').forEach(function (tabs) {
+    var btns = tabs.querySelectorAll('.pd-tabs__btn');
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btns.forEach(function (b) {
+          b.classList.remove('pd-tabs__btn--active');
+          b.setAttribute('aria-selected', 'false');
+          var panel = document.getElementById(b.getAttribute('aria-controls'));
+          if (panel) panel.hidden = true;
+        });
+        btn.classList.add('pd-tabs__btn--active');
+        btn.setAttribute('aria-selected', 'true');
+        var activePanel = document.getElementById(btn.getAttribute('aria-controls'));
+        if (activePanel) activePanel.hidden = false;
+      });
     });
   });
 
