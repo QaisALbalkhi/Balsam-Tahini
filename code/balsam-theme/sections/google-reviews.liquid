@@ -132,16 +132,15 @@
   .gr-badge__link { font-size: var(--text-sm); font-weight: 700; color: var(--accent); text-decoration: none; white-space: nowrap; border-left: 1px solid var(--border); padding-left: var(--space-4); transition: color 0.15s; }
   .gr-badge__link:hover { color: var(--accent-hover); }
 
-  /* ── Desktop: grid ── */
+  /* Desktop: masonry columns */
   .gr-track-wrap { position: relative; }
   .gr-track {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
+    column-count: 3;
+    column-gap: var(--space-5);
     padding-inline: var(--container-gutter-desktop, 40px);
   }
 
-  /* Review card — height is purely content-driven */
+  /* Review card */
   .gr-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -152,8 +151,8 @@
     gap: var(--space-3);
     transition: box-shadow 0.2s, transform 0.2s;
     overflow: hidden;
-    height: fit-content;
-    align-self: start;
+    break-inside: avoid;
+    margin-bottom: var(--space-5);
   }
   .gr-card:hover { box-shadow: var(--elev-raised); transform: translateY(-3px); }
 
@@ -175,16 +174,17 @@
   }
   .gr-card:hover .gr-card__photo { transform: scale(1.04); }
 
-  /* ── Tablet: 2 columns ── */
+  /* Tablet: 2 columns */
   @media (min-width: 768px) and (max-width: 1023px) {
-    .gr-track { grid-template-columns: repeat(2, 1fr); }
+    .gr-track { column-count: 2; }
   }
 
-  /* ── Mobile: carousel ── */
+  /* Mobile: carousel */
   @media (max-width: 767px) {
     .gr-track-wrap { overflow: hidden; }
     .gr-track {
       display: flex;
+      column-count: unset;
       gap: var(--space-4);
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -198,6 +198,7 @@
     .gr-card {
       flex: 0 0 280px;
       scroll-snap-align: start;
+      margin-bottom: 0;
     }
   }
 
