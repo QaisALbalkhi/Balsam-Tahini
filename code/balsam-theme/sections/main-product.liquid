@@ -155,25 +155,6 @@
           </div>
         {%- endif -%}
 
-        <!-- Categories -->
-        {%- assign all_collections = product.collections -%}
-        {%- if all_collections.size > 0 -%}
-          <div class="pd-cats">
-            <p class="pd-cats__label">{{ section.settings.categories_label | default: 'CATEGORIES' }}</p>
-            <div class="pd-cats__tags">
-              {%- assign cat_limit = section.settings.categories_max | default: 5 -%}
-              {%- assign shown = 0 -%}
-              {%- for col in all_collections -%}
-                {%- unless col.handle == 'frontpage' or col.handle == 'all' -%}
-                  {%- if shown < cat_limit -%}
-                    <a href="{{ col.url }}" class="pd-cats__tag">{{ col.title }}</a>
-                    {%- assign shown = shown | plus: 1 -%}
-                  {%- endif -%}
-                {%- endunless -%}
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endif -%}
 
       </div>
 
@@ -443,9 +424,7 @@
   "max_blocks": 24,
   "settings": [
     { "type": "text", "id": "why_heading", "label": "\"Why Balsam?\" heading", "default": "Why Balsam?" },
-    { "type": "text", "id": "categories_label", "label": "Categories label", "default": "CATEGORIES" },
-    { "type": "range", "id": "categories_max", "label": "Max categories", "min": 2, "max": 8, "step": 1, "default": 5 },
-    { "type": "text", "id": "cert_heading", "label": "Certifications heading", "default": "Our Certifications" },
+{ "type": "text", "id": "cert_heading", "label": "Certifications heading", "default": "Our Certifications" },
     { "type": "text", "id": "pairs_heading", "label": "Pairs Well With heading", "default": "Pairs Well With" },
     { "type": "collection", "id": "pairs_collection", "label": "Pairs collection (auto)" },
     { "type": "text", "id": "guarantee_text", "label": "Guarantee badge text", "default": "30 Day Satisfaction Guarantee" }
@@ -669,14 +648,7 @@
   .pd-why__icon { flex-shrink: 0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
   .pd-why__text { font-size: 0.95rem; color: var(--fg-2); line-height: 1.4; }
 
-  /* ── Categories ── */
-  .pd-cats { padding-top: var(--space-2); border-top: 1px solid var(--border); }
-  .pd-cats__label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); margin-bottom: 10px; }
-  .pd-cats__tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .pd-cats__tag { display: inline-block; padding: 7px 14px; border: 1.5px solid var(--accent); border-radius: 7px; font-size: 0.85rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: background 0.2s, color 0.2s; }
-  .pd-cats__tag:hover { background: var(--accent); color: #fff; }
-
-  /* ── Accordion ── */
+/* ── Accordion ── */
   .pd-accordion { border-top: 1px solid var(--border); margin-top: var(--space-2); }
   .pd-accordion__item { border-bottom: 1px solid var(--border); }
   .pd-accordion__trigger {
@@ -768,7 +740,6 @@
 
   /* Left column extra spacing for moved blocks */
   .product-layout__media .pd-why { margin-top: var(--space-6); }
-  .product-layout__media .pd-cats { margin-top: var(--space-4); }
 
   /* ── Description band ── */
   .product-desc-band { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
@@ -945,8 +916,6 @@
       z-index: 1;
       padding-top: var(--space-5);
     }
-    /* Hide categories on mobile */
-    .pd-cats { display: none; }
     /* Title + price not sticky on mobile */
     .pd-sticky-header { position: static; background: none; }
     /* Bigger title + price on mobile */
