@@ -616,11 +616,17 @@
   }
 
   /* ── Form: Quantity row ── */
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
   .product-form__qty-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
+    padding: 0 2px;
   }
   .product-form__qty-label {
     font-size: 0.75rem;
@@ -680,18 +686,19 @@
     justify-content: center;
     gap: var(--space-2);
     flex-wrap: wrap;
+    padding: var(--space-1) 2px;
   }
   .pf-trust__item {
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.68rem;
+    gap: 5px;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--fg-2);
     white-space: nowrap;
   }
   .pf-trust__item svg { color: var(--accent); flex-shrink: 0; }
-  .pf-trust__sep { color: var(--border); font-size: 0.75rem; }
+  .pf-trust__sep { color: var(--border); font-size: 0.8rem; line-height: 1; }
 
   .btn--disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -1142,6 +1149,24 @@
   var productTitle  = {{ product.title | json }};
   var productUrl    = {{ product.url | json }};
 
+  /* Track unit price so quantity changes can recalculate */
+  var currentUnitPrice = {{ product.selected_or_first_available_variant.price | default: 0 }};
+
+  function updateAtcPrice() {
+    var priceSpan = document.getElementById('atc-btn-price');
+    if (!priceSpan) return;
+    var qtyInput = document.querySelector('.qty-stepper__input');
+    var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+    priceSpan.textContent = formatMoney(currentUnitPrice * qty);
+  }
+
+  /* Listen for quantity changes */
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.classList.contains('qty-stepper__input')) {
+      updateAtcPrice();
+    }
+  });
+
   function formatMoney(cents) {
     if (!cents && cents !== 0) return '';
     return '$' + (cents / 100).toFixed(2);
@@ -1206,6 +1231,7 @@
     }
 
     /* ATC button */
+    currentUnitPrice = variant.price || 0;
     var atcBtn = document.getElementById('product-atc-btn');
     if (atcBtn) {
       atcBtn.disabled = !variant.available;
@@ -1213,12 +1239,14 @@
       if (variant.available) {
         var priceSpan = document.getElementById('atc-btn-price');
         if (priceSpan) {
-          priceSpan.textContent = formatMoney(variant.price);
+          updateAtcPrice();
         } else {
-          atcBtn.innerHTML = 'Add to Cart — <span id="atc-btn-price">' + formatMoney(variant.price) + '</span>';
+          atcBtn.innerHTML = '<span class="product-form__atc-label">Add to Cart</span>'
+            + '<span class="product-form__atc-sep" aria-hidden="true">—</span>'
+            + '<span class="product-form__atc-price" id="atc-btn-price">' + formatMoney(currentUnitPrice) + '</span>';
         }
       } else {
-        atcBtn.innerHTML = 'Sold Out';
+        atcBtn.textContent = 'Sold Out';
       }
     }
 
