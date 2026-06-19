@@ -547,7 +547,7 @@
   .product-thumbnail--active, .product-thumbnail:hover { border-color: var(--accent); }
 
   /* ── Details ── */
-  .product-layout__details { display: flex; flex-direction: column; gap: var(--space-4); }
+  .product-layout__details { display: flex; flex-direction: column; gap: var(--space-5); }
 
   /* ── Sticky title + price ── */
   .pd-sticky-header {
@@ -630,76 +630,50 @@
     color: var(--fg-2);
   }
 
-  /* ── Primary ATC button — premium green DTC ── */
+  /* ── Primary ATC button — flat solid, no gradient, no shadow ── */
   .product-form__atc {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    min-height: 64px;
+    min-height: 60px;
     padding: 0 var(--space-6);
     border: none;
-    border-radius: 14px;
+    border-radius: 10px;
     cursor: pointer;
     font-family: var(--font-body, 'Open Sans', sans-serif);
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: #fff;
-    background: linear-gradient(160deg, #2D6A4F 0%, #1B4332 55%, #143628 100%);
-    box-shadow:
-      0 1px 2px rgba(0,0,0,0.10),
-      0 4px 14px rgba(27,67,50,0.28),
-      0 10px 32px rgba(27,67,50,0.14),
-      inset 0 1px 0 rgba(255,255,255,0.13);
-    transition: box-shadow 0.22s ease, transform 0.18s ease, background 0.22s ease;
+    background: var(--accent, #1B4332);
+    box-shadow: none;
+    transition: background 0.18s ease, opacity 0.15s ease;
     position: relative;
-    overflow: hidden;
-  }
-  /* Inner vignette adds tactile depth */
-  .product-form__atc::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.08) 100%);
-    pointer-events: none;
-    border-radius: inherit;
   }
   .product-form__atc:hover:not(:disabled) {
-    background: linear-gradient(160deg, #346152 0%, #1f4d3c 55%, #163828 100%);
-    box-shadow:
-      0 2px 4px rgba(0,0,0,0.13),
-      0 6px 20px rgba(27,67,50,0.34),
-      0 14px 44px rgba(27,67,50,0.18),
-      inset 0 1px 0 rgba(255,255,255,0.16);
-    transform: translateY(-1px);
+    background: #166534;
   }
   .product-form__atc:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow:
-      0 1px 2px rgba(0,0,0,0.10),
-      0 2px 6px rgba(27,67,50,0.22),
-      inset 0 1px 0 rgba(255,255,255,0.10);
-    transition-duration: 0.08s;
+    background: #14532d;
+    opacity: 0.92;
   }
   .product-form__atc:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 3px #fff,
-      0 0 0 5px var(--accent),
-      0 4px 14px rgba(27,67,50,0.28);
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
   }
   .product-form__atc:disabled {
     opacity: 0.48;
     cursor: not-allowed;
-    transform: none;
   }
-  .product-form__atc-label { font-weight: 700; letter-spacing: 0.04em; }
-  .product-form__atc-sep  { opacity: 0.45; font-weight: 300; }
-  .product-form__atc-price { font-weight: 700; opacity: 0.9; }
+  .product-form__atc-label { font-weight: 800; letter-spacing: 0.08em; }
+  .product-form__atc-sep  { opacity: 0.5; font-weight: 400; }
+  .product-form__atc-price { font-weight: 800; }
 
   /* ── Trust strip — right below ATC ── */
+  .product-form__atc::after { content: none; }
   .product-form__trust-strip {
     display: flex;
     align-items: center;
