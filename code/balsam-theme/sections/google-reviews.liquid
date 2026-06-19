@@ -43,7 +43,21 @@
         <div class="gr-track" id="gr-track-{{ section.id }}" role="list">
           {%- for block in section.blocks -%}
             {%- if block.type == 'review' -%}
-              <div class="gr-card" role="listitem" {{ block.shopify_attributes }}>
+              <div class="gr-card{% if block.settings.photo != blank %} gr-card--has-photo{% endif %}" role="listitem" {{ block.shopify_attributes }}>
+
+                {%- if block.settings.photo != blank -%}
+                  <div class="gr-card__photo-wrap">
+                    <img
+                      src="{{ block.settings.photo | image_url: width: 720 }}"
+                      srcset="{{ block.settings.photo | image_url: width: 400 }} 400w, {{ block.settings.photo | image_url: width: 720 }} 720w"
+                      alt="Photo from {{ block.settings.reviewer_name | default: 'customer' | escape }}"
+                      width="720" height="480"
+                      loading="lazy"
+                      class="gr-card__photo"
+                    >
+                  </div>
+                {%- endif -%}
+
                 <div class="gr-card__top">
                   <div class="gr-card__avatar" aria-hidden="true">
                     {{ block.settings.initials | default: '?' | upcase | truncate: 2, '' }}
@@ -52,7 +66,6 @@
                     <p class="gr-card__name">{{ block.settings.reviewer_name | default: 'Customer' }}</p>
                     <p class="gr-card__date">{{ block.settings.date }}</p>
                   </div>
-                  <!-- Google icon -->
                   <svg class="gr-card__google-icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -145,8 +158,30 @@
     flex-direction: column;
     gap: var(--space-3);
     transition: box-shadow 0.2s, transform 0.2s;
+    overflow: hidden;
   }
   .gr-card:hover { box-shadow: var(--elev-raised); transform: translateY(-3px); }
+
+  /* Photo — sits above content, bleeds to card edges */
+  .gr-card--has-photo { padding-top: 0; flex: 0 0 300px; }
+  .gr-card__photo-wrap {
+    margin: 0 calc(var(--space-6) * -1);
+    margin-top: 0;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--border-soft);
+    margin-bottom: var(--space-4);
+    flex-shrink: 0;
+  }
+  .gr-card--has-photo .gr-card__photo-wrap { margin-left: 0; margin-right: 0; border-radius: 0; }
+  .gr-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease;
+  }
+  .gr-card:hover .gr-card__photo { transform: scale(1.04); }
 
   .gr-card__top {
     display: flex;
@@ -236,6 +271,7 @@
       "type": "review",
       "name": "Review",
       "settings": [
+        { "type": "image_picker", "id": "photo", "label": "Review photo (optional)" },
         { "type": "text", "id": "reviewer_name", "label": "Reviewer name", "default": "Happy Customer" },
         { "type": "text", "id": "initials", "label": "Avatar initials (2 chars)", "default": "HC" },
         { "type": "range", "id": "rating", "label": "Star rating", "min": 1, "max": 5, "step": 1, "default": 5 },
