@@ -12,40 +12,107 @@
     "main-product": {
       "type": "main-product",
       "blocks": {
-        "benefit-1": {
-          "type": "benefit",
+        "pairs_product_UGVipY": {
+          "type": "pairs_product",
           "settings": {
-            "icon": "leaf",
-            "text": "Single origin sesame, stone-ground in small batches"
+            "product": ""
           }
         },
-        "benefit-2": {
-          "type": "benefit",
+        "trust_badge_EEDjJf": {
+          "type": "trust_badge",
           "settings": {
-            "icon": "thumbs_up",
-            "text": "Over 2,000 five-star reviews"
+            "icon": "shield",
+            "label": "Made in Canada"
           }
         },
-        "benefit-3": {
-          "type": "benefit",
+        "trust_badge_dC9NbU": {
+          "type": "trust_badge",
           "settings": {
-            "icon": "award",
-            "text": "Guaranteed to wow you or we'll replace it"
+            "icon": "shield",
+            "label": "Made in Canada"
           }
         },
-        "benefit-4": {
-          "type": "benefit",
+        "trust_badge_ihV3Lt": {
+          "type": "trust_badge",
           "settings": {
-            "icon": "truck",
-            "text": "Free shipping on orders over $40"
+            "icon": "shield",
+            "label": "Made in Canada"
+          }
+        },
+        "certification_TwLJHH": {
+          "type": "certification",
+          "settings": {
+            "icon": "certified",
+            "label": "Certified"
+          }
+        },
+        "accordion_4fPW6H": {
+          "type": "accordion",
+          "settings": {
+            "title": "Product Description",
+            "content": ""
+          }
+        },
+        "accordion_T8hLPH": {
+          "type": "accordion",
+          "settings": {
+            "title": "Product Description",
+            "content": ""
+          }
+        },
+        "accordion_LA9tpp": {
+          "type": "accordion",
+          "settings": {
+            "title": "Product Description",
+            "content": ""
+          }
+        },
+        "desc_bullet_7rM9aK": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "desc_bullet_wcmMed": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "desc_bullet_kBVkxn": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
+          }
+        },
+        "desc_bullet_H6DdzJ": {
+          "type": "desc_bullet",
+          "settings": {
+            "emoji": "✅",
+            "bold_text": "Stone-ground from premium sesame",
+            "body_text": "for a rich, authentic flavour in every spoonful."
           }
         }
       },
       "block_order": [
-        "benefit-1",
-        "benefit-2",
-        "benefit-3",
-        "benefit-4"
+        "pairs_product_UGVipY",
+        "trust_badge_EEDjJf",
+        "trust_badge_dC9NbU",
+        "trust_badge_ihV3Lt",
+        "certification_TwLJHH",
+        "accordion_4fPW6H",
+        "accordion_T8hLPH",
+        "accordion_LA9tpp",
+        "desc_bullet_7rM9aK",
+        "desc_bullet_wcmMed",
+        "desc_bullet_kBVkxn",
+        "desc_bullet_H6DdzJ"
       ],
       "settings": {
         "why_heading": "Why Balsam?",
@@ -53,149 +120,8 @@
         "categories_max": 5,
         "cert_heading": "Our Certifications",
         "pairs_heading": "Pairs Well With",
-        "pairs_collection": ""
-      }
-    },
-    "product_details_9LFLfT": {
-      "type": "product-details",
-      "blocks": {
-        "ingredients_63EJWw": {
-          "type": "ingredients",
-          "settings": {
-            "title": "Ingredients",
-            "ingredient_list": "Premium sesame seeds (100%)",
-            "open_default": true
-          }
-        },
-        "nutrition_zt7RRq": {
-          "type": "nutrition",
-          "settings": {
-            "title": "Nutrition",
-            "serving_size": "Per 30g serving",
-            "nutrition_rows": "Calories: 180\nTotal Fat: 16g\nSaturated Fat: 2g\nSodium: 5mg\nTotal Carbs: 6g\nDietary Fiber: 2g\nProtein: 5g\nCalcium: 80mg\nIron: 2.5mg",
-            "open_default": true
-          }
-        },
-        "badge_XnTdLe": {
-          "type": "badge",
-          "settings": {
-            "icon": "kosher",
-            "label": "Kosher"
-          }
-        },
-        "badge_VUg6QR": {
-          "type": "badge",
-          "settings": {
-            "icon": "halal",
-            "label": "Halal"
-          }
-        },
-        "badge_TFhCaF": {
-          "type": "badge",
-          "settings": {
-            "icon": "non_gmo",
-            "label": "Non-GMO"
-          }
-        },
-        "badge_GYUNb9": {
-          "type": "badge",
-          "settings": {
-            "icon": "no_preservatives",
-            "label": "No Preservatives"
-          }
-        },
-        "badge_LYfFHX": {
-          "type": "badge",
-          "settings": {
-            "icon": "sugar_free",
-            "label": "Sugar Free"
-          }
-        },
-        "badge_TN7xbD": {
-          "type": "badge",
-          "settings": {
-            "icon": "vegan",
-            "label": "Vegan"
-          }
-        }
-      },
-      "block_order": [
-        "ingredients_63EJWw",
-        "nutrition_zt7RRq",
-        "badge_XnTdLe",
-        "badge_VUg6QR",
-        "badge_TFhCaF",
-        "badge_GYUNb9",
-        "badge_LYfFHX",
-        "badge_TN7xbD"
-      ],
-      "name": "Product Details",
-      "settings": {
-        "bg": "canvas",
-        "heading": "What's Inside"
-      }
-    },
-    "process_scroll_EWPiD6": {
-      "type": "process-scroll",
-      "blocks": {
-        "step_wQLDPj": {
-          "type": "step",
-          "settings": {
-            "image": "shopify://shop_images/Process-section-image-1.avif",
-            "label": "01",
-            "title": "Premium Sesame Seeds",
-            "body": "<p>We source only the finest sesame seeds, carefully selected for their purity, rich flavour, and high oil content. Every batch is hand-inspected before grinding.</p>"
-          }
-        },
-        "step_tnNtiB": {
-          "type": "step",
-          "settings": {
-            "image": "shopify://shop_images/Prcoess-section-2.jpg",
-            "label": "02",
-            "title": "Traditional Stone-Grinding",
-            "body": "<p>Our tahini is slowly stone-ground the traditional way  cool temperatures preserve natural oils and nutrients, delivering a depth of flavour that machine processing can't match.</p>"
-          }
-        },
-        "step_E4WdUc": {
-          "type": "step",
-          "settings": {
-            "image": "shopify://shop_images/Prcoess-section-3.png",
-            "label": "03",
-            "title": "Small Batch Production",
-            "body": "<p>We produce in small batches to guarantee freshness and consistency. Every jar receives our full attention  quality over volume, every single time.</p>"
-          }
-        },
-        "step_LRNXrp": {
-          "type": "step",
-          "settings": {
-            "image": "shopify://shop_images/Screenshot_2026-06-02_112755.png",
-            "label": "04",
-            "title": "Zero Additives, Ever",
-            "body": "<p>Just pure sesame seeds. No added oils, no preservatives, no stabilizers. What you see on the label is exactly what's in the jar — nothing more, nothing less.</p>"
-          }
-        },
-        "step_tNj8Pp": {
-          "type": "step",
-          "settings": {
-            "image": "shopify://shop_images/Prcoess-section-4.png",
-            "label": "05",
-            "title": "Shipped Fresh to Your Door",
-            "body": "<p>Every order is packed and shipped within days of production from our Mississauga facility. You receive tahini at its freshest — never sitting in a warehouse for months.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "step_wQLDPj",
-        "step_tnNtiB",
-        "step_E4WdUc",
-        "step_LRNXrp",
-        "step_tNj8Pp"
-      ],
-      "name": "Process Scroll",
-      "settings": {
-        "bg": "canvas",
-        "eyebrow": "OUR PROCESS",
-        "heading": "Crafted with Intention"
+        "pairs_collection": "",
+        "guarantee_text": "30 Day Satisfaction Guarantee"
       }
     },
     "recently_viewed_7kyrHz": {
@@ -329,8 +255,6 @@
   },
   "order": [
     "main-product",
-    "product_details_9LFLfT",
-    "process_scroll_EWPiD6",
     "recently_viewed_7kyrHz",
     "google_reviews_KgRRnK",
     "recipes-carousel"

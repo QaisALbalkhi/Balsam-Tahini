@@ -9,6 +9,7 @@
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden; /* reliable viewport-level guard against sideways scroll on mobile */
 }
 
 body {
@@ -18,6 +19,8 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 img, video {

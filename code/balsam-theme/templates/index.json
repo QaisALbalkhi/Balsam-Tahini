@@ -22,7 +22,7 @@
         "show_rating": true,
         "rating_text": "150+ Google five-star reviews",
         "cta_label": "Shop All",
-        "cta_url": "shopify://collections",
+        "cta_url": "shopify://collections/all",
         "cta2_label": "",
         "cta2_url": "",
         "show_certifications": true

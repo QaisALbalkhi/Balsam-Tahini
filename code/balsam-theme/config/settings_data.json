@@ -9,7 +9,9 @@
  */
 {
   "current": {
+    "logo": "shopify://shop_images/Balsam_Tahini_Logo.png",
     "logo_width": 140,
+    "favicon": "shopify://shop_images/Balsam_Tahini_Logo.png",
     "announcement_bar_enabled": true,
     "announcement_bar_dismissible": true,
     "announcement_bar_text": "Free shipping on orders over $100 · Made with love in Canada",

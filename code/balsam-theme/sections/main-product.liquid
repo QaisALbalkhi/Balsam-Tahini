@@ -71,6 +71,14 @@
           {%- if product.variants.first.sku != blank -%}
             <span class="product-media__batch eyebrow" id="product-sku-badge">Batch {{ product.variants.first.sku }}</span>
           {%- endif -%}
+          {%- if product.images.size > 1 -%}
+            <button class="product-gallery__arrow product-gallery__arrow--prev" id="gallery-prev" aria-label="Previous image" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="product-gallery__arrow product-gallery__arrow--next" id="gallery-next" aria-label="Next image" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          {%- endif -%}
         </div>
 
         {%- if product.images.size > 1 -%}
@@ -89,24 +97,124 @@
           </div>
         {%- endif -%}
 
+        <!-- Benefit bullets -->
+        {%- assign benefit_blocks = section.blocks | where: 'type', 'benefit' -%}
+        {%- if benefit_blocks.size > 0 -%}
+          <div class="pd-why">
+            {%- if section.settings.why_heading != blank -%}
+              <h3 class="pd-why__heading">{{ section.settings.why_heading }}</h3>
+            {%- endif -%}
+            <ul class="pd-why__list" role="list">
+              {%- for block in benefit_blocks -%}
+                <li class="pd-why__item" {{ block.shopify_attributes }}>
+                  <span class="pd-why__icon" aria-hidden="true">
+                    {%- case block.settings.icon -%}
+                      {%- when 'leaf' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                      {%- when 'thumbs_up' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                      {%- when 'award' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/><path d="M9 8l2 2 4-4"/></svg>
+                      {%- when 'truck' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                      {%- when 'shield' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                      {%- else -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    {%- endcase -%}
+                  </span>
+                  <span class="pd-why__text">{{ block.settings.text }}</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <!-- Inline Review Carousel -->
+        {%- assign inline_reviews = section.blocks | where: 'type', 'inline_review' -%}
+        {%- if inline_reviews.size > 0 -%}
+          <div class="pd-review-carousel" id="pd-review-carousel-{{ section.id }}">
+            <div class="pd-review-carousel__track" id="pd-review-track-{{ section.id }}">
+              {%- for block in inline_reviews -%}
+                <div class="pd-review-card" {{ block.shopify_attributes }}>
+                  <p class="pd-review-card__text">{{ block.settings.text }}</p>
+                  <div class="pd-review-card__footer">
+                    <div class="pd-review-card__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                      {%- assign r = block.settings.rating | default: 5 -%}
+                      {%- for i in (1..5) -%}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="{% if i <= r %}#FBBC05{% else %}#D1D5DB{% endif %}" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      {%- endfor -%}
+                    </div>
+                    <span class="pd-review-card__name">{{ block.settings.reviewer_name }}</span>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+            {%- if inline_reviews.size > 1 -%}
+              <button class="pd-review-carousel__arrow pd-review-carousel__arrow--prev" id="pd-review-prev-{{ section.id }}" aria-label="Previous review" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button class="pd-review-carousel__arrow pd-review-carousel__arrow--next" id="pd-review-next-{{ section.id }}" aria-label="Next review" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <!-- Categories -->
+        {%- assign all_collections = product.collections -%}
+        {%- if all_collections.size > 0 -%}
+          <div class="pd-cats">
+            <p class="pd-cats__label">{{ section.settings.categories_label | default: 'CATEGORIES' }}</p>
+            <div class="pd-cats__tags">
+              {%- assign cat_limit = section.settings.categories_max | default: 5 -%}
+              {%- assign shown = 0 -%}
+              {%- for col in all_collections -%}
+                {%- unless col.handle == 'frontpage' or col.handle == 'all' -%}
+                  {%- if shown < cat_limit -%}
+                    <a href="{{ col.url }}" class="pd-cats__tag">{{ col.title }}</a>
+                    {%- assign shown = shown | plus: 1 -%}
+                  {%- endif -%}
+                {%- endunless -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
 
       </div>
 
       <!-- Right: Details -->
       <div class="product-layout__details">
 
-        {%- if settings.show_stock_badge -%}
-          {%- render 'status-badge', type: 'in_stock', ships_in: settings.ships_in_text -%}
-        {%- endif -%}
-
-        <h1 class="product-name">{{ product.title }}</h1>
-
-        <!-- Price (wrapped for dynamic JS updates) -->
-        <div id="product-price-display">
-          {%- render 'price', product: product, variant: product.selected_or_first_available_variant -%}
+        <!-- Sticky title + price header -->
+        <div class="pd-sticky-header">
+          {%- if settings.show_stock_badge -%}
+            {%- render 'status-badge', type: 'in_stock', ships_in: settings.ships_in_text -%}
+          {%- endif -%}
+          <h1 class="product-name">{{ product.title }}</h1>
+          <div id="product-price-display">
+            {%- render 'price', product: product, variant: product.selected_or_first_available_variant -%}
+          </div>
         </div>
 
         <hr class="divider">
+
+        <!-- Description bullets -->
+        {%- assign desc_bullet_blocks = section.blocks | where: 'type', 'desc_bullet' -%}
+        {%- if desc_bullet_blocks.size > 0 -%}
+          <ul class="pd-desc-bullets" role="list">
+            {%- for block in desc_bullet_blocks -%}
+              <li class="pd-desc-bullet" {{ block.shopify_attributes }}>
+                {%- if block.settings.emoji != blank -%}
+                  <span class="pd-desc-bullet__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>
+                {%- endif -%}
+                <span class="pd-desc-bullet__text">
+                  {%- if block.settings.bold_text != blank -%}
+                    <strong>{{ block.settings.bold_text }}</strong>
+                  {%- endif -%}
+                  {%- if block.settings.body_text != blank -%}
+                    {{ block.settings.body_text }}
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endfor -%}
+          </ul>
+          <hr class="divider">
+        {%- endif -%}
 
         <!-- Variant selector -->
         {%- unless product.has_only_default_variant -%}
@@ -178,7 +286,7 @@
               {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
             >
               {%- if product.selected_or_first_available_variant.available -%}
-                {{ 'products.add_to_cart' | t }}
+                {{ 'products.add_to_cart' | t }} — <span id="atc-btn-price">{{ product.selected_or_first_available_variant.price | money }}</span>
               {%- else -%}
                 {{ 'products.sold_out' | t }}
               {%- endif -%}
@@ -186,53 +294,91 @@
           </div>
         {%- endform -%}
 
-        <!-- Benefit bullets -->
-        {%- assign benefit_blocks = section.blocks | where: 'type', 'benefit' -%}
-        {%- if benefit_blocks.size > 0 -%}
-          <div class="pd-why">
-            {%- if section.settings.why_heading != blank -%}
-              <h3 class="pd-why__heading">{{ section.settings.why_heading }}</h3>
-            {%- endif -%}
-            <ul class="pd-why__list" role="list">
-              {%- for block in benefit_blocks -%}
-                <li class="pd-why__item" {{ block.shopify_attributes }}>
-                  <span class="pd-why__icon" aria-hidden="true">
-                    {%- case block.settings.icon -%}
-                      {%- when 'leaf' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-                      {%- when 'thumbs_up' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
-                      {%- when 'award' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/><path d="M9 8l2 2 4-4"/></svg>
-                      {%- when 'truck' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                      {%- when 'shield' -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-                      {%- else -%}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    {%- endcase -%}
-                  </span>
-                  <span class="pd-why__text">{{ block.settings.text }}</span>
-                </li>
-              {%- endfor -%}
-            </ul>
+        <!-- Payment icons -->
+        <div class="pd-payment">
+          <div class="pd-payment__icons">
+            <!-- Google Pay -->
+            <svg class="pd-payment__icon" viewBox="0 0 48 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Google Pay"><text x="2" y="15" font-family="Arial" font-size="11" font-weight="700" fill="#5F6368">G</text><text x="10" y="15" font-family="Arial" font-size="11" fill="#5F6368">Pay</text></svg>
+            <!-- Apple Pay -->
+            <svg class="pd-payment__icon" viewBox="0 0 48 20" xmlns="http://www.w3.org/2000/svg" aria-label="Apple Pay"><text x="2" y="14" font-family="-apple-system,sans-serif" font-size="10" font-weight="600" fill="#000"> Pay</text></svg>
+            <!-- Amex -->
+            <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="American Express"><rect width="38" height="24" rx="4" fill="#2557D6"/><text x="4" y="16" font-family="Arial" font-size="7" font-weight="800" fill="#fff">AMEX</text></svg>
+            <!-- Mastercard -->
+            <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Mastercard"><rect width="38" height="24" rx="4" fill="#252525"/><circle cx="14" cy="12" r="7" fill="#EB001B"/><circle cx="24" cy="12" r="7" fill="#F79E1B"/><path d="M19 7.3a7 7 0 0 1 0 9.4A7 7 0 0 1 19 7.3z" fill="#FF5F00"/></svg>
+            <!-- Shop Pay -->
+            <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Shop Pay"><rect width="38" height="24" rx="4" fill="#5A31F4"/><text x="4" y="16" font-family="Arial" font-size="7" font-weight="700" fill="#fff">Shop</text></svg>
+            <!-- Visa -->
+            <svg class="pd-payment__icon" viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" aria-label="Visa"><rect width="38" height="24" rx="4" fill="#fff" stroke="#E6E6E6"/><text x="6" y="17" font-family="Arial" font-size="12" font-weight="800" fill="#1A1F71">VISA</text></svg>
+          </div>
+          <div class="pd-guarantee">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span>{{ section.settings.guarantee_text | default: '30 Day Satisfaction Guarantee' }}</span>
+          </div>
+        </div>
+
+        <!-- Accordion -->
+        {%- assign accordion_blocks = section.blocks | where: 'type', 'accordion' -%}
+        {%- if accordion_blocks.size > 0 -%}
+          <div class="pd-accordion">
+            {%- for block in accordion_blocks -%}
+              <div class="pd-accordion__item" {{ block.shopify_attributes }}>
+                <button
+                  class="pd-accordion__trigger"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="accordion-panel-{{ block.id }}"
+                  id="accordion-btn-{{ block.id }}"
+                >
+                  <span>{{ block.settings.title }}</span>
+                  <svg class="pd-accordion__chevron" width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
+                    <path d="M1 1L7 7L13 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div
+                  class="pd-accordion__panel"
+                  id="accordion-panel-{{ block.id }}"
+                  role="region"
+                  aria-labelledby="accordion-btn-{{ block.id }}"
+                  hidden
+                >
+                  <div class="pd-accordion__body">
+                    {{ block.settings.content }}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
           </div>
         {%- endif -%}
 
-        <!-- Categories -->
-        {%- assign all_collections = product.collections -%}
-        {%- if all_collections.size > 0 -%}
-          <div class="pd-cats">
-            <p class="pd-cats__label">{{ section.settings.categories_label | default: 'CATEGORIES' }}</p>
-            <div class="pd-cats__tags">
-              {%- assign cat_limit = section.settings.categories_max | default: 5 -%}
-              {%- assign shown = 0 -%}
-              {%- for col in all_collections -%}
-                {%- unless col.handle == 'frontpage' or col.handle == 'all' -%}
-                  {%- if shown < cat_limit -%}
-                    <a href="{{ col.url }}" class="pd-cats__tag">{{ col.title }}</a>
-                    {%- assign shown = shown | plus: 1 -%}
-                  {%- endif -%}
-                {%- endunless -%}
-              {%- endfor -%}
-            </div>
+        <!-- Trust badges -->
+        {%- assign trust_blocks = section.blocks | where: 'type', 'trust_badge' -%}
+        {%- if trust_blocks.size > 0 -%}
+          <div class="pd-trust">
+            {%- for block in trust_blocks -%}
+              <div class="pd-trust__item" {{ block.shopify_attributes }}>
+                <div class="pd-trust__icon" aria-hidden="true">
+                  {%- case block.settings.icon -%}
+                    {%- when 'shield' -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    {%- when 'leaf' -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                    {%- when 'award' -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/><path d="M9 8l2 2 4-4"/></svg>
+                    {%- when 'truck' -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    {%- when 'clock' -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    {%- when 'flag' -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                    {%- else -%}
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  {%- endcase -%}
+                </div>
+                <span class="pd-trust__label">{{ block.settings.label }}</span>
+              </div>
+            {%- endfor -%}
           </div>
         {%- endif -%}
-
 
       </div><!-- /.product-layout__details -->
     </div><!-- /.product-layout -->
@@ -265,6 +411,32 @@
   </div>
 </section>
 
+<!-- ── Sticky ATC bar ── -->
+<div class="sticky-atc" id="sticky-atc" aria-hidden="true">
+  <div class="container sticky-atc__inner">
+    <div class="sticky-atc__product">
+      {%- assign sticky_img = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+      {%- if sticky_img -%}
+        <img
+          id="sticky-atc-img"
+          src="{{ sticky_img | image_url: width: 80 }}"
+          alt="{{ product.title | escape }}"
+          width="40" height="40"
+          class="sticky-atc__img"
+          loading="lazy"
+        >
+      {%- endif -%}
+      <div class="sticky-atc__info">
+        <span class="sticky-atc__title">{{ product.title }}</span>
+        <span class="sticky-atc__price" id="sticky-atc-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+      </div>
+    </div>
+    <button class="btn btn-primary sticky-atc__btn" id="sticky-atc-btn" type="button">
+      {{ 'products.add_to_cart' | t }}
+    </button>
+  </div>
+</div>
+
 {% schema %}
 {
   "name": "Product",
@@ -275,7 +447,8 @@
     { "type": "range", "id": "categories_max", "label": "Max categories", "min": 2, "max": 8, "step": 1, "default": 5 },
     { "type": "text", "id": "cert_heading", "label": "Certifications heading", "default": "Our Certifications" },
     { "type": "text", "id": "pairs_heading", "label": "Pairs Well With heading", "default": "Pairs Well With" },
-    { "type": "collection", "id": "pairs_collection", "label": "Pairs collection (auto)" }
+    { "type": "collection", "id": "pairs_collection", "label": "Pairs collection (auto)" },
+    { "type": "text", "id": "guarantee_text", "label": "Guarantee badge text", "default": "30 Day Satisfaction Guarantee" }
   ],
   "blocks": [
     {
@@ -289,6 +462,15 @@
           ]
         },
         { "type": "text", "id": "label", "label": "Badge label", "default": "Certified" }
+      ]
+    },
+    {
+      "type": "desc_bullet",
+      "name": "Description bullet",
+      "settings": [
+        { "type": "text", "id": "emoji", "label": "Emoji", "default": "✅" },
+        { "type": "text", "id": "bold_text", "label": "Bold text (highlight)", "default": "Stone-ground from premium sesame" },
+        { "type": "text", "id": "body_text", "label": "Body text (regular)", "default": "for a rich, authentic flavour in every spoonful." }
       ]
     },
     {
@@ -310,6 +492,41 @@
       "name": "Pairs Well With product",
       "settings": [
         { "type": "product", "id": "product", "label": "Product" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion tab",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Tab title", "default": "Product Description" },
+        { "type": "richtext", "id": "content", "label": "Tab content" }
+      ]
+    },
+    {
+      "type": "inline_review",
+      "name": "Gallery review card",
+      "settings": [
+        { "type": "textarea", "id": "text", "label": "Review text", "default": "Absolutely love this tahini! Rich, smooth, and completely addictive." },
+        { "type": "text", "id": "reviewer_name", "label": "Reviewer name", "default": "Sarah M." },
+        { "type": "range", "id": "rating", "label": "Star rating", "min": 1, "max": 5, "step": 1, "default": 5 }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "shield",
+          "options": [
+            { "value": "shield", "label": "Shield / Certified" },
+            { "value": "leaf", "label": "Leaf / Organic" },
+            { "value": "award", "label": "Award" },
+            { "value": "truck", "label": "Free Shipping" },
+            { "value": "clock", "label": "Quick Support" },
+            { "value": "flag", "label": "Flag / Origin" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Badge label", "default": "Made in Canada" }
       ]
     }
   ],
@@ -339,7 +556,7 @@
   .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10); align-items: start; }
 
   /* ── Media ── */
-  .product-layout__media { display: flex; flex-direction: column; }
+  .product-layout__media { display: flex; flex-direction: column; position: sticky; top: 20px; align-self: start; }
   .product-media {
     position: relative;
     width: 100%;
@@ -366,6 +583,18 @@
 
   /* ── Details ── */
   .product-layout__details { display: flex; flex-direction: column; gap: var(--space-4); }
+
+  /* ── Sticky title + price ── */
+  .pd-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background: var(--bg, #FAFAF8);
+    padding-bottom: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
   .review-strip { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
   .review-strip__count { font-size: var(--text-sm); font-weight: 600; color: var(--fg-2); }
   .review-strip__verified { padding: var(--space-1) var(--space-2); background: var(--border-soft); border-radius: var(--radius-pill); }
@@ -426,6 +655,12 @@
   .product-form__atc { flex: 1; }
   .btn--disabled { opacity: 0.5; cursor: not-allowed; }
 
+  /* ── Description bullets ── */
+  .pd-desc-bullets { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); }
+  .pd-desc-bullet { display: flex; align-items: flex-start; gap: 10px; font-size: var(--text-sm); color: var(--fg-2); line-height: 1.5; }
+  .pd-desc-bullet__emoji { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .pd-desc-bullet__text strong { color: var(--fg); font-weight: 700; }
+
   /* ── Why Balsam bullets ── */
   .pd-why { padding-top: var(--space-2); }
   .pd-why__heading { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--fg); margin-bottom: 16px; letter-spacing: var(--tracking-display); }
@@ -440,6 +675,100 @@
   .pd-cats__tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .pd-cats__tag { display: inline-block; padding: 7px 14px; border: 1.5px solid var(--accent); border-radius: 7px; font-size: 0.85rem; font-weight: 500; color: var(--accent); text-decoration: none; transition: background 0.2s, color 0.2s; }
   .pd-cats__tag:hover { background: var(--accent); color: #fff; }
+
+  /* ── Accordion ── */
+  .pd-accordion { border-top: 1px solid var(--border); margin-top: var(--space-2); }
+  .pd-accordion__item { border-bottom: 1px solid var(--border); }
+  .pd-accordion__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: var(--space-4) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--fg);
+    text-align: left;
+    gap: var(--space-3);
+  }
+  .pd-accordion__trigger:hover { color: var(--accent); }
+  .pd-accordion__chevron {
+    flex-shrink: 0;
+    color: var(--fg-2);
+    transition: transform 0.25s var(--ease-standard);
+  }
+  .pd-accordion__trigger[aria-expanded="true"] .pd-accordion__chevron {
+    transform: rotate(180deg);
+  }
+  .pd-accordion__panel { overflow: hidden; }
+  .pd-accordion__body {
+    padding-bottom: var(--space-5);
+    font-size: var(--text-sm);
+    color: var(--fg-2);
+    line-height: var(--leading-body);
+  }
+  .pd-accordion__body p { margin-bottom: var(--space-3); }
+  .pd-accordion__body p:last-child { margin-bottom: 0; }
+
+  /* ── Payment icons + Guarantee ── */
+  .pd-payment { display: flex; flex-direction: column; gap: var(--space-2); align-items: center; }
+  .pd-payment__icons {
+    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+  }
+  .pd-payment__icon {
+    height: 28px; width: auto; min-width: 44px;
+    border: 1px solid var(--border); border-radius: 5px;
+    background: #fff; display: block;
+  }
+  .pd-guarantee {
+    display: flex; align-items: center; gap: 7px;
+    font-size: var(--text-sm); font-weight: 600; color: var(--accent);
+  }
+
+  /* ── Trust badges ── */
+  .pd-trust {
+    display: flex; justify-content: center;
+    gap: var(--space-6); flex-wrap: wrap;
+    padding: var(--space-5) 0 var(--space-2);
+    border-top: 1px solid var(--border);
+  }
+  .pd-trust__item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .pd-trust__icon { color: var(--accent); }
+  .pd-trust__label { font-size: 0.72rem; font-weight: 600; color: var(--fg-2); line-height: 1.3; max-width: 80px; }
+
+  /* ── Gallery arrows ── */
+  .product-gallery__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  .product-gallery__arrow:hover {
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    transform: translateY(-50%) scale(1.08);
+  }
+  .product-gallery__arrow--prev { left: var(--space-3); }
+  .product-gallery__arrow--next { right: var(--space-3); }
+
+  /* Left column extra spacing for moved blocks */
+  .product-layout__media .pd-why { margin-top: var(--space-6); }
+  .product-layout__media .pd-cats { margin-top: var(--space-4); }
 
   /* ── Description band ── */
   .product-desc-band { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border); }
@@ -517,6 +846,73 @@
   .atc-toast__close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.6); padding: 2px; margin-left: var(--space-1); display: flex; align-items: center; border-radius: 50%; transition: color 0.15s; }
   .atc-toast__close:hover { color: #fff; }
 
+  /* ── Inline Review Carousel ── */
+  .pd-review-carousel {
+    position: relative;
+    margin-top: var(--space-4);
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+  .pd-review-carousel__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pd-review-carousel__track::-webkit-scrollbar { display: none; }
+  .pd-review-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    background: var(--fg);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 110px;
+    box-sizing: border-box;
+  }
+  .pd-review-card__text {
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: rgba(255,255,255,0.92);
+    flex: 1;
+  }
+  .pd-review-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .pd-review-card__stars { display: flex; align-items: center; gap: 2px; }
+  .pd-review-card__name {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    white-space: nowrap;
+  }
+  .pd-review-carousel__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: background 0.15s;
+  }
+  .pd-review-carousel__arrow:hover { background: rgba(255,255,255,0.28); }
+  .pd-review-carousel__arrow--prev { left: 10px; }
+  .pd-review-carousel__arrow--next { right: 10px; }
+
   /* ── Recently Viewed ── */
   .recently-viewed { margin-top: var(--space-16); padding-top: var(--space-12); border-top: 1px solid var(--border); }
   .recently-viewed[hidden] { display: none; }
@@ -535,11 +931,98 @@
     .product-pairs__grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 767px) {
-    .product-layout { grid-template-columns: 1fr; gap: var(--space-5); }
+    .product-layout { grid-template-columns: 1fr; gap: 0; }
     .pd-certs__grid { grid-template-columns: repeat(3, 1fr); }
     .product-pairs__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
-    .product-media { max-width: 45vh; }
-    .product-thumbnails { max-width: 45vh; margin-inline: auto; }
+    .product-media { max-width: 100%; }
+    .product-thumbnails { max-width: 100%; margin-inline: auto; }
+    /* Image not sticky on mobile */
+    .product-layout__media {
+      position: static;
+    }
+    .product-layout__details {
+      position: relative;
+      z-index: 1;
+      padding-top: var(--space-5);
+    }
+    /* Hide categories on mobile */
+    .pd-cats { display: none; }
+    /* Title + price not sticky on mobile */
+    .pd-sticky-header { position: static; background: none; }
+    /* Bigger title + price on mobile */
+    .product-name { font-size: 2rem; line-height: 1.15; }
+    .price-block__regular,
+    .price-block__sale { font-size: 2rem; }
+  }
+
+  /* ── Sticky ATC bar ── */
+  .sticky-atc {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.10);
+    transform: translateY(100%);
+    transition: transform 0.3s var(--ease-standard);
+    pointer-events: none;
+  }
+  .sticky-atc.is-visible {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .sticky-atc__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+  .sticky-atc__product {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+    flex: 1;
+  }
+  .sticky-atc__img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+  .sticky-atc__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .sticky-atc__title {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sticky-atc__price {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .sticky-atc__btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: var(--space-3) var(--space-6);
+  }
+  @media (max-width: 767px) {
+    .sticky-atc__title { font-size: var(--text-xs); }
+    .sticky-atc__btn { padding: var(--space-3) var(--space-4); font-size: var(--text-sm); }
   }
 </style>
 
@@ -603,12 +1086,13 @@
     if (variant.featured_image) {
       var mainImg = document.getElementById('product-featured-image');
       if (mainImg) {
-        var imgSrc = variant.featured_image.src.replace(/(\.[a-z]+)(\?.*)?$/, '_900x900$1');
-        mainImg.src = variant.featured_image.src;
+        var imgSrc = variant.featured_image.src;
+        mainImg.src = imgSrc;
+        mainImg.srcset = imgSrc;
         /* Highlight the matching thumbnail */
         var thumbs = document.querySelectorAll('.product-thumbnail');
         thumbs.forEach(function (t) { t.classList.remove('product-thumbnail--active'); });
-        var matchThumb = document.querySelector('.product-thumbnail[data-thumb-index="' + variant.featured_image.position + '"]');
+        var matchThumb = document.querySelector('.product-thumbnail[data-thumb-index="' + (variant.featured_image.position - 1) + '"]');
         if (!matchThumb && thumbs.length > 0) matchThumb = thumbs[0];
         if (matchThumb) matchThumb.classList.add('product-thumbnail--active');
       }
@@ -619,8 +1103,21 @@
     if (atcBtn) {
       atcBtn.disabled = !variant.available;
       atcBtn.classList.toggle('btn--disabled', !variant.available);
-      atcBtn.textContent = variant.available ? 'Add to Cart' : 'Sold Out';
+      if (variant.available) {
+        var priceSpan = document.getElementById('atc-btn-price');
+        if (priceSpan) {
+          priceSpan.textContent = formatMoney(variant.price);
+        } else {
+          atcBtn.innerHTML = 'Add to Cart — <span id="atc-btn-price">' + formatMoney(variant.price) + '</span>';
+        }
+      } else {
+        atcBtn.innerHTML = 'Sold Out';
+      }
     }
+
+    /* Sync sticky bar price + image */
+    if (window.__stickyAtcUpdatePrice) window.__stickyAtcUpdatePrice(formatMoney(variant.price));
+    if (window.__stickyAtcUpdateImg && variant.featured_image) window.__stickyAtcUpdateImg(variant.featured_image.src);
 
     /* Variant card/pill states */
     document.querySelectorAll('.variant-card').forEach(function (card) {
@@ -653,7 +1150,23 @@
       thumb.classList.add('product-thumbnail--active');
       var src = thumb.dataset.imageSrc;
       var mainImg = document.getElementById('product-featured-image');
-      if (src && mainImg) mainImg.src = src;
+      if (src && mainImg) {
+        mainImg.src = src;
+        mainImg.srcset = src;
+      }
+      /* If this image belongs to a variant, switch to that variant (updates price, ATC, URL) */
+      var thumbIdx = parseInt(thumb.dataset.thumbIndex, 10);
+      var matchedVariant = variantData.find(function (v) {
+        return v.featured_image && (v.featured_image.position - 1) === thumbIdx;
+      });
+      if (matchedVariant) {
+        productOpts.forEach(function (name, i) {
+          var val = matchedVariant['option' + (i + 1)];
+          var inp = document.querySelector('.variant-selector input[name="options[' + name + ']"][value="' + val + '"]');
+          if (inp && !inp.checked) inp.checked = true;
+        });
+        updateVariantUI(matchedVariant);
+      }
     });
   });
 
@@ -697,8 +1210,8 @@
     productForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var atcBtn = document.getElementById('product-atc-btn');
-      var origText = atcBtn ? atcBtn.textContent : 'Add to Cart';
-      if (atcBtn) { atcBtn.disabled = true; atcBtn.textContent = 'Adding…'; }
+      var origHTML = atcBtn ? atcBtn.innerHTML : 'Add to Cart';
+      if (atcBtn) { atcBtn.disabled = true; atcBtn.innerHTML = 'Adding…'; }
 
       fetch('/cart/add.js', {
         method: 'POST',
@@ -722,7 +1235,7 @@
           if (atcBtn) {
             setTimeout(function () {
               atcBtn.disabled = false;
-              atcBtn.textContent = origText;
+              atcBtn.innerHTML = origHTML;
             }, 1200);
           }
         });
@@ -845,6 +1358,113 @@
         rvGrid.appendChild(article);
       });
     } catch(e) {}
+  })();
+
+  /* ── Gallery arrows ── */
+  (function () {
+    var allImages = document.querySelectorAll('.product-thumbnail');
+    if (!allImages.length) return;
+    var currentIdx = 0;
+    var mainImg = document.getElementById('product-featured-image');
+
+    function goToIndex(idx) {
+      var count = allImages.length;
+      currentIdx = (idx + count) % count;
+      var thumb = allImages[currentIdx];
+      if (!thumb || !mainImg) return;
+      var src = thumb.dataset.imageSrc;
+      mainImg.src = src;
+      mainImg.srcset = src;
+      allImages.forEach(function (t) { t.classList.remove('product-thumbnail--active'); });
+      thumb.classList.add('product-thumbnail--active');
+    }
+
+    allImages.forEach(function (thumb) {
+      thumb.addEventListener('click', function () {
+        currentIdx = parseInt(thumb.dataset.thumbIndex, 10) || 0;
+      });
+    });
+
+    var prevBtn = document.getElementById('gallery-prev');
+    var nextBtn = document.getElementById('gallery-next');
+    if (prevBtn) prevBtn.addEventListener('click', function () { goToIndex(currentIdx - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { goToIndex(currentIdx + 1); });
+  })();
+
+  /* ── Inline Review Carousel ── */
+  (function () {
+    var track = document.getElementById('pd-review-track-{{ section.id }}');
+    if (!track) return;
+    var prev = document.getElementById('pd-review-prev-{{ section.id }}');
+    var next = document.getElementById('pd-review-next-{{ section.id }}');
+    var cards = track.querySelectorAll('.pd-review-card');
+    if (!cards.length) return;
+    var current = 0;
+
+    function goTo(idx) {
+      current = (idx + cards.length) % cards.length;
+      track.scrollTo({ left: track.clientWidth * current, behavior: 'smooth' });
+    }
+
+    if (prev) prev.addEventListener('click', function () { goTo(current - 1); });
+    if (next) next.addEventListener('click', function () { goTo(current + 1); });
+
+    /* Touch swipe */
+    var touchStartX = 0;
+    track.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+      var diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    /* Auto-advance every 5s */
+    setInterval(function () { goTo(current + 1); }, 5000);
+  })();
+
+  /* ── Accordion ── */
+  document.querySelectorAll('.pd-accordion__trigger').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (panel) panel.hidden = expanded;
+    });
+  });
+
+  /* ── Sticky ATC bar ── */
+  (function () {
+    var stickyBar   = document.getElementById('sticky-atc');
+    var mainAtcBtn  = document.getElementById('product-atc-btn');
+    var stickyBtn   = document.getElementById('sticky-atc-btn');
+    var stickyPrice = document.getElementById('sticky-atc-price');
+    var stickyImg   = document.getElementById('sticky-atc-img');
+    if (!stickyBar || !mainAtcBtn) return;
+
+    /* Show/hide bar when main ATC button leaves viewport */
+    var observer = new IntersectionObserver(function (entries) {
+      var visible = entries[0].isIntersecting;
+      stickyBar.classList.toggle('is-visible', !visible);
+      stickyBar.setAttribute('aria-hidden', String(visible));
+    }, { threshold: 0 });
+    observer.observe(mainAtcBtn);
+
+    /* Sticky button submits the product form */
+    if (stickyBtn) {
+      stickyBtn.addEventListener('click', function () {
+        var form = document.getElementById('product-form');
+        if (form) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      });
+    }
+
+    /* Keep sticky price in sync with variant changes */
+    window.__stickyAtcUpdatePrice = function (price) {
+      if (stickyPrice) stickyPrice.textContent = price;
+    };
+
+    /* Keep sticky image in sync with variant image changes */
+    window.__stickyAtcUpdateImg = function (src) {
+      if (stickyImg && src) { stickyImg.src = src; }
+    };
   })();
 })();
 </script>

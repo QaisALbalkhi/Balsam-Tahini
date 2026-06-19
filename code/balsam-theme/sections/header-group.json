@@ -16,9 +16,9 @@
       "settings": {
         "enabled": true,
         "dismissible": true,
-        "text": "Free shipping on orders over $100 · Made with love in Canada",
+        "text": "Free shipping on orders over $60 · Made with love in Canada",
         "link_text": "Shop now →",
-        "link_url": ""
+        "link_url": "shopify://collections/all"
       }
     },
     "header": {

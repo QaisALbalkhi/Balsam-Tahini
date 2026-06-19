@@ -1,0 +1,10 @@
+# Large binary / packaging files
+labels.zip
+labels/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
