@@ -1032,17 +1032,6 @@
   .pd-review-carousel__arrow--prev { left: 10px; }
   .pd-review-carousel__arrow--next { right: 10px; }
 
-  /* ── Recently Viewed ── */
-  .recently-viewed { margin-top: var(--space-16); padding-top: var(--space-12); border-top: 1px solid var(--border); }
-  .recently-viewed[hidden] { display: none; }
-  .rv-pdp-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-6);
-  }
-  @media (max-width: 959px) { .rv-pdp-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 479px) { .rv-pdp-grid { grid-template-columns: 1fr; } }
-
   /* ── Responsive ── */
   @media (max-width: 959px) {
     .product-desc-band--split { grid-template-columns: 1fr; gap: 32px; }
@@ -1458,69 +1447,6 @@
       });
       if (stored.length > MAX) stored = stored.slice(0, MAX);
       localStorage.setItem(KEY, JSON.stringify(stored));
-    } catch(e) {}
-  })();
-
-  /* ── Recently Viewed — render on page ── */
-  (function () {
-    var KEY = 'balsam-recently-viewed';
-    var rvWrap = document.getElementById('recently-viewed');
-    var rvGrid = document.getElementById('recently-viewed-grid');
-    if (!rvWrap || !rvGrid) return;
-
-    function fmt(cents) { return '$' + (cents / 100).toFixed(2).replace(/\.00$/, ''); }
-    function esc(str) { return (str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    function buildCard(p) {
-      var url      = p.url || ('/products/' + p.handle);
-      var price    = typeof p.price === 'number' ? fmt(p.price) : '';
-      var variants = Array.isArray(p.variants) && p.variants.length ? p.variants : [];
-      var isMulti  = variants.length > 1;
-      var badge    = (p.compare_at && p.compare_at > p.price)
-        ? '<span class="pc-badge pc-badge--sale">Save ' + Math.round((1 - p.price / p.compare_at) * 100) + '%</span>' : '';
-      var desc     = p.description ? '<p class="product-card__desc">' + esc(p.description) + '</p>' : '';
-      var wlBtn    = '<button class="product-card__wishlist" type="button" aria-label="Add to wishlist" aria-pressed="false"'
-        + ' data-product-id="' + esc(String(p.id || '')) + '"'
-        + ' data-product-handle="' + esc(p.handle || '') + '"'
-        + ' data-product-title="' + esc(p.title || '') + '"'
-        + ' data-product-price="' + (p.price || 0) + '"'
-        + ' data-product-image="' + esc(p.image || '') + '"'
-        + ' data-product-url="' + esc(url) + '">'
-        + '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-        + '</button>';
-      var atcBtn   = '<button class="pc-add-btn' + (isMulti ? '' : ' pc-add-btn--single') + '" type="button" aria-expanded="false" data-default-price="' + price + '">'
-        + '<span class="pc-add-btn__inner"><span class="pc-add-btn__verb">ADD</span><span class="pc-add-btn__sep" aria-hidden="true"> — </span><span class="pc-add-btn__price">' + price + '</span></span>'
-        + (isMulti ? '<span class="pc-add-btn__chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>' : '')
-        + '</button>';
-      return '<a href="' + url + '" class="product-card__image-link" tabindex="-1" aria-hidden="true">'
-          + '<div class="product-card__image-wrap">'
-            + (p.image ? '<img src="' + p.image + '" alt="' + esc(p.title || '') + '" loading="lazy" class="product-card__img" width="600" height="600">' : '')
-            + wlBtn
-          + '</div></a>'
-        + '<div class="product-card__body">'
-          + '<a href="' + url + '" class="product-card__name">' + esc(p.title || '') + '</a>'
-          + badge + desc
-          + '<div class="pc-add">'
-            + '<script type="application/json" class="pc-variants-json">' + JSON.stringify(variants) + '<\/script>'
-            + atcBtn
-            + '<div class="pc-variant-panel" hidden></div>'
-          + '</div>'
-        + '</div>';
-    }
-
-    try {
-      var stored = JSON.parse(localStorage.getItem(KEY) || '[]');
-      var others = stored.filter(function (p) { return p.handle !== productHandle; });
-      if (others.length === 0) return;
-      rvWrap.hidden = false;
-      others.slice(0, 4).forEach(function (p) {
-        var article = document.createElement('article');
-        article.className = 'product-card';
-        article.setAttribute('aria-label', p.title || '');
-        article.setAttribute('role', 'listitem');
-        article.innerHTML = buildCard(p);
-        rvGrid.appendChild(article);
-      });
     } catch(e) {}
   })();
 
