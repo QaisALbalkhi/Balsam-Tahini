@@ -1,0 +1,18 @@
+{% doc %}
+  Renders one collapsible white row for the product-faq accordion.
+  @param {string} question - The question text
+  @param {string} answer - The answer text
+  @param {number} index - A unique index for this row (used for the DOM id)
+  @example
+  {% render 'faq-row', question: 'Is it vegan?', answer: 'Yes.', index: 1 %}
+{% enddoc %}
+
+<div class="faq-row" data-open="false">
+  <button type="button" class="faq-row__btn" aria-expanded="false" aria-controls="faq-panel-{{ index }}">
+    <span>{{ question }}</span>
+    <svg class="faq-row__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <div class="faq-row__panel" id="faq-panel-{{ index }}">
+    <div class="faq-row__panel-inner">{{ answer }}</div>
+  </div>
+</div>

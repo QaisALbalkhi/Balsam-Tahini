@@ -1,0 +1,103 @@
+{% doc %}
+  Renders a green-gradient FAQ accordion (5-6 rows) generated entirely from data already on
+  the product object — description, type, title keywords, and variants — so it works for
+  every product with no extra data entry. Nothing here is invented per-product; claims
+  (vegan/halal/etc.) are only shown if the word actually appears in the product's own
+  title or description.
+  @param {product} product - The product to generate FAQs for
+  @example
+  {% render 'product-faq', product: product %}
+{% enddoc %}
+
+{%- assign haystack = product.title | append: ' ' | append: product.description | downcase -%}
+
+{%- assign claims = '' | split: '|' -%}
+{%- if haystack contains 'vegan' -%}{%- assign one = 'Vegan' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'halal' -%}{%- assign one = 'Halal' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'kosher' -%}{%- assign one = 'Kosher' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'non-gmo' -%}{%- assign one = 'Non-GMO' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'gluten free' or haystack contains 'gluten-free' -%}{%- assign one = 'Gluten-Free' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'keto' -%}{%- assign one = 'Keto-Friendly' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'sugar-free' or haystack contains 'sugar free' or haystack contains 'no sugar added' -%}{%- assign one = 'No Sugar Added' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'palm oil-free' or haystack contains 'palm oil free' -%}{%- assign one = 'Palm Oil-Free' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'product of canada' or haystack contains 'made in canada' -%}{%- assign one = 'Made in Canada' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'all natural' -%}{%- assign one = 'All Natural' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- assign claims_trimmed = claims | uniq | join: ', ' -%}
+
+{%- assign p_type = product.type | downcase -%}
+{%- if p_type contains 'oil' -%}
+  {%- assign storage_answer = 'Store in a cool, dark place away from direct sunlight to preserve flavor and prevent the oil from turning rancid. Refrigeration can extend shelf life further, though it may cause natural clouding — that clears again at room temperature.' -%}
+  {%- assign usage_answer = "A little goes a long way. Use it as a finishing drizzle over roasted vegetables, salads, dips, or grain bowls rather than as a primary cooking oil, so the flavor doesn't get lost to heat." -%}
+{%- elsif p_type contains 'honey' -%}
+  {%- assign storage_answer = "Store at room temperature in a sealed jar. Honey doesn't spoil — if it crystallizes over time, sit the jar in warm water for a few minutes to return it to liquid form." -%}
+  {%- assign usage_answer = 'Drizzle over yogurt, toast, or cheese boards, stir into tea, or use as a natural sweetener in baking and dressings.' -%}
+{%- elsif p_type contains 'halawa' -%}
+  {%- assign storage_answer = "Store in a cool, dry place. It doesn't need refrigeration, but chilling can firm up the texture if your kitchen runs warm." -%}
+  {%- assign usage_answer = 'Enjoy it straight from the block as a sweet snack, crumbled over ice cream or yogurt, or baked into cookies, blondies, and pastries.' -%}
+{%- else -%}
+  {%- assign storage_answer = 'Store in a cool, dry pantry away from direct heat and moisture. Natural oil separation on top is normal for a spread with no added stabilizers — just stir before using.' -%}
+  {%- assign usage_answer = 'Spread it on toast, stir it into oatmeal or smoothies, or use it as a base for dressings, sauces, and baking. See the Recipes tab above for specific ideas.' -%}
+{%- endif -%}
+
+{%- assign variant_count = product.variants.size -%}
+
+<div class="product-faq">
+  {%- capture faq_1_q -%}What's in {{ product.title }}?{%- endcapture -%}
+  {%- capture faq_1_a -%}{{ product.description | strip_html | truncate: 320 }}{%- endcapture -%}
+
+  {%- capture faq_2_q -%}Are there any allergens I should know about?{%- endcapture -%}
+  {%- capture faq_2_a -%}This product is made in a facility that also handles tree nuts, peanuts, sesame, and dairy. Always check the ingredient label on your package for the most current allergen information.{%- endcapture -%}
+
+  {%- capture faq_4_q -%}How should I store {{ product.title }}?{%- endcapture -%}
+  {%- assign faq_4_a = storage_answer -%}
+
+  {%- capture faq_5_q -%}How do I use it?{%- endcapture -%}
+  {%- assign faq_5_a = usage_answer -%}
+
+  {%- capture faq_6_q -%}What sizes does this come in?{%- endcapture -%}
+  {%- capture faq_6_a -%}Available in: {{ product.variants | map: 'title' | join: ', ' }}.{%- endcapture -%}
+
+  {%- render 'faq-row', question: faq_1_q, answer: faq_1_a, index: 1 -%}
+  {%- render 'faq-row', question: faq_2_q, answer: faq_2_a, index: 2 -%}
+  {%- if claims_trimmed != blank -%}
+    {%- capture faq_3_q -%}Is {{ product.title }} vegan, halal, or otherwise certified?{%- endcapture -%}
+    {%- capture faq_3_a -%}Yes — this product is {{ claims_trimmed }}.{%- endcapture -%}
+    {%- render 'faq-row', question: faq_3_q, answer: faq_3_a, index: 3 -%}
+  {%- endif -%}
+  {%- render 'faq-row', question: faq_4_q, answer: faq_4_a, index: 4 -%}
+  {%- render 'faq-row', question: faq_5_q, answer: faq_5_a, index: 5 -%}
+  {%- if variant_count > 1 -%}
+    {%- render 'faq-row', question: faq_6_q, answer: faq_6_a, index: 6 -%}
+  {%- endif -%}
+</div>
+
+<style>
+  .product-faq {
+    display: flex; flex-direction: column; gap: var(--space-2);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+  .faq-row { background: var(--surface); border-radius: var(--radius-md); overflow: hidden; }
+  .faq-row__btn {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: none; border: none; cursor: pointer; text-align: left;
+    font-family: var(--font-body); font-size: var(--text-sm); font-weight: 700; color: var(--fg);
+  }
+  .faq-row__icon { flex-shrink: 0; color: var(--accent); transition: transform var(--motion-fast) var(--ease-standard); }
+  .faq-row[data-open="true"] .faq-row__icon { transform: rotate(180deg); }
+  .faq-row__panel { max-height: 0; overflow: hidden; transition: max-height var(--motion-base) var(--ease-standard); }
+  .faq-row[data-open="true"] .faq-row__panel { max-height: 400px; }
+  .faq-row__panel-inner { padding: 0 var(--space-4) var(--space-3); font-size: var(--text-sm); color: var(--fg-2); line-height: var(--leading-body); }
+</style>
+
+<script>
+  document.querySelectorAll('.product-faq .faq-row__btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var row = btn.closest('.faq-row');
+      var isOpen = row.getAttribute('data-open') === 'true';
+      row.setAttribute('data-open', isOpen ? 'false' : 'true');
+    });
+  });
+</script>

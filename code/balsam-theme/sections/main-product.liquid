@@ -343,6 +343,8 @@
                     {%- render 'nutrition-facts', product: product -%}
                   {%- elsif tab_title contains 'recip' -%}
                     {%- render 'product-recipes', product: product -%}
+                  {%- elsif tab_title == 'faq' -%}
+                    {%- render 'product-faq', product: product -%}
                   {%- else -%}
                     {{ block.settings.content }}
                   {%- endif -%}
