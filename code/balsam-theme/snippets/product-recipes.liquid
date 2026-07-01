@@ -1,7 +1,9 @@
 {% doc %}
-  Renders a grid of recipe cards from the "recipes" blog, filtered to only the articles
-  that link back to this product (matched by a "/products/{handle}" link inside the
-  article body). Renders nothing if no matching articles are found.
+  Renders a grid of recipe cards (image, category tag, title — not linked) from the
+  "recipes" blog, filtered to only the articles that mention this product (matched by
+  a "/products/{handle}" link inside the article body), plus a "View all recipes" link
+  that jumps down to the recipes-column-carousel section further down the product page.
+  Renders nothing if no matching articles are found.
   @param {product} product - The product to find recipes for
   @example
   {% render 'product-recipes', product: product %}
@@ -17,7 +19,7 @@
       {%- for recipe in recipes_blog.articles -%}
         {%- if recipe.content contains product_link -%}
           {%- assign match_count = match_count | plus: 1 -%}
-          <a href="{{ recipe.url }}" class="product-recipes__card">
+          <div class="product-recipes__card">
             <div class="product-recipes__img-wrap">
               {%- if recipe.image -%}
                 <img
@@ -39,9 +41,8 @@
             </div>
             <div class="product-recipes__body">
               <span class="product-recipes__title">{{ recipe.title }}</span>
-              <span class="product-recipes__cta">Read recipe &rarr;</span>
             </div>
-          </a>
+          </div>
         {%- endif -%}
       {%- endfor -%}
     {%- endpaginate -%}
@@ -51,17 +52,44 @@
 {%- if match_count > 0 -%}
   <div class="product-recipes">{{ recipe_cards }}</div>
 
+  <a href="#" class="product-recipes__view-all" data-scroll-to-recipes>
+    View all recipes
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+  </a>
+
+  <script>
+    document.querySelectorAll('[data-scroll-to-recipes]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        var target = document.querySelector('.rcc');
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
   <style>
     .product-recipes { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
-    .product-recipes__card { display: block; text-decoration: none; color: inherit; border-radius: var(--radius-md); overflow: hidden; background: var(--surface); box-shadow: var(--elev-ring); transition: box-shadow var(--motion-fast) var(--ease-standard); }
-    .product-recipes__card:hover { box-shadow: var(--elev-raised); }
+    .product-recipes__card { display: block; border-radius: var(--radius-md); overflow: hidden; background: var(--surface); box-shadow: var(--elev-ring); }
     .product-recipes__img-wrap { position: relative; aspect-ratio: 4 / 3; background: var(--surface-warm); }
     .product-recipes__img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .product-recipes__img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); }
     .product-recipes__tag { position: absolute; top: 8px; left: 8px; background: var(--surface); color: var(--fg); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: var(--radius-pill); }
     .product-recipes__body { padding: var(--space-3); }
-    .product-recipes__title { display: block; font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--fg); line-height: 1.3; margin-bottom: 6px; }
-    .product-recipes__cta { display: block; font-size: 0.7rem; font-weight: 600; color: var(--accent); }
+    .product-recipes__title { display: block; font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--fg); line-height: 1.3; }
+
+    .product-recipes__view-all {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: var(--space-4);
+      font-size: var(--text-sm); font-weight: 700; color: var(--accent);
+      text-decoration: none;
+      padding: var(--space-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: background var(--motion-fast) var(--ease-standard);
+    }
+    .product-recipes__view-all:hover { background: var(--surface-warm); }
 
     @media (max-width: 480px) {
       .product-recipes { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
