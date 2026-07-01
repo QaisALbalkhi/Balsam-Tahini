@@ -98,17 +98,24 @@
           "type": "accordion",
           "settings": {
             "title": "Details",
-            "content": "<p>This product is make on</p>"
+            "content": "<p>This product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make on</p>"
           }
         },
         "accordion_T8hLPH": {
           "type": "accordion",
           "settings": {
             "title": "Nutrition",
-            "content": ""
+            "content": "<p>This product is make onThis product is make onThis product is make onThis product is make onThis product is make onThis product is make on</p>"
           }
         },
         "accordion_LA9tpp": {
+          "type": "accordion",
+          "settings": {
+            "title": "Recipes",
+            "content": ""
+          }
+        },
+        "accordion_RgVqeb": {
           "type": "accordion",
           "settings": {
             "title": "FAQ",
@@ -130,152 +137,115 @@
         "certification_TwLJHH",
         "accordion_4fPW6H",
         "accordion_T8hLPH",
-        "accordion_LA9tpp"
+        "accordion_LA9tpp",
+        "accordion_RgVqeb"
       ],
       "settings": {
         "why_heading": "Why Balsam?",
         "cert_heading": "Our Certifications",
-        "pairs_heading": "Pairs Well With",
-        "pairs_collection": "",
         "guarantee_text": "30 Day Satisfaction Guarantee"
       }
     },
-    "recently_viewed_7kyrHz": {
-      "type": "recently-viewed",
-      "name": "Recently Viewed",
-      "settings": {
-        "collection": "",
-        "eyebrow": "YOUR HISTORY",
-        "heading": "Recently Viewed",
-        "products_count": 8,
-        "bg": "canvas"
-      }
-    },
-    "google_reviews_KgRRnK": {
-      "type": "google-reviews",
+    "ingredient-cards": {
+      "type": "ingredient-cards",
       "blocks": {
-        "review_EAH7x4": {
-          "type": "review",
+        "ingredient_NEJgf4": {
+          "type": "ingredient",
           "settings": {
-            "reviewer_name": "Rahela Sachedina",
-            "initials": "HC",
-            "rating": 5,
-            "text": "Upon trying the pistachio spread with cardamom, I ended up buying four jars to take back with me. It was THAT heavenly.  Back in New York having breakfast on New Year’s Day with warm croissants and pistachio spread with cardamom from this lovely shop! Will definitely go back next time I’m up in Mississauga.",
-            "date": "Jan 2026"
+            "name": "Sesame Seeds",
+            "description": ""
           }
         },
-        "review_ecD9bU": {
-          "type": "review",
+        "ingredient_ApE948": {
+          "type": "ingredient",
           "settings": {
-            "reviewer_name": "RS",
-            "initials": "RS",
-            "rating": 5,
-            "text": "I went here with my best friend after visiting once before, and it blew me away again. Everything is made in-house, and you can truly taste the love and care in every bite.",
-            "date": "May 2025"
+            "name": "Sesame Seeds",
+            "description": ""
           }
         },
-        "review_x4XNUG": {
-          "type": "review",
+        "ingredient_EtTRaj": {
+          "type": "ingredient",
           "settings": {
-            "reviewer_name": "SAM",
-            "initials": "S",
-            "rating": 5,
-            "text": "First visit to BALSAM tahini shop..alot of fresh..natural ...delicious products...tahini..butter..oil...chocolat..etc..the most important that is all made in CANADA by a proffessional team and  management ..",
-            "date": "May 2025"
+            "name": "Sesame Seeds",
+            "description": ""
           }
         },
-        "review_anPVk9": {
-          "type": "review",
+        "ingredient_efrFLt": {
+          "type": "ingredient",
           "settings": {
-            "reviewer_name": "Sarah Scott",
-            "initials": "HC",
-            "rating": 5,
-            "text": "Great place. Lots of desserts and treats. Got fresh tahini, bottled right in front of me. Everything homemade, no extra sugar. Loved it. Nice small business and friendly staff.",
-            "date": "May 2025"
-          }
-        },
-        "review_JNtEd4": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "Aneesa Magsi",
-            "initials": "AM",
-            "rating": 5,
-            "text": "Best customer service with really tasty deserts and nut spreads. Quality of items purchased exceeded my expectations !!!!!",
-            "date": "May 2026"
-          }
-        },
-        "review_8jFan9": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "Samar Alsalem",
-            "initials": "SA",
-            "rating": 5,
-            "text": "I bought a large 18 kg bucket of tahini from this store. The first time it was amazing rich flavor and great quality.",
-            "date": "March 2026"
-          }
-        },
-        "review_eBWLGL": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "Rosalin Krieger",
-            "initials": "RK",
-            "rating": 5,
-            "text": "The chocolates are outstanding! I am looking forward to trying the pistachio pastes that we bought, on sale. Excellent customer service and I want to eagerly return.",
-            "date": "April 2026"
-          }
-        },
-        "review_xTRK7H": {
-          "type": "review",
-          "settings": {
-            "reviewer_name": "Lyndsay Sink",
-            "initials": "LS",
-            "rating": 5,
-            "text": "Wonderful owner- she was very kind and even offered us free samples to try ! Large selection of Arab treats, will be back again soon. Thank you!",
-            "date": "February 2026"
+            "name": "Sesame Seeds",
+            "description": ""
           }
         }
       },
       "block_order": [
-        "review_EAH7x4",
-        "review_ecD9bU",
-        "review_x4XNUG",
-        "review_anPVk9",
-        "review_JNtEd4",
-        "review_8jFan9",
-        "review_eBWLGL",
-        "review_xTRK7H"
+        "ingredient_NEJgf4",
+        "ingredient_ApE948",
+        "ingredient_EtTRaj",
+        "ingredient_efrFLt"
       ],
-      "name": "Google Reviews",
       "settings": {
-        "eyebrow": "CUSTOMER STORIES",
-        "heading": "What Our Customers Say",
-        "overall_rating": "4.8",
-        "review_count": "160+",
-        "place_url": "",
-        "bg": "cream"
-      }
-    },
-    "pairs-carousel": {
-      "type": "pairs-carousel",
-      "settings": {
-        "eyebrow": "GOES GREAT WITH",
-        "heading_italic": "Try it with",
-        "heading": "Pairs Well With",
-        "products_limit": 6,
-        "show_price": true
-      }
-    },
-    "recipes-carousel": {
-      "type": "recipes-carousel",
-      "settings": {
-        "blog": "recipes",
-        "eyebrow": "FROM OUR KITCHEN",
-        "heading": "Recipes Using This Product",
-        "articles_count": 6,
-        "show_tags": true,
-        "cta_label": "View all recipes",
-        "cta_url": "/blogs/recipes",
+        "eyebrow": "WHAT'S INSIDE",
+        "heading": "inside our <br><em>premium ingredients</em>",
+        "initial_count": 3,
+        "show_more_label": "Show more ingredients",
+        "show_less_label": "Show less",
         "bg": "canvas"
+      }
+    },
+    "scroll_story_FJDyQg": {
+      "type": "scroll-story",
+      "blocks": {
+        "row_wQRtmP": {
+          "type": "row",
+          "settings": {
+            "video_url": "",
+            "eyebrow": "",
+            "heading": "<em>Stone-ground</em> Tahini",
+            "badge": "",
+            "meta": "",
+            "body": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "row_n3mV3m": {
+          "type": "row",
+          "settings": {
+            "video_url": "",
+            "eyebrow": "STEP 01",
+            "heading": "<em>Stone-ground</em> Tahini",
+            "badge": "THE CLASSIC",
+            "meta": "COLD-PRESSED · SMALL BATCH",
+            "body": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "row_yf7aHM": {
+          "type": "row",
+          "settings": {
+            "video_url": "",
+            "eyebrow": "STEP 02",
+            "heading": "Pistachio <em>Spread</em>",
+            "badge": "THE BOLD ONE",
+            "meta": "ROASTED · STONE-GROUND",
+            "body": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "row_wQRtmP",
+        "row_n3mV3m",
+        "row_yf7aHM"
+      ],
+      "name": "Scroll Story",
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "bg": "white"
       }
     },
     "recipes-column-carousel": {
@@ -290,25 +260,173 @@
         "cta_label": "Read recipe →"
       }
     },
-    "ingredient-cards": {
-      "type": "ingredient-cards",
+    "google_reviews_KgRRnK": {
+      "type": "google-reviews",
+      "blocks": {
+        "review_F4E9qf": {
+          "type": "review",
+          "settings": {
+            "photo": "shopify://shop_images/04B6A65F-F01D-4A80-8B99-7292D5B95BC7.png",
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_7iBcY8": {
+          "type": "review",
+          "settings": {
+            "photo": "shopify://shop_images/Baslam_Store_Front.webp",
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_JLKTKz": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_p4Ttna": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_gPtG4H": {
+          "type": "review",
+          "settings": {
+            "photo": "shopify://shop_images/mint-chocolate-tahini-sugar-free-variant-43552674054198.png",
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality. Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality. Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_xnJLqd": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_EJJNGM": {
+          "type": "review",
+          "settings": {
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_94pJxT": {
+          "type": "review",
+          "settings": {
+            "photo": "shopify://shop_images/Prcoess-section-3.png",
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        },
+        "review_LQWhD9": {
+          "type": "review",
+          "settings": {
+            "photo": "shopify://shop_images/Prcoess-section-4.png",
+            "reviewer_name": "Happy Customer",
+            "initials": "HC",
+            "rating": 5,
+            "text": "Absolutely love this tahini! The flavour is incredible — rich, nutty, and so fresh. You can really taste the quality.",
+            "date": "May 2025"
+          }
+        }
+      },
+      "block_order": [
+        "review_F4E9qf",
+        "review_7iBcY8",
+        "review_JLKTKz",
+        "review_p4Ttna",
+        "review_gPtG4H",
+        "review_xnJLqd",
+        "review_EJJNGM",
+        "review_94pJxT",
+        "review_LQWhD9"
+      ],
+      "name": "Google Reviews",
       "settings": {
-        "eyebrow": "WHAT'S INSIDE",
-        "heading": "inside our <br><em>premium ingredients</em>",
-        "initial_count": 3,
-        "show_more_label": "Show more ingredients",
-        "show_less_label": "Show less",
-        "bg": "canvas"
+        "eyebrow": "CUSTOMER STORIES",
+        "heading": "What Our Customers Say",
+        "overall_rating": "4.8",
+        "review_count": "160+",
+        "place_url": "",
+        "bg": "cream"
+      }
+    },
+    "pairs-carousel": {
+      "type": "pairs-carousel",
+      "blocks": {
+        "pairs_product_9XXcLf": {
+          "type": "pairs_product",
+          "settings": {
+            "product": ""
+          }
+        },
+        "pairs_product_V7eCNt": {
+          "type": "pairs_product",
+          "settings": {
+            "product": "pine-oil"
+          }
+        }
+      },
+      "block_order": [
+        "pairs_product_9XXcLf",
+        "pairs_product_V7eCNt"
+      ],
+      "settings": {
+        "eyebrow": "GOES GREAT WITH",
+        "heading_italic": "Try it with",
+        "heading": "Pairs Well With",
+        "collection": "",
+        "products_limit": 6,
+        "show_price": true
+      }
+    },
+    "recently_viewed_pzAVTY": {
+      "type": "recently-viewed",
+      "settings": {
+        "collection": "",
+        "eyebrow": "YOUR HISTORY",
+        "heading": "Recently Viewed",
+        "products_count": 8,
+        "bg": "cream"
       }
     }
   },
   "order": [
     "main-product",
     "ingredient-cards",
-    "pairs-carousel",
-    "recently_viewed_7kyrHz",
+    "scroll_story_FJDyQg",
+    "recipes-column-carousel",
     "google_reviews_KgRRnK",
-    "recipes-carousel",
-    "recipes-column-carousel"
+    "pairs-carousel",
+    "recently_viewed_pzAVTY"
   ]
 }

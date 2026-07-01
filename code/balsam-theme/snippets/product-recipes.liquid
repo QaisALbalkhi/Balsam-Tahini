@@ -1,0 +1,71 @@
+{% doc %}
+  Renders a grid of recipe cards from the "recipes" blog, filtered to only the articles
+  that link back to this product (matched by a "/products/{handle}" link inside the
+  article body). Renders nothing if no matching articles are found.
+  @param {product} product - The product to find recipes for
+  @example
+  {% render 'product-recipes', product: product %}
+{% enddoc %}
+
+{%- assign recipes_blog = blogs['recipes'] -%}
+{%- assign product_link = '/products/' | append: product.handle | append: '"' -%}
+{%- assign match_count = 0 -%}
+
+{%- capture recipe_cards -%}
+  {%- if recipes_blog != blank -%}
+    {%- paginate recipes_blog.articles by 250 -%}
+      {%- for recipe in recipes_blog.articles -%}
+        {%- if recipe.content contains product_link -%}
+          {%- assign match_count = match_count | plus: 1 -%}
+          <a href="{{ recipe.url }}" class="product-recipes__card">
+            <div class="product-recipes__img-wrap">
+              {%- if recipe.image -%}
+                <img
+                  src="{{ recipe.image | image_url: width: 480 }}"
+                  srcset="{{ recipe.image | image_url: width: 240 }} 240w, {{ recipe.image | image_url: width: 480 }} 480w"
+                  alt="{{ recipe.image.alt | default: recipe.title | escape }}"
+                  width="240" height="180"
+                  loading="lazy"
+                  class="product-recipes__img"
+                >
+              {%- else -%}
+                <div class="product-recipes__img-placeholder" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h1v11"/><path d="M9 2v20"/><path d="M15 2s-2 3-2 6 2 4 2 4v10"/></svg>
+                </div>
+              {%- endif -%}
+              {%- if recipe.tags.size > 0 -%}
+                <span class="product-recipes__tag">{{ recipe.tags | first }}</span>
+              {%- endif -%}
+            </div>
+            <div class="product-recipes__body">
+              <span class="product-recipes__title">{{ recipe.title }}</span>
+              <span class="product-recipes__cta">Read recipe &rarr;</span>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if match_count > 0 -%}
+  <div class="product-recipes">{{ recipe_cards }}</div>
+
+  <style>
+    .product-recipes { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    .product-recipes__card { display: block; text-decoration: none; color: inherit; border-radius: var(--radius-md); overflow: hidden; background: var(--surface); box-shadow: var(--elev-ring); transition: box-shadow var(--motion-fast) var(--ease-standard); }
+    .product-recipes__card:hover { box-shadow: var(--elev-raised); }
+    .product-recipes__img-wrap { position: relative; aspect-ratio: 4 / 3; background: var(--surface-warm); }
+    .product-recipes__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-recipes__img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+    .product-recipes__tag { position: absolute; top: 8px; left: 8px; background: var(--surface); color: var(--fg); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: var(--radius-pill); }
+    .product-recipes__body { padding: var(--space-3); }
+    .product-recipes__title { display: block; font-family: var(--font-display); font-size: 0.9rem; font-weight: 700; color: var(--fg); line-height: 1.3; margin-bottom: 6px; }
+    .product-recipes__cta { display: block; font-size: 0.7rem; font-weight: 600; color: var(--accent); }
+
+    @media (max-width: 480px) {
+      .product-recipes { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+      .product-recipes__title { font-size: 0.8rem; }
+    }
+  </style>
+{%- endif -%}
