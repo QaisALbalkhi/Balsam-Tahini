@@ -412,7 +412,7 @@
     "recently_viewed_pzAVTY": {
       "type": "recently-viewed",
       "settings": {
-        "collection": "",
+        "collection": "popular-products",
         "eyebrow": "YOUR HISTORY",
         "heading": "Recently Viewed",
         "products_count": 8,
