@@ -1,0 +1,70 @@
+{% doc %}
+  Renders 3 checkmark bullet points for a product: two category-based craft/process
+  facts (verified against this store's actual product descriptions per product.type),
+  plus a third bullet listing any certifications actually found in the product's title
+  or description (via snippets/product-claims.liquid). Falls back to a generic honest
+  bullet when no certifications are detected, so every product always gets exactly 3.
+  @param {product} product - The product to generate bullets for
+  @example
+  {% render 'product-bullets', product: product %}
+{% enddoc %}
+
+{%- assign p_type = product.type | downcase -%}
+
+{%- if p_type contains 'oil' -%}
+  {%- assign b1_bold = 'Cold-pressed, never heated' -%}
+  {%- assign b1_body = 'extracted without heat or chemicals to preserve natural flavour and nutrients.' -%}
+  {%- assign b2_bold = 'Single-ingredient purity' -%}
+  {%- assign b2_body = 'just one pure oil — no blends, fillers, or refining agents.' -%}
+{%- elsif p_type contains 'honey' -%}
+  {%- assign b1_bold = '100% raw & organic' -%}
+  {%- assign b1_body = 'unfiltered to preserve natural enzymes and antioxidants.' -%}
+  {%- assign b2_bold = 'Nothing removed, nothing added' -%}
+  {%- assign b2_body = 'just pure honey, unprocessed the traditional way.' -%}
+{%- elsif p_type contains 'halawa' -%}
+  {%- assign b1_bold = 'Handcrafted the traditional way' -%}
+  {%- assign b1_body = 'made with stone-ground tahini and Halawa root, just like classic Levantine halawa.' -%}
+  {%- assign b2_bold = 'Small-batch texture & flavour' -%}
+  {%- assign b2_body = "combining sesame's nutty richness with a delicate, flaky texture." -%}
+{%- elsif p_type contains 'pistachio spread' -%}
+  {%- assign b1_bold = 'Stone-ground pistachios in every batch' -%}
+  {%- assign b1_body = 'made with real, premium pistachios for an intensely nutty flavour.' -%}
+  {%- assign b2_bold = 'Just a few clean ingredients' -%}
+  {%- assign b2_body = 'no artificial thickeners — only what it takes for great flavour and texture.' -%}
+{%- elsif p_type contains 'pure butter' -%}
+  {%- assign b1_bold = '100% dry-roasted, nothing else' -%}
+  {%- assign b1_body = 'just real nuts and seeds — no added oils, sugars, or emulsifiers.' -%}
+  {%- assign b2_bold = 'Stone-ground for a silky texture' -%}
+  {%- assign b2_body = 'slow-ground to unlock natural richness without any shortcuts.' -%}
+{%- elsif p_type contains 'sugar-free' -%}
+  {%- assign b1_bold = 'Formulated without added sugar' -%}
+  {%- assign b1_body = 'no glycemic-spiking sweeteners — just real flavour.' -%}
+  {%- assign b2_bold = 'Stone-ground tahini base' -%}
+  {%- assign b2_body = 'the same premium sesame foundation as our classic tahini.' -%}
+{%- elsif p_type contains 'tahini' -%}
+  {%- assign b1_bold = "Stone-ground from Ethiopia's Humera sesame" -%}
+  {%- assign b1_body = 'prized for its superior oil content and naturally rich flavour.' -%}
+  {%- assign b2_bold = 'Velvety-smooth, pourable texture' -%}
+  {%- assign b2_body = 'no separation, no gritty texture — just clean tahini.' -%}
+{%- else -%}
+  {%- assign b1_bold = 'Made from real, whole ingredients' -%}
+  {%- assign b1_body = 'no fillers, no shortcuts — just honest food.' -%}
+  {%- assign b2_bold = 'Sourced for quality' -%}
+  {%- assign b2_body = 'carefully selected to deliver consistent flavour and freshness in every batch.' -%}
+{%- endif -%}
+
+{%- capture claims_csv -%}{%- render 'product-claims', product: product -%}{%- endcapture -%}
+{%- assign claims_trimmed = claims_csv | strip | replace: ',', ', ' -%}
+{%- if claims_trimmed != blank -%}
+  {%- assign b3_bold = claims_trimmed -%}
+  {%- assign b3_body = "certified so you know exactly what you're getting." -%}
+{%- else -%}
+  {%- assign b3_bold = 'Made in small batches' -%}
+  {%- assign b3_body = 'for consistent quality and freshness in every jar.' -%}
+{%- endif -%}
+
+<ul class="pd-desc-bullets" role="list">
+  <li class="pd-desc-bullet"><span class="pd-desc-bullet__emoji" aria-hidden="true">✅</span><span class="pd-desc-bullet__text"><strong>{{ b1_bold }}</strong> {{ b1_body }}</span></li>
+  <li class="pd-desc-bullet"><span class="pd-desc-bullet__emoji" aria-hidden="true">✅</span><span class="pd-desc-bullet__text"><strong>{{ b2_bold }}</strong> {{ b2_body }}</span></li>
+  <li class="pd-desc-bullet"><span class="pd-desc-bullet__emoji" aria-hidden="true">✅</span><span class="pd-desc-bullet__text"><strong>{{ b3_bold }}</strong> {{ b3_body }}</span></li>
+</ul>

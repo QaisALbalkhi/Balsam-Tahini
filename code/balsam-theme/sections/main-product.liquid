@@ -172,27 +172,8 @@
         <hr class="divider">
 
         <!-- Description bullets -->
-        {%- assign desc_bullet_blocks = section.blocks | where: 'type', 'desc_bullet' -%}
-        {%- if desc_bullet_blocks.size > 0 -%}
-          <ul class="pd-desc-bullets" role="list">
-            {%- for block in desc_bullet_blocks -%}
-              <li class="pd-desc-bullet" {{ block.shopify_attributes }}>
-                {%- if block.settings.emoji != blank -%}
-                  <span class="pd-desc-bullet__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>
-                {%- endif -%}
-                <span class="pd-desc-bullet__text">
-                  {%- if block.settings.bold_text != blank -%}
-                    <strong>{{ block.settings.bold_text }}</strong>
-                  {%- endif -%}
-                  {%- if block.settings.body_text != blank -%}
-                    {{ block.settings.body_text }}
-                  {%- endif -%}
-                </span>
-              </li>
-            {%- endfor -%}
-          </ul>
-          <hr class="divider">
-        {%- endif -%}
+        {%- render 'product-bullets', product: product -%}
+        <hr class="divider">
 
         <!-- Variant selector -->
         {%- unless product.has_only_default_variant -%}
@@ -356,6 +337,10 @@
 
         <!-- Trust badges -->
         {%- assign product_badges = product.metafields.nutrition.badges.value -%}
+        {%- if product_badges == blank -%}
+          {%- capture product_badges_csv -%}{%- render 'product-claims', product: product -%}{%- endcapture -%}
+          {%- assign product_badges = product_badges_csv | strip | split: ',' -%}
+        {%- endif -%}
         {%- assign trust_blocks = section.blocks | where: 'type', 'trust_badge' -%}
         {%- if product_badges != blank -%}
           <div class="pd-trust">

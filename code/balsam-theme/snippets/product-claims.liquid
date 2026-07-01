@@ -1,0 +1,29 @@
+{% doc %}
+  Scans product.title and product.description for known certification/diet keywords
+  and outputs them as a comma-separated list (e.g. "Halal,Kosher,Non-GMO"). A claim is
+  only included if the word actually appears in the product's own title or description —
+  nothing here is invented. Outputs nothing if no keywords match.
+
+  Intended to be captured by the caller, e.g.:
+  {%- capture claims_csv -%}{%- render 'product-claims', product: product -%}{%- endcapture -%}
+  {%- assign claims = claims_csv | strip | split: ',' -%}
+
+  @param {product} product - The product to scan
+  @example
+  {%- render 'product-claims', product: product -%}
+{% enddoc %}
+
+{%- assign haystack = product.title | append: ' ' | append: product.description | downcase -%}
+{%- assign claims = '' | split: '|' -%}
+{%- if haystack contains 'vegan' -%}{%- assign one = 'Vegan' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'halal' -%}{%- assign one = 'Halal' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'kosher' -%}{%- assign one = 'Kosher' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'non-gmo' -%}{%- assign one = 'Non-GMO' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'gluten free' or haystack contains 'gluten-free' -%}{%- assign one = 'Gluten Free' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'keto' -%}{%- assign one = 'Keto Diet' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'sugar-free' or haystack contains 'sugar free' or haystack contains 'no sugar added' -%}{%- assign one = 'No Sugar Added' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'palm oil-free' or haystack contains 'palm oil free' -%}{%- assign one = 'Palm Oil Free' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'product of canada' -%}{%- assign one = 'Product of Canada' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- elsif haystack contains 'made in canada' -%}{%- assign one = 'Made in Canada' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- if haystack contains 'all natural' -%}{%- assign one = 'All Natural' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
+{%- assign claims = claims | uniq -%}
+{{ claims | join: ',' }}

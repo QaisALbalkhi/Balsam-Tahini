@@ -9,20 +9,8 @@
   {% render 'product-faq', product: product %}
 {% enddoc %}
 
-{%- assign haystack = product.title | append: ' ' | append: product.description | downcase -%}
-
-{%- assign claims = '' | split: '|' -%}
-{%- if haystack contains 'vegan' -%}{%- assign one = 'Vegan' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'halal' -%}{%- assign one = 'Halal' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'kosher' -%}{%- assign one = 'Kosher' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'non-gmo' -%}{%- assign one = 'Non-GMO' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'gluten free' or haystack contains 'gluten-free' -%}{%- assign one = 'Gluten-Free' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'keto' -%}{%- assign one = 'Keto-Friendly' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'sugar-free' or haystack contains 'sugar free' or haystack contains 'no sugar added' -%}{%- assign one = 'No Sugar Added' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'palm oil-free' or haystack contains 'palm oil free' -%}{%- assign one = 'Palm Oil-Free' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'product of canada' or haystack contains 'made in canada' -%}{%- assign one = 'Made in Canada' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- if haystack contains 'all natural' -%}{%- assign one = 'All Natural' | split: '|' -%}{%- assign claims = claims | concat: one -%}{%- endif -%}
-{%- assign claims_trimmed = claims | uniq | join: ', ' -%}
+{%- capture claims_csv -%}{%- render 'product-claims', product: product -%}{%- endcapture -%}
+{%- assign claims_trimmed = claims_csv | strip | replace: ',', ', ' -%}
 
 {%- assign p_type = product.type | downcase -%}
 {%- if p_type contains 'oil' -%}
