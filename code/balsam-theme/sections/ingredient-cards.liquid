@@ -170,65 +170,103 @@
     </div>
 
     <!-- Cards grid -->
-    {%- if section.blocks.size > 0 -%}
+    {%- assign product_ingredient_keys = product.metafields.nutrition.ingredient_cards.value -%}
+    {%- assign use_dynamic = false -%}
+    {%- if product_ingredient_keys != blank and product_ingredient_keys.size > 0 -%}
+      {%- assign use_dynamic = true -%}
+    {%- endif -%}
+
+    {%- if use_dynamic or section.blocks.size > 0 -%}
       {%- assign visible_count = section.settings.initial_count | default: 3 -%}
       <div class="ing-grid" id="ing-grid-{{ section.id }}">
-        {%- for block in section.blocks -%}
-          <div
-            class="ing-card{% if forloop.index > visible_count %} ing-card--hidden{% endif %}"
-            id="ing-card-{{ block.id }}"
-            {{ block.shopify_attributes }}
-          >
-            <!-- Image -->
-            <div class="ing-card__img-wrap">
-              {%- if block.settings.image != blank -%}
-                <img
-                  src="{{ block.settings.image | image_url: width: 600 }}"
-                  srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w"
-                  alt="{{ block.settings.name | escape }}"
-                  width="600" height="600"
-                  loading="lazy"
-                  class="ing-card__img"
-                >
-              {%- else -%}
-                <div class="ing-card__img-placeholder">🌿</div>
-              {%- endif -%}
+        {%- if use_dynamic -%}
+          {%- for key in product_ingredient_keys -%}
+            {%- capture ing_lookup -%}{%- render 'ingredient-image', key: key -%}{%- endcapture -%}
+            {%- assign ing_parts = ing_lookup | strip | split: '|' -%}
+            {%- assign ing_name = ing_parts[0] -%}
+            {%- assign ing_image = ing_parts[1] -%}
+            <div
+              class="ing-card{% if forloop.index > visible_count %} ing-card--hidden{% endif %}"
+              id="ing-card-{{ section.id }}-{{ forloop.index }}"
+            >
+              <div class="ing-card__img-wrap">
+                {%- if ing_image != blank -%}
+                  <img
+                    src="{{ ing_image }}"
+                    alt="{{ ing_name | escape }}"
+                    width="600" height="600"
+                    loading="lazy"
+                    class="ing-card__img"
+                  >
+                {%- else -%}
+                  <div class="ing-card__img-placeholder">🌿</div>
+                {%- endif -%}
+              </div>
+              <div class="ing-card__body">
+                <h3 class="ing-card__name">{{ ing_name }}</h3>
+              </div>
             </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            <div
+              class="ing-card{% if forloop.index > visible_count %} ing-card--hidden{% endif %}"
+              id="ing-card-{{ block.id }}"
+              {{ block.shopify_attributes }}
+            >
+              <!-- Image -->
+              <div class="ing-card__img-wrap">
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 600 }}"
+                    srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w"
+                    alt="{{ block.settings.name | escape }}"
+                    width="600" height="600"
+                    loading="lazy"
+                    class="ing-card__img"
+                  >
+                {%- else -%}
+                  <div class="ing-card__img-placeholder">🌿</div>
+                {%- endif -%}
+              </div>
 
-            <!-- Content -->
-            <div class="ing-card__body">
-              {%- if block.settings.name != blank -%}
-                <h3 class="ing-card__name">{{ block.settings.name }}</h3>
-              {%- endif -%}
+              <!-- Content -->
+              <div class="ing-card__body">
+                {%- if block.settings.name != blank -%}
+                  <h3 class="ing-card__name">{{ block.settings.name }}</h3>
+                {%- endif -%}
 
-              {%- if block.settings.description != blank -%}
-                <div class="ing-card__desc" id="ing-desc-{{ block.id }}">
-                  {{ block.settings.description }}
-                </div>
-                <button
-                  class="ing-card__toggle"
-                  type="button"
-                  aria-expanded="false"
-                  aria-controls="ing-desc-{{ block.id }}"
-                  aria-label="More info about {{ block.settings.name | escape }}"
-                >
-                  <!-- Plus icon -->
-                  <svg class="icon-plus" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M13.4 11.4v-5a1 1 0 0 0-2 0v5h-5a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 1 0 0-2h-5Z" fill="#fff"/>
-                  </svg>
-                  <!-- Minus icon -->
-                  <svg class="icon-minus" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M5 12h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-              {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <div class="ing-card__desc" id="ing-desc-{{ block.id }}">
+                    {{ block.settings.description }}
+                  </div>
+                  <button
+                    class="ing-card__toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="ing-desc-{{ block.id }}"
+                    aria-label="More info about {{ block.settings.name | escape }}"
+                  >
+                    <!-- Plus icon -->
+                    <svg class="icon-plus" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M13.4 11.4v-5a1 1 0 0 0-2 0v5h-5a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 1 0 0-2h-5Z" fill="#fff"/>
+                    </svg>
+                    <!-- Minus icon -->
+                    <svg class="icon-minus" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 12h14" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                {%- endif -%}
+              </div>
             </div>
-          </div>
-        {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
 
-      <!-- Show more / less (only if blocks exceed initial_count) -->
-      {%- if section.blocks.size > visible_count -%}
+      <!-- Show more / less (only if cards exceed initial_count) -->
+      {%- assign total_cards = section.blocks.size -%}
+      {%- if use_dynamic -%}{%- assign total_cards = product_ingredient_keys.size -%}{%- endif -%}
+      {%- if total_cards > visible_count -%}
         <div class="ing-more-wrap">
           <button class="ing-more-btn" id="ing-show-more-{{ section.id }}" type="button">
             {{ section.settings.show_more_label | default: 'Show more ingredients' }}

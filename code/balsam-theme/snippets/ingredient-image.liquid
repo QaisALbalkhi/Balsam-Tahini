@@ -1,0 +1,49 @@
+{% doc %}
+  Looks up a canonical ingredient key (as stored in product.metafields.nutrition.ingredient_cards)
+  and outputs "Display Name|https://cdn-image-url" for the caller to capture and split. All 34 photos
+  are hosted on this store's own Shopify CDN (uploaded via Admin API fileCreate). Falls back to a
+  title-cased version of the key with a blank image if the key is unrecognized (e.g. halawa-root,
+  which has no dedicated photo).
+  @param {string} key - The canonical ingredient key, e.g. "sesame-seeds"
+  @example
+  {%- capture lookup -%}{%- render 'ingredient-image', key: 'pistachios' -%}{%- endcapture -%}
+  {%- assign parts = lookup | strip | split: '|' -%}
+{% enddoc %}
+
+{%- case key -%}
+  {%- when 'sesame-seeds' -%}Sesame Seeds|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-sesame-seeds.jpg?v=1782937673
+  {%- when 'pistachios' -%}Pistachios|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-pistachios.jpg?v=1782937673
+  {%- when 'almonds' -%}Almonds|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-almonds.jpg?v=1782937673
+  {%- when 'cashews' -%}Cashews|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-cashews.jpg?v=1782937673
+  {%- when 'walnuts' -%}Walnuts|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-walnuts.jpg?v=1782937673
+  {%- when 'pecans' -%}Pecans|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-pecans.jpg?v=1782937673
+  {%- when 'brazil-nuts' -%}Brazil Nuts|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-brazil-nuts.jpg?v=1782937673
+  {%- when 'macadamia-nuts' -%}Macadamia Nuts|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-macadamia-nuts.jpg?v=1782937673
+  {%- when 'pine-nuts' -%}Pine Nuts|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-pine-nuts.jpg?v=1782937673
+  {%- when 'hazelnuts' -%}Hazelnuts|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-hazelnuts.jpg?v=1782937673
+  {%- when 'flax-seeds' -%}Flax Seeds|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-flax-seeds.jpg?v=1782937673
+  {%- when 'sunflower-seeds' -%}Sunflower Seeds|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-sunflower-seeds.jpg?v=1782937673
+  {%- when 'pumpkin-seeds' -%}Pumpkin Seeds|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-pumpkin-seeds.jpg?v=1782937673
+  {%- when 'peanuts' -%}Peanuts|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-peanuts.jpg?v=1782937673
+  {%- when 'black-seed' -%}Black Seed|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-black-seed.jpg?v=1782937673
+  {%- when 'mustard-seed' -%}Mustard Seed|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-mustard-seed.jpg?v=1782937673
+  {%- when 'cardamom' -%}Cardamom|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-cardamom.jpg?v=1782937673
+  {%- when 'cinnamon' -%}Cinnamon|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-cinnamon.jpg?v=1782937673
+  {%- when 'vanilla' -%}Vanilla|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-vanilla.jpg?v=1782937673
+  {%- when 'orange-blossom-water' -%}Orange Blossom Water|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-orange-blossom-water.jpg?v=1782937673
+  {%- when 'rose-water' -%}Rose Water|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-rose-water.jpg?v=1782937673
+  {%- when 'honey' -%}Honey|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-honey.jpg?v=1782937673
+  {%- when 'cane-sugar' -%}Cane Sugar|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-cane-sugar.jpg?v=1782937673
+  {%- when 'dates' -%}Dates|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-dates.jpg?v=1782937673
+  {%- when 'pomegranate' -%}Pomegranate|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-pomegranate.jpg?v=1782937673
+  {%- when 'kataifi' -%}Kataifi Pastry|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-kataifi.jpg?v=1782937673
+  {%- when 'beet' -%}Beet|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-beet.jpg?v=1782937673
+  {%- when 'turmeric' -%}Turmeric|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-turmeric.jpg?v=1782937673
+  {%- when 'ginseng-root' -%}Ginseng Root|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-ginseng-root.jpg?v=1782937673
+  {%- when 'bee-pollen' -%}Bee Pollen|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-bee-pollen.jpg?v=1782937673
+  {%- when 'milk-powder' -%}Milk Powder|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-milk-powder.jpg?v=1782937673
+  {%- when 'chocolate' -%}Chocolate|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-chocolate.jpg?v=1782937673
+  {%- when 'mint' -%}Mint|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-mint.jpg?v=1782937673
+  {%- when 'zaatar' -%}Zaatar|https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-zaatar.jpg?v=1782937673
+  {%- else -%}{{ key | replace: '-', ' ' | capitalize }}|
+{%- endcase -%}
