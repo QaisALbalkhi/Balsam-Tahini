@@ -1,0 +1,178 @@
+{% doc %}
+  Renders the Nutrition tab panel from product.metafields.nutrition.* (namespace: nutrition —
+  facts json metafield, ingredients, allergens, badges list). Renders nothing if
+  product.metafields.nutrition.facts is blank.
+  @param {product} product - The product to render nutrition facts for
+  @example
+  {% render 'nutrition-facts', product: product %}
+{% enddoc %}
+
+{%- assign facts = product.metafields.nutrition.facts.value -%}
+{%- assign ingredients = product.metafields.nutrition.ingredients.value -%}
+{%- assign allergens = product.metafields.nutrition.allergens.value -%}
+{%- assign badges = product.metafields.nutrition.badges.value -%}
+
+{%- if facts != blank -%}
+  {%- assign fat_g = facts.total_fat | remove: 'g' | strip | plus: 0 -%}
+  {%- assign sat_g = facts.saturated_fat | remove: 'g' | strip | plus: 0 -%}
+  {%- assign sugar_g = facts.total_sugars | remove: 'g' | strip | plus: 0 -%}
+  {%- assign sodium_mg = facts.sodium | remove: 'mg' | strip | plus: 0 -%}
+
+  {%- if fat_g > 17.5 -%}{%- assign fat_tier = 'high' -%}
+  {%- elsif fat_g <= 3 -%}{%- assign fat_tier = 'low' -%}
+  {%- else -%}{%- assign fat_tier = 'medium' -%}{%- endif -%}
+
+  {%- if sat_g > 5 -%}{%- assign sat_tier = 'high' -%}
+  {%- elsif sat_g <= 1.5 -%}{%- assign sat_tier = 'low' -%}
+  {%- else -%}{%- assign sat_tier = 'medium' -%}{%- endif -%}
+
+  {%- if sugar_g > 22.5 -%}{%- assign sugar_tier = 'high' -%}
+  {%- elsif sugar_g <= 5 -%}{%- assign sugar_tier = 'low' -%}
+  {%- else -%}{%- assign sugar_tier = 'medium' -%}{%- endif -%}
+
+  {%- if sodium_mg > 1500 -%}{%- assign sodium_tier = 'high' -%}
+  {%- elsif sodium_mg <= 300 -%}{%- assign sodium_tier = 'low' -%}
+  {%- else -%}{%- assign sodium_tier = 'medium' -%}{%- endif -%}
+
+  <div class="nutrition-panel">
+
+    <!-- Per serving at a glance -->
+    <div class="nutrition-glance">
+      <div class="nutrition-glance__card">
+        <span class="nutrition-glance__label">Fat</span>
+        <span class="nutrition-glance__value">{{ facts.total_fat }}</span>
+        <span class="nutrition-glance__tier nutrition-glance__tier--{{ fat_tier }}">{{ fat_tier }}</span>
+      </div>
+      <div class="nutrition-glance__card">
+        <span class="nutrition-glance__label">Saturates</span>
+        <span class="nutrition-glance__value">{{ facts.saturated_fat }}</span>
+        <span class="nutrition-glance__tier nutrition-glance__tier--{{ sat_tier }}">{{ sat_tier }}</span>
+      </div>
+      <div class="nutrition-glance__card">
+        <span class="nutrition-glance__label">Sugar</span>
+        <span class="nutrition-glance__value">{{ facts.total_sugars }}</span>
+        <span class="nutrition-glance__tier nutrition-glance__tier--{{ sugar_tier }}">{{ sugar_tier }}</span>
+      </div>
+      <div class="nutrition-glance__card">
+        <span class="nutrition-glance__label">Sodium</span>
+        <span class="nutrition-glance__value">{{ facts.sodium }}</span>
+        <span class="nutrition-glance__tier nutrition-glance__tier--{{ sodium_tier }}">{{ sodium_tier }}</span>
+      </div>
+    </div>
+
+    <!-- Nutrition Facts label -->
+    <div class="nft">
+      <div class="nft__title">Nutrition Facts</div>
+      <div class="nft__title-fr">Valeur nutritive</div>
+      <div class="nft__serving">Per {{ facts.serving_size }} / Pour {{ facts.serving_size }}</div>
+      <div class="nft__bar nft__bar--thick"></div>
+      <div class="nft__calories">
+        <span>Amount per serving<br>Calories</span>
+        <span class="nft__calories-value">{{ facts.calories }}</span>
+      </div>
+      <div class="nft__bar"></div>
+      <div class="nft__dv-head">% Daily Value*</div>
+      <div class="nft__row nft__row--bold"><span>Total Fat {{ facts.total_fat }}</span><span>{{ facts.total_fat_dv }}</span></div>
+      <div class="nft__row nft__row--sub"><span>Saturated Fat {{ facts.saturated_fat }}</span><span>{{ facts.saturated_fat_dv }}</span></div>
+      <div class="nft__row nft__row--sub2"><span><em>Trans</em> Fat {{ facts.trans_fat }}</span></div>
+      <div class="nft__row nft__row--bold"><span>Cholesterol {{ facts.cholesterol }}</span><span>{{ facts.cholesterol_dv }}</span></div>
+      <div class="nft__row nft__row--bold"><span>Sodium {{ facts.sodium }}</span><span>{{ facts.sodium_dv }}</span></div>
+      <div class="nft__row nft__row--bold"><span>Total Carbohydrate {{ facts.total_carbohydrate }}</span><span>{{ facts.total_carbohydrate_dv }}</span></div>
+      <div class="nft__row nft__row--sub"><span>Dietary Fibre {{ facts.dietary_fiber }}</span><span>{{ facts.dietary_fiber_dv }}</span></div>
+      <div class="nft__row nft__row--sub"><span>Total Sugars {{ facts.total_sugars }}</span></div>
+      <div class="nft__row nft__row--bold"><span>Protein {{ facts.protein }}</span></div>
+      <div class="nft__bar nft__bar--thick"></div>
+      <div class="nft__footline">
+        <span>Vitamin D 0mcg 0%</span>
+        <span>Calcium {{ facts.calcium }} {{ facts.calcium_dv }}</span>
+      </div>
+      <div class="nft__footline">
+        <span>Iron {{ facts.iron }} {{ facts.iron_dv }}</span>
+        <span>Potassium {{ facts.potassium }} {{ facts.potassium_dv }}</span>
+      </div>
+      <p class="nft__disclaimer">* Percent Daily Values are based on a 2,000 calorie diet. Your Daily Values may be higher or lower depending on your calorie needs.<br>* Les valeurs quotidiennes en pourcentage sont basées sur un régime alimentaire de 2 000 calories.</p>
+    </div>
+
+    <!-- Ingredients -->
+    {%- if ingredients != blank -%}
+      <div class="nutrition-block">
+        <h4 class="nutrition-block__heading">Ingredients</h4>
+        <p class="nutrition-block__body">{{ ingredients }}</p>
+        {%- if allergens != blank -%}
+          <div class="nutrition-allergens">⚠ {{ allergens }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <!-- Certifications & Claims -->
+    {%- if badges != blank -%}
+      <div class="nutrition-block">
+        <h4 class="nutrition-block__heading">Certifications &amp; Claims</h4>
+        <div class="nutrition-badges">
+          {%- for badge in badges -%}
+            <span class="nutrition-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              {{ badge }}
+            </span>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+
+  <style>
+    .nutrition-panel { display: flex; flex-direction: column; gap: var(--space-6); }
+
+    /* Glance cards */
+    .nutrition-glance { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2); }
+    .nutrition-glance__card {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: var(--space-3) var(--space-2);
+      background: var(--surface-warm);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    .nutrition-glance__label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .nutrition-glance__value { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--fg); }
+    .nutrition-glance__tier { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 1px 8px; border-radius: var(--radius-pill); }
+    .nutrition-glance__tier--low { background: rgba(82,183,136,0.16); color: #2E7D5B; }
+    .nutrition-glance__tier--medium { background: rgba(217,119,6,0.14); color: var(--warn); }
+    .nutrition-glance__tier--high { background: rgba(220,38,38,0.12); color: var(--danger); }
+
+    /* Nutrition Facts label */
+    .nft { border: 2px solid var(--fg); border-radius: var(--radius-sm); padding: var(--space-4); font-family: var(--font-body); color: var(--fg); }
+    .nft__title { font-size: 1.35rem; font-weight: 800; line-height: 1.1; }
+    .nft__title-fr { font-size: 0.85rem; font-style: italic; margin-bottom: var(--space-2); }
+    .nft__serving { font-size: 0.8rem; padding-bottom: var(--space-2); }
+    .nft__bar { height: 1px; background: var(--fg); margin: var(--space-1) 0; }
+    .nft__bar--thick { height: 8px; }
+    .nft__calories { display: flex; justify-content: space-between; align-items: flex-end; padding: var(--space-2) 0; font-size: 0.8rem; }
+    .nft__calories-value { font-size: 1.8rem; font-weight: 800; }
+    .nft__dv-head { text-align: right; font-size: 0.75rem; font-weight: 700; padding-bottom: 2px; border-bottom: 1px solid var(--fg); }
+    .nft__row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid var(--border); }
+    .nft__row--bold { font-weight: 700; }
+    .nft__row--sub { padding-left: var(--space-4); font-weight: 400; }
+    .nft__row--sub2 { padding-left: var(--space-6); font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .nft__footline { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 3px 0; }
+    .nft__disclaimer { font-size: 0.65rem; color: var(--muted); line-height: 1.4; margin-top: var(--space-3); }
+
+    /* Ingredients / allergens */
+    .nutrition-block__heading { font-family: var(--font-display); font-size: 1rem; font-weight: 700; margin-bottom: var(--space-2); }
+    .nutrition-block__body { font-size: var(--text-sm); color: var(--fg-2); line-height: var(--leading-body); }
+    .nutrition-allergens { margin-top: var(--space-3); padding: var(--space-3); background: rgba(217,119,6,0.10); border: 1px solid rgba(217,119,6,0.3); border-radius: var(--radius-md); font-size: var(--text-sm); color: var(--fg-2); }
+
+    /* Certification badges */
+    .nutrition-badges { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .nutrition-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; background: rgba(27,67,50,0.07); color: var(--accent);
+      border: 1px solid rgba(27,67,50,0.2); border-radius: var(--radius-pill);
+      font-size: 0.72rem; font-weight: 700;
+    }
+
+    @media (max-width: 480px) {
+      .nutrition-glance { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+{%- endif -%}

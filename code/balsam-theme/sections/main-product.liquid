@@ -336,7 +336,14 @@
                   aria-labelledby="pd-tab-btn-{{ block.id }}"
                   {% unless forloop.first %}hidden{% endunless %}
                 >
-                  {{ block.settings.content }}
+                  {%- assign tab_title = block.settings.title | downcase | strip -%}
+                  {%- if tab_title == 'details' and product.description != blank -%}
+                    {{ product.description }}
+                  {%- elsif tab_title == 'nutrition' and product.metafields.nutrition.facts != blank -%}
+                    {%- render 'nutrition-facts', product: product -%}
+                  {%- else -%}
+                    {{ block.settings.content }}
+                  {%- endif -%}
                 </div>
               {%- endfor -%}
             </div>
