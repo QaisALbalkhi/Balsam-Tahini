@@ -351,8 +351,20 @@
         {%- endif -%}
 
         <!-- Trust badges -->
+        {%- assign product_badges = product.metafields.nutrition.badges.value -%}
         {%- assign trust_blocks = section.blocks | where: 'type', 'trust_badge' -%}
-        {%- if trust_blocks.size > 0 -%}
+        {%- if product_badges != blank -%}
+          <div class="pd-trust">
+            {%- for badge in product_badges -%}
+              <div class="pd-trust__item">
+                <div class="pd-trust__icon" aria-hidden="true">
+                  {%- render 'badge-icon', badge: badge -%}
+                </div>
+                <span class="pd-trust__label">{{ badge }}</span>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- elsif trust_blocks.size > 0 -%}
           <div class="pd-trust">
             {%- for block in trust_blocks -%}
               <div class="pd-trust__item" {{ block.shopify_attributes }}>

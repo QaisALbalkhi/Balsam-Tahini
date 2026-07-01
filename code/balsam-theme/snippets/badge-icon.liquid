@@ -1,0 +1,30 @@
+{% doc %}
+  Renders a small stroke-icon SVG matching a product claim/certification badge label
+  (e.g. "Non-GMO", "Halal", "Vegan"). Falls back to a checkmark for unrecognized labels.
+  @param {string} badge - The badge label to match an icon for
+  @param {number} [size] - Icon width/height in px, defaults to 28
+  @example
+  {% render 'badge-icon', badge: 'Vegan' %}
+{% enddoc %}
+
+{%- assign badge_key = badge | strip | downcase -%}
+{%- assign icon_size = size | default: 28 -%}
+
+{%- case badge_key -%}
+  {%- when 'non-gmo', 'palm oil free', 'gluten free', 'no sugar added' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/></svg>
+  {%- when 'halal' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a7 7 0 0 0 8.5 8.5z"/></svg>
+  {%- when 'all natural' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+  {%- when 'vegan' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-7"/><path d="M9 8c0 3 1.5 5 3 5s3-2 3-5c0-3-3-6-3-6s-3 3-3 6z"/><path d="M5 13c0 2 2 3 4 3"/><path d="M19 13c0 2-2 3-4 3"/></svg>
+  {%- when 'kosher' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><text x="12" y="16.5" font-size="11" font-weight="700" text-anchor="middle" fill="currentColor" stroke="none">K</text></svg>
+  {%- when 'keto diet' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s-6 6-6 11a6 6 0 0 0 12 0c0-2-1-3-1-3s-1 2-2 2c0-3-3-5-3-8z"/></svg>
+  {%- when 'product of canada', 'made in canada' -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.3 3.9 3.9-2.3-1.1 4 4.4.7-3 3.2 2.8 3-4-.3.6 4-3.6-2.1L12 20l-.3-3.9-3.6 2.1.6-4-4-.3 2.8-3-3-3.2 4.4-.7-1.1-4 3.9 2.3z"/><line x1="12" y1="20" x2="12" y2="22"/></svg>
+  {%- else -%}
+    <svg width="{{ icon_size }}" height="{{ icon_size }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+{%- endcase -%}
