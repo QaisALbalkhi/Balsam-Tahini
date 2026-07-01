@@ -1,0 +1,79 @@
+{% doc %}
+  Renders a simple line-art illustration matching a recipe's category tag, used as a
+  stand-in for photography on recipe cards that don't have a featured image. Falls back
+  to a generic jar sketch for unrecognized tags.
+  @param {string} tag - The recipe's category tag, e.g. "Tahini", "Pistachio", "Honey"
+  @example
+  {% render 'recipe-illustration', tag: 'Tahini' %}
+{% enddoc %}
+
+{%- assign t = tag | strip | downcase -%}
+
+{%- case t -%}
+  {%- when 'tahini' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M24 30h32l-3 34a4 4 0 0 1-4 3.6H31a4 4 0 0 1-4-3.6l-3-34z"/>
+      <path d="M28 30v-6a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4v6"/>
+      <path d="M32 42c3 3 5-2 8 0s5 3 8 0"/>
+      <path d="M52 20l8-6"/><path d="M56 16l4 4"/>
+    </svg>
+  {%- when 'pistachio' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M28 22c-7 4-9 13-6 21 2 6 6 11 10 11s8-5 10-11c3-8 1-17-6-21-3-2-5-2-8 0z"/>
+      <path d="M31 24c2 6 2 12 0 18"/>
+      <path d="M46 46c-6 3-8 10-5 16 1.5 4.5 4.5 8 7.5 8s6-3.5 7.5-8c2-6 0-13-5-16-2-1.5-3-1.5-4.5 0z"/>
+      <path d="M48 48c1.5 4.5 1.5 9 0 13.5"/>
+      <path d="M18 50c-5 2-7 8-4.5 13 1.2 3.5 3.5 6 5.7 6s4.5-2.5 5.7-6c1.5-3.8-.3-9.6-3-11.5" opacity="0.7"/>
+    </svg>
+  {%- when 'peanut butter' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M32 24c-7 0-12 6-12 13 0 5 3 7 3 11 0 7 5 12 12 12s12-5 12-12"/>
+      <path d="M48 24c7 0 12 6 12 13 0 5-3 7-3 11 0 7-5 12-12 12"/>
+      <path d="M20 37h40"/>
+      <path d="M56 20l7-5"/><path d="M60 17l3 3"/>
+    </svg>
+  {%- when 'mixed nut & seed butter' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 40c0-11 10-20 22-20s22 9 22 20"/>
+      <path d="M14 40h52l-4 20a4 4 0 0 1-4 3.4H22A4 4 0 0 1 18 60l-4-20z"/>
+      <circle cx="30" cy="46" r="2.2" fill="currentColor" stroke="none"/>
+      <circle cx="40" cy="50" r="2.2" fill="currentColor" stroke="none"/>
+      <circle cx="50" cy="45" r="2.2" fill="currentColor" stroke="none"/>
+      <circle cx="36" cy="41" r="2.2" fill="currentColor" stroke="none"/>
+      <circle cx="46" cy="53" r="2.2" fill="currentColor" stroke="none"/>
+    </svg>
+  {%- when 'halawa' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 16l16 16-16 16-16-16z"/>
+      <path d="M28 40l12 12 12-12"/>
+      <path d="M32 44l8 8 8-8"/>
+      <path d="M40 32v8"/>
+    </svg>
+  {%- when 'oils' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M34 18h12v10l6 8v26a4 4 0 0 1-4 4H32a4 4 0 0 1-4-4V36l6-8z"/>
+      <path d="M30 44h20"/>
+      <path d="M34 18v-4h12v4"/>
+      <path d="M40 50v10" opacity="0.6"/>
+    </svg>
+  {%- when 'honey' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 18c-9 8-9 16 0 22 9-6 9-14 0-22z"/>
+      <path d="M40 40v8"/>
+      <path d="M32 48c0 8 4 14 8 14s8-6 8-14"/>
+      <path d="M34 52h12"/><path d="M35 58h10"/>
+      <path d="M22 30l3 3M58 30l-3 3M22 20l4 1" opacity="0.5"/>
+    </svg>
+  {%- when 'pure butters' -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M24 32h32l-3 30a4 4 0 0 1-4 3.6H31a4 4 0 0 1-4-3.6l-3-30z"/>
+      <path d="M27 32c0-8 6-14 13-14s13 6 13 14"/>
+      <path d="M31 44h18"/><path d="M32 52h16"/>
+    </svg>
+  {%- else -%}
+    <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M26 28h28l-2.5 32a4 4 0 0 1-4 3.7H32.5a4 4 0 0 1-4-3.7L26 28z"/>
+      <path d="M29 28v-6a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v6"/>
+      <path d="M32 40h16"/><path d="M33 48h14"/>
+    </svg>
+{%- endcase -%}
