@@ -84,12 +84,14 @@
       <div class="nft__bar nft__bar--thick"></div>
       <div class="nft__footline">
         <span>Vitamin D 0mcg 0%</span>
-        <span>Calcium {{ facts.calcium }} {{ facts.calcium_dv }}</span>
+        {%- if facts.calcium != blank -%}<span>Calcium {{ facts.calcium }} {{ facts.calcium_dv }}</span>{%- endif -%}
       </div>
-      <div class="nft__footline">
-        <span>Iron {{ facts.iron }} {{ facts.iron_dv }}</span>
-        <span>Potassium {{ facts.potassium }} {{ facts.potassium_dv }}</span>
-      </div>
+      {%- if facts.iron != blank or facts.potassium != blank -%}
+        <div class="nft__footline">
+          {%- if facts.iron != blank -%}<span>Iron {{ facts.iron }} {{ facts.iron_dv }}</span>{%- endif -%}
+          {%- if facts.potassium != blank -%}<span>Potassium {{ facts.potassium }} {{ facts.potassium_dv }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
       <p class="nft__disclaimer">* Percent Daily Values are based on a 2,000 calorie diet. Your Daily Values may be higher or lower depending on your calorie needs.<br>* Les valeurs quotidiennes en pourcentage sont basées sur un régime alimentaire de 2 000 calories.</p>
     </div>
 
