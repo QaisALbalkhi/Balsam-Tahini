@@ -148,8 +148,8 @@
     background: var(--accent-on, #fff);
     color: var(--accent);
   }
-  .rcc__nav--prev { left: var(--container-gutter-desktop, 40px); }
-  .rcc__nav--next { right: var(--container-gutter-desktop, 40px); }
+  .rcc__nav--prev { left: max(var(--container-gutter-desktop, 40px), calc((100vw - 1200px) / 2 + 40px)); }
+  .rcc__nav--next { right: max(var(--container-gutter-desktop, 40px), calc((100vw - 1200px) / 2 + 40px)); }
 
   .rcc__dots {
     display: flex;
