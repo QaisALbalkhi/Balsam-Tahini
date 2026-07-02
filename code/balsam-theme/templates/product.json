@@ -196,55 +196,88 @@
     "scroll_story_FJDyQg": {
       "type": "scroll-story",
       "blocks": {
-        "row_wQRtmP": {
+        "row_tahini": {
           "type": "row",
           "settings": {
+            "image": "shopify://shop_images/Balsam-Tahini-907g.jpg",
             "video_url": "",
-            "eyebrow": "",
-            "heading": "<em>Stone-ground</em> Tahini",
-            "badge": "",
-            "meta": "",
-            "body": "",
-            "cta_label": "",
-            "cta_url": ""
+            "eyebrow": "THE ORIGINAL",
+            "heading": "<em>Stone-Ground</em> Tahini",
+            "badge": "WHERE IT ALL BEGAN",
+            "meta": "COLD STONE-MILLED · SMALL BATCH",
+            "body": "<p>Tahini was on our table every single meal growing up. When we moved to Canada and couldn't find one that tasted like home, we partnered with traditional stone mills to grind premium sesame seeds slowly, at cool temperatures — the way it's always been done.</p><p>No shortcuts, no additives. Just pure sesame, ground with care.</p>",
+            "cta_label": "Shop Tahini",
+            "cta_url": "/collections/tahini"
           }
         },
-        "row_n3mV3m": {
+        "row_oils": {
           "type": "row",
           "settings": {
+            "image": "shopify://shop_images/Pecan-Oil.jpg",
             "video_url": "",
-            "eyebrow": "STEP 01",
-            "heading": "<em>Stone-ground</em> Tahini",
-            "badge": "THE CLASSIC",
-            "meta": "COLD-PRESSED · SMALL BATCH",
-            "body": "",
-            "cta_label": "",
-            "cta_url": ""
+            "eyebrow": "COLD-PRESSED",
+            "heading": "<em>Pure</em> Cold-Pressed Oils",
+            "badge": "NOTHING ADDED",
+            "meta": "SLOW-PRESSED · UNREFINED",
+            "body": "<p>We press our oils the slow way — extracting them from sesame, pistachio, walnut, and more without heat or chemicals, so the natural aroma and nutrients stay exactly where they belong.</p><p>Every bottle is unrefined and unfiltered, just like nature intended.</p>",
+            "cta_label": "Shop Oils",
+            "cta_url": "/collections/oils"
           }
         },
-        "row_yf7aHM": {
+        "row_honey": {
           "type": "row",
           "settings": {
+            "image": "shopify://shop_images/IMG_2434_1.jpg",
             "video_url": "",
-            "eyebrow": "STEP 02",
-            "heading": "Pistachio <em>Spread</em>",
-            "badge": "THE BOLD ONE",
+            "eyebrow": "RAW & ORGANIC",
+            "heading": "<em>Organic</em> Honey, Straight from the Hive",
+            "badge": "UNPROCESSED",
+            "meta": "RAW · ORGANIC · UNFILTERED",
+            "body": "<p>Our honey is harvested raw and organic, then folded with roasted nuts like cashews, pistachios, and pine nuts for a naturally sweet, wholesome spread.</p><p>Nothing is cooked out — just honey the way bees intended it.</p>",
+            "cta_label": "Shop Honey",
+            "cta_url": "/collections/honey"
+          }
+        },
+        "row_halawa": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Plain-Halawa-_1.jpg",
+            "video_url": "",
+            "eyebrow": "A FAMILY RECIPE",
+            "heading": "<em>Halawa</em>, the Traditional Way",
+            "badge": "HANDCRAFTED",
+            "meta": "TAHINI-BASED · SLOW-COOKED",
+            "body": "<p>Halawa is where our tahini becomes dessert. We slow-cook sesame paste with a rosewater-kissed sugar syrup until it sets into the flaky, melt-in-your-mouth texture generations have loved.</p><p>Every batch is folded by hand with real pistachios, hazelnuts, and honey — never artificial flavour.</p>",
+            "cta_label": "Shop Halawa",
+            "cta_url": "/collections/halawas"
+          }
+        },
+        "row_pistachio": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/Pistachio-Spread-with-Milk.jpg",
+            "video_url": "",
+            "eyebrow": "THE BOLD ONE",
+            "heading": "<em>Pistachio</em> Spread",
+            "badge": "6 CLEAN INGREDIENTS",
             "meta": "ROASTED · STONE-GROUND",
-            "body": "",
-            "cta_label": "",
-            "cta_url": ""
+            "body": "<p>We roast real pistachios and stone-grind them slowly into a smooth, naturally green spread — no food colouring, no palm oil, no shortcuts.</p><p>Just nutty, rich pistachio, the way it should taste.</p>",
+            "cta_label": "Shop Pistachio Spread",
+            "cta_url": "/collections/pistachio-spreads"
           }
         }
       },
       "block_order": [
-        "row_wQRtmP",
-        "row_n3mV3m",
-        "row_yf7aHM"
+        "row_tahini",
+        "row_oils",
+        "row_honey",
+        "row_halawa",
+        "row_pistachio"
       ],
       "name": "Scroll Story",
       "settings": {
-        "eyebrow": "",
-        "heading": "",
+        "eyebrow": "OUR CRAFT",
+        "heading": "From Sesame to Spread",
         "bg": "white"
       }
     },
