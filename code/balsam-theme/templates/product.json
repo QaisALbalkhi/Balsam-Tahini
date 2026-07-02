@@ -409,14 +409,22 @@
         "show_price": true
       }
     },
-    "recently_viewed_pzAVTY": {
+    "recently_viewed_VHWekg": {
       "type": "recently-viewed",
+      "custom_css": [
+        ".rv-slot .product-card{display:flex;flex-direction:column;height:100%}",
+        ".rv-slot .product-card__body{display:flex;flex-direction:column;flex:1}",
+        ".rv-slot .pc-add{margin-top:auto;text-align:center}",
+        ".rv-slot .pc-add-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:2px solid #1B4332;border-radius:999px;background:#1B4332;color:#fff;font-size:.82rem;font-weight:800;cursor:pointer}",
+        ".rv-slot .pc-add-btn:hover{background:#166534;border-color:#166534}"
+      ],
+      "name": "Recently Viewed",
       "settings": {
-        "collection": "popular-products",
+        "collection": "",
         "eyebrow": "YOUR HISTORY",
         "heading": "Recently Viewed",
         "products_count": 8,
-        "bg": "cream"
+        "bg": "canvas"
       }
     }
   },
@@ -427,6 +435,6 @@
     "recipes-column-carousel",
     "google_reviews_KgRRnK",
     "pairs-carousel",
-    "recently_viewed_pzAVTY"
+    "recently_viewed_VHWekg"
   ]
 }
