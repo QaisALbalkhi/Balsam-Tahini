@@ -1,0 +1,23 @@
+{% doc %}
+  Renders a single numbered step for the product-process section: a step
+  number/title/body, plus either a "why it's different" USP callout (steps
+  1-4) or an italicized brand-intro treatment (step 5, is_brand: true).
+  @param {string} num - Two-digit step number, e.g. '01'
+  @param {string} title - Step title
+  @param {string} body - Step body copy
+  @param {string} [usp] - "Why it's different" callout line
+  @param {boolean} [is_brand] - If true, renders the step-5 brand-intro style instead of a USP callout
+  @example
+  {% render 'process-step', num: '01', title: 'Real Sesame Seeds', body: 'We start with whole seeds.', usp: 'Others use cheaper blends.' %}
+{% enddoc %}
+
+{%- assign step_idx = num | plus: 0 | minus: 1 -%}
+
+<div class="pp-step{% if is_brand %} pp-step--brand{% endif %}" data-pp-step="{{ step_idx }}">
+  <span class="pp-step-num">{{ num }}</span>
+  <h3 class="pp-step-title">{{ title }}</h3>
+  <div class="pp-step-body"><p>{{ body }}</p></div>
+  {%- if usp != blank -%}
+    <p class="pp-step-usp"><strong>Why it's different</strong>{{ usp }}</p>
+  {%- endif -%}
+</div>
