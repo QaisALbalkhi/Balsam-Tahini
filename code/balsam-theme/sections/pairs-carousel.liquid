@@ -131,6 +131,7 @@
     background: var(--fg);
     color: var(--surface-warm, #F5F0E8);
   }
+  /* Fallback position (before JS measures actual content width); JS overrides via inline style */
   .pairs-carousel__nav--prev {
     left: max(var(--container-gutter-desktop, 40px), calc((100vw - var(--container-max, 1200px)) / 2 + var(--container-gutter-desktop, 40px)));
   }
@@ -336,6 +337,28 @@
 
   if (prev) prev.addEventListener('click', function () { goTo(current - 1); });
   if (next) next.addEventListener('click', function () { goTo(current + 1); });
+
+  /* Position arrows just outside the actual visible card content, not the
+     page edge — matters when there are too few slides to fill the track. */
+  var stage = track.parentElement;
+  var NAV_GAP = 16;
+  function positionNavArrows() {
+    if (!prev || !next || !slides.length) return;
+    var stageRect = stage.getBoundingClientRect();
+    var firstRect = slides[0].getBoundingClientRect();
+    var lastRect  = slides[slides.length - 1].getBoundingClientRect();
+    var navWidth  = prev.offsetWidth || 80;
+
+    var prevLeft  = Math.max(0, Math.min(stageRect.width - navWidth, (firstRect.left - stageRect.left) - navWidth - NAV_GAP));
+    var nextRight = Math.max(0, Math.min(stageRect.width - navWidth, stageRect.width - ((lastRect.right - stageRect.left) + NAV_GAP) - navWidth));
+
+    prev.style.left = prevLeft + 'px';
+    prev.style.right = 'auto';
+    next.style.right = nextRight + 'px';
+    next.style.left = 'auto';
+  }
+  positionNavArrows();
+  window.addEventListener('resize', positionNavArrows);
 
   /* Click on any slide activates it */
   slides.forEach(function (slide, i) {
