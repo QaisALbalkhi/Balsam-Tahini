@@ -1,0 +1,48 @@
+{% doc %}
+  Renders one alternating photo/text row for the scroll-story section: an
+  image on one side, a step label + heading + short oval badge + body copy
+  (and an optional CTA) on the other. Used by scroll-story.liquid to render
+  its per-category "how it's made" rows.
+  @param {string} image - Full CDN image URL
+  @param {string} heading - Row heading (supports <em> italic)
+  @param {string} [eyebrow] - Small label above the heading, e.g. "STEP 01"
+  @param {string} [badge] - Short oval pill label
+  @param {string} body - Body copy, rendered as raw HTML (wrap in <p> tags)
+  @param {string} [cta_label] - CTA link text
+  @param {string} [cta_url] - CTA link URL
+  @example
+  {% render 'scroll-story-row', image: 'https://cdn.shopify.com/.../seeds.jpg', eyebrow: 'STEP 01', heading: 'Real Sesame Seeds', badge: 'NO SEED BLENDS', body: '<p>We start with whole seeds.</p>' %}
+{% enddoc %}
+
+<div class="ss2-row">
+  <div class="ss2-row__text-col">
+    {%- if eyebrow != blank -%}
+      <p class="ss2-row__eyebrow">{{ eyebrow }}</p>
+    {%- endif -%}
+    <h3 class="ss2-row__heading">{{ heading }}</h3>
+    {%- if badge != blank -%}
+      <span class="ss2-row__badge">{{ badge }}</span>
+    {%- endif -%}
+    <div class="ss2-row__body">{{ body }}</div>
+    {%- if cta_label != blank and cta_url != blank -%}
+      <a href="{{ cta_url }}" class="ss2-row__cta">
+        {{ cta_label }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    {%- endif -%}
+  </div>
+
+  <div class="ss2-row__media-col">
+    <div class="ss2-row__media-wrap">
+      <img
+        src="{{ image | append: '&width=840' }}"
+        srcset="{{ image | append: '&width=420' }} 420w, {{ image | append: '&width=840' }} 840w"
+        sizes="(max-width: 767px) 100vw, 40vw"
+        alt="{{ heading | strip_html | escape }}"
+        width="420" height="560"
+        loading="lazy"
+        class="ss2-row__img"
+      >
+    </div>
+  </div>
+</div>

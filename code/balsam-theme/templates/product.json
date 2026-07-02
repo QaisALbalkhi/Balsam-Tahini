@@ -193,9 +193,9 @@
         "bg": "canvas"
       }
     },
-    "product_process_FJDyQg": {
-      "type": "product-process",
-      "name": "Product Process",
+    "scroll_story_FJDyQg": {
+      "type": "scroll-story",
+      "name": "Scroll Story",
       "settings": {
         "bg": "white"
       }
@@ -383,7 +383,7 @@
   "order": [
     "main-product",
     "ingredient-cards",
-    "product_process_FJDyQg",
+    "scroll_story_FJDyQg",
     "recipes-column-carousel",
     "google_reviews_KgRRnK",
     "pairs-carousel",

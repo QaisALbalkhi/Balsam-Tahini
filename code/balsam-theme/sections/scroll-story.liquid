@@ -168,79 +168,88 @@
   }
 {% endstyle %}
 
+{%- assign is_halawa = false -%}
+{%- assign is_honey = false -%}
+{%- assign is_oils = false -%}
+{%- assign is_pistachio = false -%}
+{%- for c in product.collections -%}
+  {%- case c.handle -%}
+    {%- when 'halawas' -%}{%- assign is_halawa = true -%}
+    {%- when 'honey' -%}{%- assign is_honey = true -%}
+    {%- when 'oils' -%}{%- assign is_oils = true -%}
+    {%- when 'pistachio-spreads', 'pure-butters' -%}{%- assign is_pistachio = true -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+{%- assign category = 'tahini' -%}
+{%- if is_halawa -%}
+  {%- assign category = 'halawa' -%}
+{%- elsif is_honey -%}
+  {%- assign category = 'honey' -%}
+{%- elsif is_oils -%}
+  {%- assign category = 'oils' -%}
+{%- elsif is_pistachio -%}
+  {%- assign category = 'pistachio' -%}
+{%- endif -%}
+
+{%- case category -%}
+  {%- when 'oils' -%}
+    {%- assign ss2_heading = 'How Our <em>Oils</em> Are Made' -%}
+  {%- when 'honey' -%}
+    {%- assign ss2_heading = 'How Our <em>Honey</em> Is Made' -%}
+  {%- when 'halawa' -%}
+    {%- assign ss2_heading = 'How Our <em>Halawa</em> Is Made' -%}
+  {%- when 'pistachio' -%}
+    {%- assign ss2_heading = 'How Our <em>Pistachio Spread</em> Is Made' -%}
+  {%- else -%}
+    {%- assign ss2_heading = 'How Our <em>Tahini</em> Is Made' -%}
+{%- endcase -%}
+
 <section class="ss2" id="ss2-{{ section.id }}">
 
-  {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
-    <div class="ss2-header">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
-      {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="ss2-header__heading">{{ section.settings.heading }}</h2>
-      {%- endif -%}
-    </div>
-  {%- endif -%}
+  <div class="ss2-header">
+    <p class="eyebrow">OUR PROCESS</p>
+    <h2 class="ss2-header__heading">{{ ss2_heading }}</h2>
+  </div>
 
-  {%- for block in section.blocks -%}
-    {%- if block.type == 'row' -%}
-      <div class="ss2-row" {{ block.shopify_attributes }}>
+  {%- case category -%}
 
-        <!-- Text column -->
-        <div class="ss2-row__text-col">
-          {%- if block.settings.eyebrow != blank -%}
-            <p class="ss2-row__eyebrow">{{ block.settings.eyebrow }}</p>
-          {%- endif -%}
-          {%- if block.settings.heading != blank -%}
-            <h3 class="ss2-row__heading">{{ block.settings.heading }}</h3>
-          {%- endif -%}
-          {%- if block.settings.badge != blank -%}
-            <span class="ss2-row__badge">{{ block.settings.badge }}</span>
-          {%- endif -%}
-          {%- if block.settings.meta != blank -%}
-            <p class="ss2-row__meta">{{ block.settings.meta }}</p>
-          {%- endif -%}
-          {%- if block.settings.body != blank -%}
-            <div class="ss2-row__body">{{ block.settings.body }}</div>
-          {%- endif -%}
-          {%- if block.settings.cta_label != blank and block.settings.cta_url != blank -%}
-            <a href="{{ block.settings.cta_url }}" class="ss2-row__cta">
-              {{ block.settings.cta_label }}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          {%- endif -%}
-        </div>
+    {%- when 'oils' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-sesame-seeds.jpg?v=1782937673', eyebrow: 'STEP 01', heading: 'Handpicked Seeds & Nuts', badge: 'NO SEED BLENDS', body: '<p>Every oil starts with whole, unrefined seeds and nuts — sesame, black seed, walnut, pistachio, and more.</p><p>No reused presscake — just the real thing, pressed one variety at a time.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pecan-Oil.jpg?v=1742973312', eyebrow: 'STEP 02', heading: 'Cold-Pressed Below 50°C', badge: 'NO HEAT, NO SOLVENTS', body: '<p>We mechanically press each batch at low temperature, with no heat and no solvents.</p><p>Big-brand oils are often chemically extracted with heat — ours never touches either.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pecan-Oil.jpg?v=1742973312', eyebrow: 'STEP 03', heading: 'Unrefined & Unfiltered', badge: 'NOTHING STRIPPED OUT', body: '<p>We leave the natural sediment in — that is where the real flavour and nutrients live.</p><p>Refining strips out aroma and nutrition to make oil shelf-stable and "neutral." We keep the character.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pecan-Oil.jpg?v=1742973312', eyebrow: 'STEP 04', heading: 'Bottled in Small Batches', badge: 'PRESSED TO ORDER', body: '<p>Every bottle is pressed to order and bottled fresh, never left to oxidize on a shelf.</p><p>Freshness fades fast once oil is pressed — small batches mean yours never sits around.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pecan-Oil.jpg?v=1742973312', eyebrow: 'OUR STORY', heading: 'This Is <em>Balsam Tahini</em>', body: '<p>We started with tahini because we could not find one that tasted like home. That same standard — real ingredients, traditional methods, no shortcuts — goes into every oil we press.</p>', cta_label: 'Shop Oils', cta_url: '/collections/oils' -%}
 
-        <!-- Media column -->
-        <div class="ss2-row__media-col">
-          <div class="ss2-row__media-wrap">
-            {%- if block.settings.video_url != blank -%}
-              <video
-                src="{{ block.settings.video_url }}"
-                class="ss2-row__video"
-                autoplay muted loop playsinline
-                preload="metadata"
-              ></video>
-            {%- elsif block.settings.video != blank -%}
-              {{- block.settings.video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, class: 'ss2-row__video' -}}
-            {%- elsif block.settings.image != blank -%}
-              <img
-                src="{{ block.settings.image | image_url: width: 840 }}"
-                srcset="{{ block.settings.image | image_url: width: 420 }} 420w, {{ block.settings.image | image_url: width: 840 }} 840w"
-                sizes="(max-width: 767px) 100vw, 40vw"
-                alt="{{ block.settings.heading | strip_html | escape }}"
-                width="420" height="560"
-                loading="lazy"
-                class="ss2-row__img"
-              >
-            {%- else -%}
-              <div style="width:100%;height:100%;background:var(--border-soft);"></div>
-            {%- endif -%}
-          </div>
-        </div>
+    {%- when 'honey' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-honey.jpg?v=1782937673', eyebrow: 'STEP 01', heading: 'Raw, Organic Hives', badge: 'CHEMICAL-FREE', body: '<p>Our honey comes from organic apiaries, free from antibiotics and pesticide treatments.</p><p>Most commercial honey comes from hives treated with chemicals we would never put near our own food.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/IMG_2434_1.jpg?v=1744733063', eyebrow: 'STEP 02', heading: 'Never Heated, Never Ultra-Filtered', badge: 'STAYS RAW', body: '<p>We keep our honey raw — no pasteurizing, no ultra-filtering.</p><p>Heat-treating and ultra-filtering — standard in most grocery-aisle honey — strips out the pollen and enzymes that make raw honey worth having.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/IMG_2434_1.jpg?v=1744733063', eyebrow: 'STEP 03', heading: 'Blended with Real Roasted Nuts', badge: 'REAL NUTS, HAND-FOLDED', body: '<p>Cashews, pistachios, and pine nuts are folded in by hand, batch by batch.</p><p>No artificial nut flavouring, no reconstituted nut paste — just real roasted nuts.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/IMG_2434_1.jpg?v=1744733063', eyebrow: 'STEP 04', heading: 'No Added Sugar, Ever', badge: '100% HONEY', body: '<p>What you taste is honey, full stop.</p><p>A lot of cheaper honey is cut with corn syrup or glucose to stretch the jar. Ours never is.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/IMG_2434_1.jpg?v=1744733063', eyebrow: 'OUR STORY', heading: 'This Is <em>Balsam Tahini</em>', body: '<p>We built this brand on the idea that real, unprocessed food tastes better. Our honey follows the same rule as our tahini — raw, honest, and never cut with anything that does not belong.</p>', cta_label: 'Shop Honey', cta_url: '/collections/honey' -%}
 
-      </div>
-    {%- endif -%}
-  {%- endfor -%}
+    {%- when 'halawa' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Plain-Halawa-_1.jpg?v=1743874823', eyebrow: 'STEP 01', heading: 'Real Tahini Base', badge: 'OUR OWN TAHINI', body: '<p>Every batch of halawa starts with our own stone-ground tahini — not a bought-in bulk paste.</p><p>Most halawa makers buy generic tahini by the drum. We use the same tahini we sell in the jar.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Plain-Halawa-_1.jpg?v=1743874823', eyebrow: 'STEP 02', heading: 'Slow-Cooked Sugar & Rosewater Syrup', badge: 'PRECISION-COOKED', body: '<p>The syrup is cooked by hand to a precise temperature before it is worked into the tahini.</p><p>Get the temperature wrong and halawa turns grainy or gummy — precision is what gives it that signature flaky melt.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pistachio-Halawa.jpg?v=1743874186', eyebrow: 'STEP 03', heading: 'Hand-Folded, Never Machine-Extruded', badge: 'FOLDED BY HAND', body: '<p>We fold each batch by hand in small runs, which is what creates the flaky strands halawa is known for.</p><p>Mass-produced halawa is machine-extruded and dense — hand-folding is slower, but it is the only way to get real flakiness.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Plain-Halawa-_1.jpg?v=1743874823', eyebrow: 'STEP 04', heading: 'Real Nuts & Honey, No Artificial Flavour', badge: 'NO CORN-SYRUP SWIRLS', body: '<p>Our pistachio, hazelnut, and honey varieties are made with the real ingredient folded in.</p><p>Many supermarket halawas use corn-syrup-based flavour swirls instead of the real thing. We do not.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Plain-Halawa-_1.jpg?v=1743874823', eyebrow: 'OUR STORY', heading: 'This Is <em>Balsam Tahini</em>', body: '<p>Halawa is where our tahini becomes dessert. It carries the same promise as everything else we make: real ingredients, traditional methods, nothing artificial.</p>', cta_label: 'Shop Halawa', cta_url: '/collections/halawas' -%}
+
+    {%- when 'pistachio' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-pistachios.jpg?v=1782937673', eyebrow: 'STEP 01', heading: 'Real Roasted Pistachios', badge: 'PISTACHIO, FULL STOP', body: '<p>We start with whole, roasted pistachios — not a diluted pistachio paste.</p><p>A lot of "pistachio" spreads are cut with cheaper cashews or almonds. Ours is not.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pistachio-Spread-with-Milk.jpg?v=1743874327', eyebrow: 'STEP 02', heading: 'Stone-Ground Low & Slow', badge: 'LOW & SLOW', body: '<p>We grind slowly to a smooth, spreadable texture without overheating the nuts.</p><p>Overheating cooks off the natural pistachio oils and flavour — low and slow keeps both intact.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/IMG_2664.jpg?v=1745863680', eyebrow: 'STEP 03', heading: 'Naturally Green, No Food Colouring', badge: 'NO ARTIFICIAL DYE', body: '<p>That vibrant green comes from real pistachio skins, not a dye.</p><p>Many pistachio products add artificial colouring to look more vibrant on the shelf. We let the pistachio speak for itself.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pistachio-Spread-with-Milk.jpg?v=1743874327', eyebrow: 'STEP 04', heading: '6 Clean Ingredients, No Palm Oil', badge: 'NO PALM OIL', body: '<p>Just pistachios, a touch of sugar, and natural stabilizers — nothing else.</p><p>No palm oil, no hydrogenated fat — ingredients most mass-market spreads rely on to stay shelf-stable.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Pistachio-Spread-with-Milk.jpg?v=1743874327', eyebrow: 'OUR STORY', heading: 'This Is <em>Balsam Tahini</em>', body: '<p>Pistachio spread is our boldest flavour, but it is built on the same standard as our tahini: real ingredients, stone-ground the slow way, nothing hidden in the jar.</p>', cta_label: 'Shop Pistachio Spread', cta_url: '/collections/pistachio-spreads' -%}
+
+    {%- else -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/ingredient-sesame-seeds.jpg?v=1782937673', eyebrow: 'STEP 01', heading: 'Real Humera Sesame Seeds', badge: 'NO SEED BLENDS', body: '<p>We start with whole Ethiopian Humera sesame seeds — prized for their high oil content and rich, nutty flavour.</p><p>Most mass-market tahini uses cheaper decorticated seed blends. We do not cut corners on the seed.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Balsam-Tahini-907g.jpg?v=1743874677', eyebrow: 'STEP 02', heading: 'Slow Stone-Ground, Never Machine-Milled', badge: 'COOL-TEMP MILLED', body: '<p>Our sesame is ground slowly between traditional stone mills at cool temperatures.</p><p>High-speed steel mills overheat the paste, cooking out flavour and turning it bitter — ours never does.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Balsam-Tahini-907g.jpg?v=1743874677', eyebrow: 'STEP 03', heading: 'Small Batches, Always Fresh', badge: 'MILLED THIS WEEK', body: '<p>Every batch is milled in small runs, then jarred and shipped within days.</p><p>No sitting in a warehouse for months before it reaches your shelf.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Balsam-Tahini-907g.jpg?v=1743874677', eyebrow: 'STEP 04', heading: 'Zero Additives, Zero Shortcuts', badge: '100% SESAME', body: '<p>Just 100% stone-ground sesame — nothing else goes in the jar.</p><p>Many competitors add vegetable oil to stretch the batch and mask bitterness. We never do.</p>' -%}
+      {%- render 'scroll-story-row', image: 'https://cdn.shopify.com/s/files/1/0657/3067/4742/files/Balsam-Tahini-907g.jpg?v=1743874677', eyebrow: 'OUR STORY', heading: 'This Is <em>Balsam Tahini</em>', body: '<p>Tahini was on our table every single meal growing up. When we moved to Canada and could not find one that tasted like home, we partnered with traditional stone mills to make our own. That is the tahini in your hands today.</p>', cta_label: 'Shop Tahini', cta_url: '/collections/tahini' -%}
+
+  {%- endcase -%}
 
 </section>
 
@@ -248,8 +257,6 @@
 {
   "name": "Scroll Story",
   "settings": [
-    { "type": "text",     "id": "eyebrow", "label": "Section eyebrow" },
-    { "type": "textarea", "id": "heading", "label": "Section heading (supports <em> italic)" },
     { "type": "select", "id": "bg", "label": "Background",
       "options": [
         { "value": "white", "label": "White" },
@@ -258,49 +265,8 @@
       "default": "white"
     }
   ],
-  "blocks": [
-    {
-      "type": "row",
-      "name": "Story row",
-      "settings": [
-        { "type": "image_picker", "id": "image",       "label": "Image (if no video)" },
-        { "type": "video",        "id": "video",       "label": "Video (Shopify-hosted)" },
-        { "type": "text",         "id": "video_url",   "label": "Video URL (external .mp4, overrides above)" },
-        { "type": "text",         "id": "eyebrow",     "label": "Eyebrow / step" },
-        { "type": "textarea",     "id": "heading",     "label": "Heading (supports <em> italic)", "default": "<em>Stone-ground</em> Tahini" },
-        { "type": "text",         "id": "badge",       "label": "Oval badge label" },
-        { "type": "text",         "id": "meta",        "label": "Meta line (uppercase)" },
-        { "type": "richtext",     "id": "body",        "label": "Body text" },
-        { "type": "text",         "id": "cta_label",   "label": "CTA label" },
-        { "type": "url",          "id": "cta_url",     "label": "CTA link" }
-      ]
-    }
-  ],
-  "max_blocks": 10,
   "presets": [
-    {
-      "name": "Scroll Story",
-      "blocks": [
-        {
-          "type": "row",
-          "settings": {
-            "eyebrow": "STEP 01",
-            "heading": "<em>Stone-ground</em> Tahini",
-            "badge": "THE CLASSIC",
-            "meta": "COLD-PRESSED · SMALL BATCH"
-          }
-        },
-        {
-          "type": "row",
-          "settings": {
-            "eyebrow": "STEP 02",
-            "heading": "Pistachio <em>Spread</em>",
-            "badge": "THE BOLD ONE",
-            "meta": "ROASTED · STONE-GROUND"
-          }
-        }
-      ]
-    }
+    { "name": "Scroll Story" }
   ]
 }
 {% endschema %}
