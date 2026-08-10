@@ -320,7 +320,7 @@
                   {%- assign tab_title = block.settings.title | downcase | strip -%}
                   {%- if tab_title == 'details' and product.description != blank -%}
                     {{ product.description }}
-                  {%- elsif tab_title == 'nutrition' and product.metafields.nutrition.facts != blank -%}
+                  {%- elsif tab_title == 'nutrition' -%}
                     {%- render 'nutrition-facts', product: product -%}
                   {%- elsif tab_title contains 'recip' -%}
                     {%- render 'product-recipes', product: product -%}
@@ -1377,13 +1377,17 @@
       })
         .then(function (r) { return r.json(); })
         .then(function (item) {
-          showToast(item.title || productTitle);
           setAddedState(atcBtn);
           setAddedState(stickyBtn);
-          fetch('/cart.js')
-            .then(function (r) { return r.json(); })
-            .then(function (cart) { updateHeaderCartCount(cart.item_count); })
-            .catch(function () {});
+          if (window.BalsamCart) {
+            window.BalsamCart.refresh().then(function () { window.BalsamCart.open(); });
+          } else {
+            showToast(item.title || productTitle);
+            fetch('/cart.js')
+              .then(function (r) { return r.json(); })
+              .then(function (cart) { updateHeaderCartCount(cart.item_count); })
+              .catch(function () {});
+          }
           setTimeout(function () {
             resetBtnState(atcBtn, origMainHTML);
             resetBtnState(stickyBtn, origStickyHTML);

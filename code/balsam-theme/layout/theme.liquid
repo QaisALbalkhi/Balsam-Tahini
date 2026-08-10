@@ -45,8 +45,9 @@
 
   {%- sections 'footer-group' -%}
 
-  <div class="cart-drawer__overlay" aria-hidden="true"></div>
+  {%- render 'cart-drawer' -%}
 
   {{ 'balsam-theme.js' | asset_url | script_tag }}
+  {{ 'cart-drawer.js' | asset_url | script_tag }}
 </body>
 </html>

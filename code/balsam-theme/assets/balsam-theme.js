@@ -61,38 +61,8 @@
   }
 
   /* ── Cart drawer ─────────────────────────────────────────────── */
-  function initCartDrawer() {
-    const drawer = document.querySelector('.cart-drawer');
-    const overlay = document.querySelector('.cart-drawer__overlay');
-    if (!drawer) return;
-
-    function openDrawer() {
-      drawer.classList.add('cart-drawer--open');
-      document.body.classList.add('overflow-hidden');
-      drawer.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeDrawer() {
-      drawer.classList.remove('cart-drawer--open');
-      document.body.classList.remove('overflow-hidden');
-      drawer.setAttribute('aria-hidden', 'true');
-    }
-
-    document.querySelectorAll('[data-open-cart]').forEach((el) => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        openDrawer();
-      });
-    });
-
-    const closeBtn = drawer.querySelector('[data-close-cart]');
-    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-    if (overlay) overlay.addEventListener('click', closeDrawer);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDrawer();
-    });
-  }
+  /* Owned by assets/cart-drawer.js (open/close, AJAX add/update/remove,
+     free shipping bar, recommendations, gift note). Nothing to init here. */
 
   /* ── Variant selector ────────────────────────────────────────── */
   function initVariantSelector() {
@@ -198,7 +168,6 @@
     initStickyHeader();
     initMobileNav();
 
-    initCartDrawer();
     initVariantSelector();
     initAddToCart();
     initWishlist();

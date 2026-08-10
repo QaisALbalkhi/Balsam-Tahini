@@ -155,5 +155,30 @@
         "label": "Products per page"
       }
     ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "number",
+        "id": "cart_free_shipping_threshold",
+        "default": 60,
+        "label": "Free shipping threshold",
+        "info": "In your store's currency. Shown as a progress bar in the cart drawer — keep this in sync with your announcement bar text."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_recommendations",
+        "default": true,
+        "label": "Show \"You might also like\" in cart drawer",
+        "info": "Uses Shopify's built-in product recommendations — no app required."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_gift_note",
+        "default": true,
+        "label": "Allow gift notes in cart"
+      }
+    ]
   }
 ]
