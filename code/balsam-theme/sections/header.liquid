@@ -16,7 +16,7 @@
     <!-- Logo -->
     <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ shop.name }}">
       <img
-        src="{{ 'balsam-logo.png' | asset_url }}"
+        src="{{ 'balsam-logo.svg' | asset_url }}"
         alt="{{ shop.name }}"
         width="120"
         height="60"
@@ -258,7 +258,7 @@
   <div class="mobile-nav__panel">
     <div class="mobile-nav__hdr">
       <a href="{{ routes.root_url }}" class="mobile-nav__logo-link">
-        <img src="{{ 'balsam-logo.png' | asset_url }}"
+        <img src="{{ 'balsam-logo.svg' | asset_url }}"
           alt="{{ shop.name }}" width="100" height="50" loading="eager">
       </a>
       <button class="mobile-nav__close" type="button" aria-label="Close menu" data-mobile-close>
@@ -396,7 +396,17 @@
 {% endschema %}
 
 <style>
-  /* ── Header shell ── */
+  /* ── Header shell ──
+     Shopify wraps this section in its own auto-generated
+     `.shopify-section` div, which is exactly as tall as the header.
+     Sticky positioning has no room to "travel" unless that wrapper
+     itself is sticky too — otherwise the header just scrolls away
+     with the page. Target it via the stable `__header` id suffix
+     (comes from this section's key, "header", in header-group.json)
+     so the announcement bar above it stays free to scroll off normally. */
+  [id$="__header"] {
+    position: sticky; top: 0; z-index: 200;
+  }
   .site-header {
     position: sticky; top: 0; z-index: 200;
     background: #fff;
