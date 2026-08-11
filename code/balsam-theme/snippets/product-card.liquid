@@ -558,7 +558,11 @@
       btn.classList.remove('pc-add-btn--busy', 'pc-add-btn--atc');
       btn.classList.add('pc-add-btn--added');
       verb.textContent = '✓ Added!';
-      refreshCartCount();
+      if (window.BalsamCart) {
+        window.BalsamCart.refresh().then(function () { window.BalsamCart.open(); });
+      } else {
+        refreshCartCount();
+      }
       setTimeout(reset.bind(null, btn), 2200);
     })
     .catch(function () {
