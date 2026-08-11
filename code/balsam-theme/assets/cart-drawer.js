@@ -23,6 +23,8 @@
   var fsFill       = drawer.querySelector('[data-cart-fs-fill]');
   var recsWrap     = drawer.querySelector('[data-cart-recs]');
   var recsTrack    = drawer.querySelector('[data-cart-recs-track]');
+  var recsPrevBtn  = drawer.querySelector('[data-cart-recs-prev]');
+  var recsNextBtn  = drawer.querySelector('[data-cart-recs-next]');
   var giftToggle   = drawer.querySelector('[data-cart-gift-toggle]');
   var giftBody     = drawer.querySelector('[data-cart-gift-body]');
   var giftInput    = drawer.querySelector('[data-cart-gift-input]');
@@ -201,9 +203,29 @@
           recsTrack.appendChild(card);
         });
         recsWrap.hidden = false;
+        updateRecsNav();
       })
       .catch(function () { recsWrap.hidden = true; });
   }
+
+  function updateRecsNav() {
+    if (!recsTrack || !recsPrevBtn || !recsNextBtn) return;
+    var max = recsTrack.scrollWidth - recsTrack.clientWidth;
+    recsPrevBtn.hidden = recsTrack.scrollLeft <= 4;
+    recsNextBtn.hidden = recsTrack.scrollLeft >= max - 4;
+  }
+
+  function scrollRecs(direction) {
+    if (!recsTrack) return;
+    var card = recsTrack.querySelector('.cart-rec');
+    var step = card ? card.getBoundingClientRect().width + 12 : 140;
+    recsTrack.scrollBy({ left: direction * step * 2, behavior: 'smooth' });
+  }
+
+  if (recsTrack) recsTrack.addEventListener('scroll', updateRecsNav, { passive: true });
+  if (recsPrevBtn) recsPrevBtn.addEventListener('click', function () { scrollRecs(-1); });
+  if (recsNextBtn) recsNextBtn.addEventListener('click', function () { scrollRecs(1); });
+  window.addEventListener('resize', updateRecsNav);
 
   /* ── Event delegation ── */
   drawer.addEventListener('click', function (e) {
