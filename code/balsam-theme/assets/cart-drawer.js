@@ -34,16 +34,30 @@
       : '$' + (cents / 100).toFixed(2);
   }
 
+  /* This theme's actual scroll container is <html>, not <body>
+     (body/html both use overflow-x: clip for the sticky-header fix,
+     which makes overflow-y resolve to the scrolling element on html).
+     Locking only body left the page behind the drawer still scrollable
+     — lock both so background scroll is fully blocked on all browsers. */
+  function lockScroll() {
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+  }
+  function unlockScroll() {
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  }
+
   function open() {
     drawer.classList.add('cart-drawer--open');
     drawer.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   }
 
   function close() {
     drawer.classList.remove('cart-drawer--open');
     drawer.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    unlockScroll();
   }
 
   function renderLine(item) {

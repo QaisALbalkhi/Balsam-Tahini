@@ -140,7 +140,7 @@
   .cart-drawer--open { pointer-events: all; visibility: visible; }
 
   .cart-drawer__overlay {
-    position: absolute; inset: 0;
+    position: absolute; inset: 0; z-index: 1;
     background: rgba(0,0,0,0.45);
     opacity: 0; transition: opacity var(--motion-base) var(--ease-standard);
     cursor: pointer;
@@ -148,7 +148,7 @@
   .cart-drawer--open .cart-drawer__overlay { opacity: 1; }
 
   .cart-drawer__panel {
-    position: absolute; right: 0; top: 0; bottom: 0;
+    position: absolute; right: 0; top: 0; bottom: 0; z-index: 2;
     width: min(420px, 92vw);
     background: var(--surface, #fff);
     display: flex; flex-direction: column;
