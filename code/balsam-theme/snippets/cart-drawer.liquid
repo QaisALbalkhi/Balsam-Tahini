@@ -50,31 +50,37 @@
           <div class="cart-line" data-cart-line-key="{{ item.key }}">
             <a href="{{ item.url }}" class="cart-line__img-link">
               {%- if item.image -%}
-                <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.image.alt | escape }}" width="72" height="72" loading="lazy" class="cart-line__img">
+                <img src="{{ item.image | image_url: width: 140 }}" alt="{{ item.image.alt | escape }}" width="60" height="60" loading="lazy" class="cart-line__img">
               {%- endif -%}
             </a>
             <div class="cart-line__info">
-              <a href="{{ item.url }}" class="cart-line__title">{{ item.product.title }}</a>
+              <div class="cart-line__top-row">
+                <a href="{{ item.url }}" class="cart-line__title">{{ item.product.title }}</a>
+                <button type="button" class="cart-line__remove" data-cart-remove aria-label="Remove item">
+                  <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M4 6h12M8 6V4.5A1.5 1.5 0 0 1 9.5 3h1A1.5 1.5 0 0 1 12 4.5V6m2 0-.6 9.4a1.5 1.5 0 0 1-1.5 1.4H8.1a1.5 1.5 0 0 1-1.5-1.4L6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
               {%- unless item.product.has_only_default_variant -%}
                 <p class="cart-line__variant">{{ item.variant.title }}</p>
               {%- endunless -%}
               {%- if item.selling_plan_allocation -%}
                 <p class="cart-line__plan">{{ item.selling_plan_allocation.selling_plan.name }}</p>
               {%- endif -%}
-              <div class="cart-line__qty-row">
+              <div class="cart-line__bottom-row">
                 <div class="cart-line__stepper" data-cart-qty-stepper>
                   <button type="button" class="cart-line__qty-btn" data-cart-qty-dec aria-label="Decrease quantity">−</button>
                   <span class="cart-line__qty-val" data-cart-qty-val>{{ item.quantity }}</span>
                   <button type="button" class="cart-line__qty-btn" data-cart-qty-inc aria-label="Increase quantity">+</button>
                 </div>
-                <button type="button" class="cart-line__remove" data-cart-remove aria-label="Remove item">Remove</button>
+                <div class="cart-line__price">
+                  {%- if item.original_line_price != item.final_line_price -%}
+                    <s class="cart-line__compare">{{ item.original_line_price | money }}</s>
+                  {%- endif -%}
+                  <span>{{ item.final_line_price | money }}</span>
+                </div>
               </div>
-            </div>
-            <div class="cart-line__price">
-              {%- if item.original_line_price != item.final_line_price -%}
-                <s class="cart-line__compare">{{ item.original_line_price | money }}</s>
-              {%- endif -%}
-              <span>{{ item.final_line_price | money }}</span>
             </div>
           </div>
         {%- endfor -%}
@@ -215,23 +221,31 @@
   .cart-drawer__pinned { flex-shrink: 0; border-top: 1px solid var(--border-soft); padding: var(--space-5) var(--space-6) 0; }
   .cart-drawer__pinned[hidden] { display: none; }
 
-  /* Line items */
-  .cart-line { display: grid; grid-template-columns: 72px 1fr auto; gap: var(--space-4); padding-block: var(--space-5); border-bottom: 1px solid var(--border-soft); }
+  /* Line items — compact, nomz-density: small image, remove folded
+     into a corner icon, qty + price share one row instead of stacking,
+     so ~3 lines are visible at once without scrolling. */
+  .cart-line { display: grid; grid-template-columns: 60px 1fr; gap: var(--space-3); padding-block: var(--space-3); border-bottom: 1px solid var(--border-soft); }
   .cart-line:first-child { padding-top: 0; }
-  .cart-line__img { width: 72px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); display: block; }
-  .cart-line__title { font-size: var(--text-sm); font-weight: 700; color: var(--fg); display: block; }
+  .cart-line__img { width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border); display: block; }
+  .cart-line__info { min-width: 0; }
+  .cart-line__top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-2); }
+  .cart-line__title { font-size: var(--text-sm); font-weight: 700; color: var(--fg); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
   .cart-line__title:hover { color: var(--accent); }
-  .cart-line__variant, .cart-line__plan { font-size: var(--text-xs); color: var(--muted); margin-top: 2px; }
+  .cart-line__variant, .cart-line__plan { font-size: var(--text-xs); color: var(--muted); margin-top: 1px; }
   .cart-line__plan { color: var(--accent); font-weight: 600; }
-  .cart-line__qty-row { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-2); }
+  .cart-line__bottom-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-1); }
   .cart-line__stepper { display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: var(--radius-sm); }
-  .cart-line__qty-btn { width: 26px; height: 26px; background: none; border: none; cursor: pointer; color: var(--fg-2); font-size: 14px; line-height: 1; }
+  .cart-line__qty-btn { width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--fg-2); font-size: 13px; line-height: 1; }
   .cart-line__qty-btn:hover { background: var(--border-soft); }
-  .cart-line__qty-val { width: 26px; text-align: center; font-size: var(--text-xs); font-weight: 700; }
-  .cart-line__remove { background: none; border: none; color: var(--muted); font-size: var(--text-xs); text-decoration: underline; cursor: pointer; }
-  .cart-line__remove:hover { color: var(--danger); }
-  .cart-line__price { font-size: var(--text-sm); font-weight: 700; color: var(--fg); text-align: right; white-space: nowrap; }
-  .cart-line__compare { display: block; font-size: var(--text-xs); font-weight: 400; color: var(--muted); text-decoration: line-through; }
+  .cart-line__qty-val { width: 20px; text-align: center; font-size: var(--text-xs); font-weight: 700; }
+  .cart-line__remove {
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; margin-top: 1px;
+    background: none; border: none; color: var(--muted); cursor: pointer; border-radius: var(--radius-sm);
+  }
+  .cart-line__remove:hover { color: var(--danger); background: var(--border-soft); }
+  .cart-line__price { font-size: var(--text-sm); font-weight: 700; color: var(--fg); text-align: right; white-space: nowrap; display: flex; align-items: baseline; gap: 6px; }
+  .cart-line__compare { font-size: var(--text-xs); font-weight: 400; color: var(--muted); text-decoration: line-through; }
   .cart-line--updating { opacity: 0.5; pointer-events: none; }
 
   .cart-drawer__empty { text-align: center; padding-block: var(--space-12); color: var(--muted); display: flex; flex-direction: column; gap: var(--space-4); align-items: center; }

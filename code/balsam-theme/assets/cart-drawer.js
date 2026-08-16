@@ -69,7 +69,7 @@
     el.dataset.cartLineKey = item.key;
 
     var img = item.image
-      ? '<img src="' + item.image.replace(/(\.[a-z]+)(\?|$)/i, '_160x160$1$2') + '" alt="' + (item.title || '').replace(/"/g, '&quot;') + '" width="72" height="72" loading="lazy" class="cart-line__img">'
+      ? '<img src="' + item.image.replace(/(\.[a-z]+)(\?|$)/i, '_140x140$1$2') + '" alt="' + (item.title || '').replace(/"/g, '&quot;') + '" width="60" height="60" loading="lazy" class="cart-line__img">'
       : '';
 
     var variantHtml = (item.variant_title && item.variant_title !== 'Default Title')
@@ -82,18 +82,22 @@
     el.innerHTML =
       '<a href="' + item.url + '" class="cart-line__img-link">' + img + '</a>' +
       '<div class="cart-line__info">' +
-        '<a href="' + item.url + '" class="cart-line__title">' + item.product_title + '</a>' +
+        '<div class="cart-line__top-row">' +
+          '<a href="' + item.url + '" class="cart-line__title">' + item.product_title + '</a>' +
+          '<button type="button" class="cart-line__remove" data-cart-remove aria-label="Remove item">' +
+            '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 6h12M8 6V4.5A1.5 1.5 0 0 1 9.5 3h1A1.5 1.5 0 0 1 12 4.5V6m2 0-.6 9.4a1.5 1.5 0 0 1-1.5 1.4H8.1a1.5 1.5 0 0 1-1.5-1.4L6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+        '</div>' +
         variantHtml + planHtml +
-        '<div class="cart-line__qty-row">' +
+        '<div class="cart-line__bottom-row">' +
           '<div class="cart-line__stepper">' +
             '<button type="button" class="cart-line__qty-btn" data-cart-qty-dec aria-label="Decrease quantity">−</button>' +
             '<span class="cart-line__qty-val">' + item.quantity + '</span>' +
             '<button type="button" class="cart-line__qty-btn" data-cart-qty-inc aria-label="Increase quantity">+</button>' +
           '</div>' +
-          '<button type="button" class="cart-line__remove" data-cart-remove aria-label="Remove item">Remove</button>' +
+          '<div class="cart-line__price">' + compareHtml + '<span>' + formatMoney(item.final_line_price) + '</span></div>' +
         '</div>' +
-      '</div>' +
-      '<div class="cart-line__price">' + compareHtml + '<span>' + formatMoney(item.final_line_price) + '</span></div>';
+      '</div>';
 
     return el;
   }
