@@ -14,6 +14,7 @@
 
   var itemsEl      = drawer.querySelector('[data-cart-items]');
   var emptyEl      = drawer.querySelector('[data-cart-empty]');
+  var pinnedEl     = drawer.querySelector('[data-cart-drawer-pinned]');
   var footerEl     = drawer.querySelector('[data-cart-drawer-footer]');
   var countEl      = drawer.querySelector('[data-cart-drawer-count]');
   var subtotalEl   = drawer.querySelector('[data-cart-subtotal]');
@@ -136,6 +137,7 @@
     }
 
     if (emptyEl) emptyEl.hidden = cart.item_count > 0;
+    if (pinnedEl) pinnedEl.hidden = cart.item_count === 0;
     if (footerEl) footerEl.hidden = cart.item_count === 0;
     if (subtotalEl) subtotalEl.textContent = formatMoney(cart.total_price);
 
@@ -193,12 +195,14 @@
           var card = document.createElement('div');
           card.className = 'cart-rec';
           var img = p.featured_image
-            ? '<img class="cart-rec__img" src="' + p.featured_image + '&width=256" alt="" width="128" height="128" loading="lazy">'
+            ? '<img class="cart-rec__img" src="' + p.featured_image + '&width=128" alt="" width="64" height="64" loading="lazy">'
             : '';
           card.innerHTML =
             '<a href="' + p.url + '">' + img + '</a>' +
-            '<p class="cart-rec__title">' + p.title + '</p>' +
-            '<p class="cart-rec__price">' + formatMoney(variant.price) + '</p>' +
+            '<div class="cart-rec__body">' +
+              '<a href="' + p.url + '" class="cart-rec__title">' + p.title + '</a>' +
+              '<p class="cart-rec__price">' + formatMoney(variant.price) + '</p>' +
+            '</div>' +
             '<button type="button" class="cart-rec__add" data-cart-rec-add="' + variant.id + '">+ Add</button>';
           recsTrack.appendChild(card);
         });
@@ -218,8 +222,8 @@
   function scrollRecs(direction) {
     if (!recsTrack) return;
     var card = recsTrack.querySelector('.cart-rec');
-    var step = card ? card.getBoundingClientRect().width + 12 : 140;
-    recsTrack.scrollBy({ left: direction * step * 2, behavior: 'smooth' });
+    var step = card ? card.getBoundingClientRect().width + 12 : recsTrack.clientWidth;
+    recsTrack.scrollBy({ left: direction * step, behavior: 'smooth' });
   }
 
   if (recsTrack) recsTrack.addEventListener('scroll', updateRecsNav, { passive: true });
