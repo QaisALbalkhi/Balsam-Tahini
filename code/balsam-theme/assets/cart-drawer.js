@@ -199,7 +199,7 @@
           var card = document.createElement('div');
           card.className = 'cart-rec';
           var img = p.featured_image
-            ? '<img class="cart-rec__img" src="' + p.featured_image + '&width=128" alt="" width="64" height="64" loading="lazy">'
+            ? '<img class="cart-rec__img" src="' + p.featured_image + '&width=96" alt="" width="48" height="48" loading="lazy">'
             : '';
           card.innerHTML =
             '<a href="' + p.url + '">' + img + '</a>' +
