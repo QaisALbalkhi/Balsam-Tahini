@@ -1,0 +1,83 @@
+{% comment %}
+  Reusable trust bar: star rating + review count, and a row of key
+  facts (free shipping threshold, guarantee, years in business).
+  Accepts:
+    context — 'product' | 'cart' | 'homepage' (controls sizing only)
+  No customer avatar photos: we don't have real customer photos to
+  use, and stock/placeholder people photos next to a review count
+  would read as fabricated testimonial faces.
+{% endcomment %}
+
+{%- liquid
+  assign review_count = settings.trust_bar_review_count | default: '160+'
+  assign years_in_business = settings.trust_bar_years | default: '15+'
+  assign free_shipping_threshold = settings.cart_free_shipping_threshold | default: 60
+-%}
+
+<div class="trust-bar trust-bar--{{ context | default: 'default' }}">
+  <div class="trust-bar__top">
+    <div class="trust-bar__stars" aria-hidden="true">
+      {%- for i in (1..5) -%}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FBBC05"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      {%- endfor -%}
+    </div>
+    <span class="trust-bar__reviews">{{ review_count }} Google Reviews</span>
+  </div>
+  <div class="trust-bar__facts">
+    <div class="trust-bar__fact">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span>Free Shipping ${{ free_shipping_threshold }}+</span>
+    </div>
+    <div class="trust-bar__fact">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>30-Day Guarantee</span>
+    </div>
+    <div class="trust-bar__fact">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+      <span>{{ years_in_business }} Years in Business</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .trust-bar {
+    border: 1.5px dashed var(--accent);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    padding: var(--space-3) var(--space-4);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    text-align: center;
+  }
+  .trust-bar__top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .trust-bar__stars { display: flex; gap: 1px; }
+  .trust-bar__reviews { font-size: var(--text-xs); font-weight: 700; color: var(--fg); }
+  .trust-bar__facts {
+    display: flex; align-items: center; justify-content: center;
+    gap: var(--space-4); flex-wrap: wrap;
+    padding-top: 6px; margin-top: 2px;
+    border-top: 1px solid var(--border-soft);
+    width: 100%;
+  }
+  .trust-bar__fact { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--fg-2); white-space: nowrap; }
+  .trust-bar__fact svg { color: var(--accent); flex-shrink: 0; }
+
+  /* Product page: slightly larger, more breathing room */
+  .trust-bar--product { padding: var(--space-4) var(--space-5); margin-bottom: var(--space-5); }
+  .trust-bar--product .trust-bar__reviews { font-size: var(--text-sm); }
+  .trust-bar--product .trust-bar__fact { font-size: var(--text-xs); }
+  .trust-bar--product .trust-bar__facts { gap: var(--space-5); }
+
+  /* Cart drawer: compact, single line where possible */
+  .trust-bar--cart { padding: 8px var(--space-3); gap: 4px; margin-top: var(--space-2); }
+  .trust-bar--cart .trust-bar__facts { gap: var(--space-3); padding-top: 4px; }
+  .trust-bar--cart .trust-bar__fact { font-size: 10px; }
+
+  /* Homepage: wider, roomier */
+  .trust-bar--homepage { max-width: 620px; margin: 0 auto; padding: var(--space-4) var(--space-6); }
+  .trust-bar--homepage .trust-bar__facts { gap: var(--space-6); }
+
+  @media (max-width: 480px) {
+    .trust-bar__facts { gap: var(--space-3); }
+    .trust-bar--homepage .trust-bar__facts { gap: var(--space-3) var(--space-4); }
+  }
+</style>

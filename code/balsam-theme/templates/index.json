@@ -28,6 +28,10 @@
         "show_certifications": true
       }
     },
+    "trust_bar_section": {
+      "type": "trust-bar-section",
+      "settings": {}
+    },
     "review_spotlight_6rtBCU": {
       "type": "review-spotlight",
       "blocks": {
@@ -340,6 +344,7 @@
   },
   "order": [
     "hero-banner",
+    "trust_bar_section",
     "review_spotlight_6rtBCU",
     "collections-grid",
     "popular-products",

@@ -1,0 +1,24 @@
+{% comment %}
+  Thin homepage section wrapping snippets/trust-bar.liquid — a
+  Four-Sigmatic-style stat strip (reviews, free shipping, guarantee,
+  years in business). Kept intentionally minimal: no heading, no
+  background band, just the bar itself with page-standard spacing.
+{% endcomment %}
+
+<div class="trust-bar-section section">
+  <div class="container">
+    {%- render 'trust-bar', context: 'homepage' -%}
+  </div>
+</div>
+
+<style>
+  .trust-bar-section { padding-block: var(--space-6, 24px); }
+</style>
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "settings": [],
+  "presets": [{ "name": "Trust bar" }]
+}
+{% endschema %}

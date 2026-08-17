@@ -151,16 +151,7 @@
         <span>·</span>
         <span>Ships in 24h</span>
       </div>
-      <a href="https://balsamtahini.com/policies/refund-policy" class="cart-drawer__guarantee">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 3l7 3v6c0 4.5-3 8.2-7 9-4-0.8-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-          <path d="M9 12.5l2 2 4-4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span>
-          <strong>30-Day Money-Back Guarantee</strong>
-          <em>Not happy? Full refund, no questions asked.</em>
-        </span>
-      </a>
+      {%- render 'trust-bar', context: 'cart' -%}
     </div>
 
   </div>
@@ -339,20 +330,6 @@
   .cart-drawer__checkout:active { background: var(--accent-active); transform: translateY(0); }
 
   .cart-drawer__trust { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; color: var(--muted); margin-top: var(--space-2); flex-wrap: wrap; }
-
-  /* Guarantee — a single slim line, not a padded card, so it reads
-     like nomz's "Happiness Guarantee" footnote rather than another
-     competing block. */
-  .cart-drawer__guarantee {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    margin-top: var(--space-2);
-    text-decoration: none; color: var(--muted);
-  }
-  .cart-drawer__guarantee:hover { color: var(--accent); }
-  .cart-drawer__guarantee svg { flex-shrink: 0; width: 14px; height: 14px; color: var(--accent); }
-  .cart-drawer__guarantee span { display: flex; flex-direction: column; align-items: center; font-size: 11px; line-height: 1.35; }
-  .cart-drawer__guarantee strong { font-weight: 700; color: var(--fg); }
-  .cart-drawer__guarantee em { font-style: normal; }
 
   @media (max-width: 480px) {
     .cart-drawer__panel { width: 100vw; }
