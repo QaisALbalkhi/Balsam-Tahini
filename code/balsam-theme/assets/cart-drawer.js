@@ -22,6 +22,7 @@
   var fsBar        = drawer.querySelector('[data-cart-fs-bar]');
   var fsText       = drawer.querySelector('[data-cart-fs-text]');
   var fsFill       = drawer.querySelector('[data-cart-fs-fill]');
+  var fsBadge      = drawer.querySelector('[data-cart-fs-badge]');
   var recsWrap     = drawer.querySelector('[data-cart-recs]');
   var recsTrack    = drawer.querySelector('[data-cart-recs-track]');
   var recsPrevBtn  = drawer.querySelector('[data-cart-recs-prev]');
@@ -107,6 +108,7 @@
     var remaining = thresholdCents - cart.total_price;
     var pct = Math.min(100, Math.round((cart.total_price / thresholdCents) * 100));
     if (fsFill) fsFill.style.width = pct + '%';
+    if (fsBadge) fsBadge.classList.toggle('cart-drawer__fs-badge--met', remaining <= 0);
     if (fsText) {
       if (remaining <= 0) {
         fsText.innerHTML = '🎉 You’ve unlocked <strong>free shipping!</strong>';
