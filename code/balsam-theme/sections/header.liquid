@@ -884,7 +884,10 @@
       srchInput.focus();
     });
 
-    function formatMoney(cents) { return '$' + (cents / 100).toFixed(2); }
+    /* /search/suggest.json returns price/compare_at_price_max as decimal
+       dollar strings (e.g. "12.99"), unlike the Cart AJAX API which uses
+       cents — no /100 here, that was rendering $12.99 as $0.13. */
+    function formatMoney(amount) { return '$' + parseFloat(amount).toFixed(2); }
 
     function fetchSuggestions(q) {
       fetch('/search/suggest.json?q=' + encodeURIComponent(q) + '&resources[type]=product,collection,page&resources[limit]=5')
