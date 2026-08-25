@@ -288,45 +288,112 @@
       .catch(function () { recsWrap.hidden = true; });
   }
 
-  /* ── Quick-view popup ── */
-  function openQuickView(productId) {
-    var p = recProductsById[productId];
-    if (!p || !qv || !qvBody) return;
+  /* ── Quick-view popup ──
+     Recommendation-endpoint data is enough for the card itself, but
+     not for a real gallery/per-variant images, so this fetches the
+     product's full /products/{handle}.js on open — same endpoint
+     already used for the footer's before/after price. Cached so
+     reopening the same card doesn't refetch. */
+  var qvProductCache = {};
 
-    var img = p.featured_image
-      ? '<img class="qv-img" src="' + p.featured_image + '&width=480" alt="">'
-      : '<div class="qv-img"></div>';
+  function qvHandleFromUrl(url) {
+    var m = url && url.match(/\/products\/([^/?#]+)/);
+    return m ? m[1] : null;
+  }
 
-    var variants = p.variants || [];
-    var hasOptions = variants.length > 1;
+  function renderQuickView(full) {
+    var images = (full.images || []).slice(0, 6);
+    if (images.length === 0 && full.featured_image) images = [full.featured_image];
+
+    var variants = full.variants || [];
     var firstAvailable = variants.find(function (v) { return v.available; }) || variants[0];
 
-    var priceHtml = '<span data-qv-price>' + formatMoney(firstAvailable.price) + '</span>';
-    if (firstAvailable.compare_at_price && firstAvailable.compare_at_price > firstAvailable.price) {
-      priceHtml = '<s>' + formatMoney(firstAvailable.compare_at_price) + '</s>' + priceHtml;
-    }
+    var mainSrc = (firstAvailable.featured_image && firstAvailable.featured_image.src) || images[0] || '';
 
-    var variantHtml = '';
-    if (hasOptions) {
-      var optionsHtml = variants.map(function (v) {
-        return '<option value="' + v.id + '" data-price="' + v.price + '" data-compare="' + (v.compare_at_price || '') + '"' + (v.available ? '' : ' disabled') + '>' + v.title + (v.available ? '' : ' — Sold out') + '</option>';
-      }).join('');
-      variantHtml =
-        '<span class="qv-variant-label">Options</span>' +
-        '<select class="qv-variant-select" data-qv-variant>' + optionsHtml + '</select>';
+    var thumbsHtml = images.length > 1
+      ? '<div class="qv-thumbs" data-qv-thumbs>' + images.map(function (src, i) {
+          return '<button type="button" class="qv-thumb' + (src === mainSrc ? ' qv-thumb--active' : '') + '" data-qv-thumb="' + encodeURIComponent(src) + '"><img src="' + qvImgUrl(src, 120) + '" alt=""></button>';
+        }).join('') + '</div>'
+      : '';
+
+    var galleryHtml =
+      '<div class="qv-gallery">' +
+        '<div class="qv-main-img-wrap"><img class="qv-main-img" data-qv-main-img src="' + qvImgUrl(mainSrc, 480) + '" alt=""></div>' +
+        thumbsHtml +
+      '</div>';
+
+    var priceHtml = qvPriceHtml(firstAvailable);
+
+    var variantsHtml = '';
+    if (variants.length > 1) {
+      variantsHtml =
+        '<span class="qv-variant-label">Pack Size</span>' +
+        '<div class="qv-variants" data-qv-variants>' +
+          variants.map(function (v) {
+            var cls = 'qv-variant-btn' + (v.id === firstAvailable.id ? ' qv-variant-btn--active' : '') + (v.available ? '' : ' qv-variant-btn--soldout');
+            return '<button type="button" class="' + cls + '" data-qv-variant-btn="' + v.id + '"' + (v.available ? '' : ' disabled') + '>' + v.title + '</button>';
+          }).join('') +
+        '</div>';
     }
 
     qvBody.innerHTML =
-      img +
-      '<h3 class="qv-title">' + p.title + '</h3>' +
-      '<p class="qv-price">' + priceHtml + '</p>' +
-      variantHtml +
+      galleryHtml +
+      '<h3 class="qv-title">' + full.title + '</h3>' +
+      '<p class="qv-price" data-qv-price>' + priceHtml + '</p>' +
+      variantsHtml +
       '<button type="button" class="qv-add" data-qv-add data-variant-id="' + firstAvailable.id + '"' + (firstAvailable.available ? '' : ' disabled') + '>' +
         (firstAvailable.available ? 'Add to Cart' : 'Sold Out') +
       '</button>';
 
+    qvBody.dataset.qvVariants = JSON.stringify(variants);
+    qvBody.dataset.qvImages = JSON.stringify(images);
+  }
+
+  function qvImgUrl(src, width) {
+    if (!src) return '';
+    return src + (src.indexOf('?') === -1 ? '?' : '&') + 'width=' + width;
+  }
+
+  function qvPriceHtml(variant) {
+    var html = formatMoney(variant.price);
+    if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+      html = '<s>' + formatMoney(variant.compare_at_price) + '</s>' + html;
+    }
+    return html;
+  }
+
+  function openQuickView(productId) {
+    var p = recProductsById[productId];
+    if (!p || !qv || !qvBody) return;
+    var handle = qvHandleFromUrl(p.url);
+
+    /* Open immediately with what the rec card already has, so there's
+       no blank/delayed popup — then swap in the richer gallery once
+       the full product fetch resolves (usually well under a second). */
+    renderQuickView({
+      title: p.title,
+      images: p.featured_image ? [p.featured_image] : [],
+      featured_image: p.featured_image,
+      variants: (p.variants || []).map(function (v) {
+        return { id: v.id, title: v.title, price: v.price, compare_at_price: v.compare_at_price, available: v.available !== false, featured_image: null };
+      })
+    });
     qv.classList.add('cart-quickview--open');
     qv.setAttribute('aria-hidden', 'false');
+
+    if (handle) {
+      if (qvProductCache[handle]) {
+        renderQuickView(qvProductCache[handle]);
+      } else {
+        fetch('/products/' + handle + '.js')
+          .then(function (r) { return r.json(); })
+          .then(function (full) {
+            qvProductCache[handle] = full;
+            if (qv.classList.contains('cart-quickview--open')) renderQuickView(full);
+          })
+          .catch(function () {});
+      }
+    }
   }
 
   function closeQuickView() {
@@ -339,17 +406,44 @@
     qv.addEventListener('click', function (e) {
       if (e.target.closest('[data-cart-quickview-close]')) { closeQuickView(); return; }
 
-      var variantSelect = e.target.closest('[data-qv-variant]');
-      if (variantSelect) {
-        var opt = variantSelect.selectedOptions[0];
-        var addBtn = qvBody.querySelector('[data-qv-add]');
+      var thumbBtn = e.target.closest('[data-qv-thumb]');
+      if (thumbBtn) {
+        var src = decodeURIComponent(thumbBtn.dataset.qvThumb);
+        var mainImg = qvBody.querySelector('[data-qv-main-img]');
+        if (mainImg) mainImg.src = qvImgUrl(src, 480);
+        qvBody.querySelectorAll('.qv-thumb').forEach(function (t) { t.classList.remove('qv-thumb--active'); });
+        thumbBtn.classList.add('qv-thumb--active');
+        return;
+      }
+
+      var variantBtn = e.target.closest('[data-qv-variant-btn]');
+      if (variantBtn && !variantBtn.disabled) {
+        var variants = JSON.parse(qvBody.dataset.qvVariants || '[]');
+        var chosen = variants.find(function (v) { return String(v.id) === variantBtn.dataset.qvVariantBtn; });
+        if (!chosen) return;
+
+        qvBody.querySelectorAll('.qv-variant-btn').forEach(function (b) { b.classList.remove('qv-variant-btn--active'); });
+        variantBtn.classList.add('qv-variant-btn--active');
+
         var priceEl = qvBody.querySelector('[data-qv-price]');
-        if (opt && addBtn) {
-          addBtn.dataset.variantId = opt.value;
-          addBtn.disabled = opt.disabled;
-          addBtn.textContent = opt.disabled ? 'Sold Out' : 'Add to Cart';
+        if (priceEl) priceEl.innerHTML = qvPriceHtml(chosen);
+
+        /* Only swap the main image if this variant actually has its
+           own photo — most of the catalog doesn't, and silently
+           reverting to the product's generic first image on every
+           click would be more jarring than just leaving it alone. */
+        if (chosen.featured_image && chosen.featured_image.src) {
+          var mainImg2 = qvBody.querySelector('[data-qv-main-img]');
+          if (mainImg2) mainImg2.src = qvImgUrl(chosen.featured_image.src, 480);
+          qvBody.querySelectorAll('.qv-thumb').forEach(function (t) { t.classList.remove('qv-thumb--active'); });
         }
-        if (opt && priceEl) priceEl.textContent = formatMoney(parseInt(opt.dataset.price, 10));
+
+        var addBtn = qvBody.querySelector('[data-qv-add]');
+        if (addBtn) {
+          addBtn.dataset.variantId = chosen.id;
+          addBtn.disabled = !chosen.available;
+          addBtn.textContent = chosen.available ? 'Add to Cart' : 'Sold Out';
+        }
         return;
       }
 
