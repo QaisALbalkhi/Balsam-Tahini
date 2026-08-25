@@ -335,7 +335,7 @@
           <a href="/pages/wishlist" class="mob-link mob-link--util">Wishlist</a>
         </li>
         <li class="mobile-nav__item">
-          <a href="{{ routes.cart_url }}" class="mob-link mob-link--util">
+          <a href="{{ routes.cart_url }}" class="mob-link mob-link--util" data-open-cart>
             Cart{%- if cart.item_count > 0 -%}<span class="mob-cart-count">{{ cart.item_count }}</span>{%- endif -%}
           </a>
         </li>

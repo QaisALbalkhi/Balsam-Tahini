@@ -18,9 +18,9 @@
   var footerEl     = drawer.querySelector('[data-cart-drawer-footer]');
   var countEl      = drawer.querySelector('[data-cart-drawer-count]');
   var subtotalEl   = drawer.querySelector('[data-cart-subtotal]');
-  var savingsEl    = drawer.querySelector('[data-cart-savings]');
   var fsBar        = drawer.querySelector('[data-cart-fs-bar]');
   var fsText       = drawer.querySelector('[data-cart-fs-text]');
+  var fsTrack      = drawer.querySelector('[data-cart-fs-track]');
   var fsFill       = drawer.querySelector('[data-cart-fs-fill]');
   var fsBadge      = drawer.querySelector('[data-cart-fs-badge]');
   var recsWrap     = drawer.querySelector('[data-cart-recs]');
@@ -31,6 +31,11 @@
   var giftBody     = drawer.querySelector('[data-cart-gift-body]');
   var giftInput    = drawer.querySelector('[data-cart-gift-input]');
   var checkoutLink = drawer.querySelector('[data-cart-checkout]');
+  var subtotalCompareEl = drawer.querySelector('[data-cart-subtotal-compare]');
+
+  var qv       = document.getElementById('cart-quickview');
+  var qvBody   = qv && qv.querySelector('[data-cart-quickview-body]');
+  var recProductsById = {}; /* full recommendation product objects, keyed by id, for the quick-view popup */
 
   function formatMoney(cents) {
     return (window.Shopify && Shopify.formatMoney)
@@ -53,6 +58,13 @@
   }
 
   function open() {
+    /* If the mobile hamburger menu happens to be open (e.g. tapping
+       "Cart" inside it), close it first so two overlays don't stack. */
+    var mobileNav = document.getElementById('mobile-nav');
+    if (mobileNav && mobileNav.classList.contains('mobile-nav--open')) {
+      mobileNav.classList.remove('mobile-nav--open');
+      mobileNav.setAttribute('aria-hidden', 'true');
+    }
     drawer.classList.add('cart-drawer--open');
     drawer.setAttribute('aria-hidden', 'false');
     lockScroll();
@@ -103,31 +115,84 @@
     return el;
   }
 
+  var lastFsMessage = null;
+
   function renderFreeShipping(cart) {
     if (!fsBar || thresholdCents <= 0) return;
     var remaining = thresholdCents - cart.total_price;
     var pct = Math.min(100, Math.round((cart.total_price / thresholdCents) * 100));
     if (fsFill) fsFill.style.width = pct + '%';
-    if (fsBadge) fsBadge.classList.toggle('cart-drawer__fs-badge--met', remaining <= 0);
+    /* Badge rides the fill's leading edge (clamped so its own radius
+       never overhangs past the track ends) instead of sitting fixed
+       at the track's far edge — it visibly travels as items are
+       added, the way nomz's does. */
+    if (fsBadge && fsTrack) {
+      var trackWidth = fsTrack.clientWidth || 1;
+      var badgeRadiusPct = (15 / trackWidth) * 100;
+      var badgeLeft = Math.min(100 - badgeRadiusPct, Math.max(badgeRadiusPct, pct));
+      fsBadge.style.left = badgeLeft + '%';
+      fsBadge.classList.toggle('cart-drawer__fs-badge--met', remaining <= 0);
+    }
     if (fsText) {
-      if (remaining <= 0) {
-        fsText.innerHTML = '🎉 You’ve unlocked <strong>free shipping!</strong>';
-        fsText.classList.add('cart-drawer__fs-text--met');
-      } else {
-        fsText.innerHTML = 'You’re <strong>' + formatMoney(remaining) + '</strong> away from free shipping';
-        fsText.classList.remove('cart-drawer__fs-text--met');
+      var message = remaining <= 0
+        ? '🎉 You’ve unlocked <strong>free shipping!</strong>'
+        : 'You’re <strong>' + formatMoney(remaining) + '</strong> away from free shipping';
+      fsText.classList.toggle('cart-drawer__fs-text--met', remaining <= 0);
+      /* Only replay the "pop" entrance animation when the message
+         actually changed (crossing the threshold, or a different
+         dollar amount) — not on every render, which would make it
+         feel jittery rather than eye-catching. */
+      if (message !== lastFsMessage) {
+        fsText.innerHTML = message;
+        fsText.style.animation = 'none';
+        void fsText.offsetWidth; /* force reflow so the animation can restart */
+        fsText.style.animation = '';
+        lastFsMessage = message;
       }
     }
   }
 
-  function renderSavings(cart) {
-    if (!savingsEl) return;
-    if (cart.total_discount > 0) {
-      savingsEl.hidden = false;
-      savingsEl.textContent = 'You’re saving ' + formatMoney(cart.total_discount) + ' on this order';
-    } else {
-      savingsEl.hidden = true;
-    }
+  /* The Cart AJAX API's line items don't include compare_at_price at
+     all (confirmed by inspecting a real cart response — it's simply
+     absent, not just unpopulated), only the per-item product handle.
+     To show a genuine "was $X" total against list price, each unique
+     product's real data has to be fetched separately. Cached by
+     handle so repeat renders (qty changes, etc.) don't re-fetch. */
+  var productDataCache = {};
+  function fetchProductData(handle) {
+    if (productDataCache[handle]) return Promise.resolve(productDataCache[handle]);
+    return fetch('/products/' + handle + '.js')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { productDataCache[handle] = data; return data; })
+      .catch(function () { return null; });
+  }
+
+  function renderSubtotalCompare(cart) {
+    if (!subtotalCompareEl) return;
+    if (cart.items.length === 0) { subtotalCompareEl.hidden = true; return; }
+
+    Promise.all(cart.items.map(function (item) { return fetchProductData(item.handle); }))
+      .then(function (products) {
+        var original = 0;
+        var hasAnyCompare = false;
+        cart.items.forEach(function (item, i) {
+          var product = products[i];
+          var variant = product && product.variants && product.variants.find(function (v) { return v.id === item.variant_id; });
+          var compareAt = variant && variant.compare_at_price;
+          if (compareAt && compareAt > variant.price) {
+            hasAnyCompare = true;
+            original += compareAt * item.quantity;
+          } else {
+            original += item.final_price * item.quantity;
+          }
+        });
+        if (hasAnyCompare && original > cart.total_price) {
+          subtotalCompareEl.hidden = false;
+          subtotalCompareEl.textContent = formatMoney(original);
+        } else {
+          subtotalCompareEl.hidden = true;
+        }
+      });
   }
 
   function render(cart) {
@@ -148,7 +213,7 @@
     if (subtotalEl) subtotalEl.textContent = formatMoney(cart.total_price);
 
     renderFreeShipping(cart);
-    renderSavings(cart);
+    renderSubtotalCompare(cart);
 
     if (showRecs && recsWrap) {
       if (cart.item_count > 0) fetchRecommendations(cart.items[cart.items.length - 1].product_id);
@@ -198,15 +263,20 @@
         products.forEach(function (p) {
           var variant = p.variants && p.variants[0];
           if (!variant) return;
+          recProductsById[p.id] = p;
           var card = document.createElement('div');
           card.className = 'cart-rec';
           var img = p.featured_image
-            ? '<img class="cart-rec__img" src="' + p.featured_image + '&width=96" alt="" width="48" height="48" loading="lazy">'
+            ? '<img class="cart-rec__img" src="' + p.featured_image + '&width=136" alt="" width="68" height="68" loading="lazy">'
             : '';
+          /* Tapping the image/title opens the quick-view popup instead
+             of navigating to the PDP — recommended products shouldn't
+             pull someone out of the checkout flow they're already in.
+             Buttons, not links: no href to accidentally follow. */
           card.innerHTML =
-            '<a href="' + p.url + '">' + img + '</a>' +
+            '<button type="button" class="cart-rec__img-btn" data-cart-rec-view="' + p.id + '" aria-label="Quick view ' + p.title.replace(/"/g, '&quot;') + '">' + img + '</button>' +
             '<div class="cart-rec__body">' +
-              '<a href="' + p.url + '" class="cart-rec__title">' + p.title + '</a>' +
+              '<button type="button" class="cart-rec__title" data-cart-rec-view="' + p.id + '">' + p.title + '</button>' +
               '<p class="cart-rec__price">' + formatMoney(variant.price) + '</p>' +
             '</div>' +
             '<button type="button" class="cart-rec__add" data-cart-rec-add="' + variant.id + '">+ Add</button>';
@@ -216,6 +286,85 @@
         updateRecsNav();
       })
       .catch(function () { recsWrap.hidden = true; });
+  }
+
+  /* ── Quick-view popup ── */
+  function openQuickView(productId) {
+    var p = recProductsById[productId];
+    if (!p || !qv || !qvBody) return;
+
+    var img = p.featured_image
+      ? '<img class="qv-img" src="' + p.featured_image + '&width=480" alt="">'
+      : '<div class="qv-img"></div>';
+
+    var variants = p.variants || [];
+    var hasOptions = variants.length > 1;
+    var firstAvailable = variants.find(function (v) { return v.available; }) || variants[0];
+
+    var priceHtml = '<span data-qv-price>' + formatMoney(firstAvailable.price) + '</span>';
+    if (firstAvailable.compare_at_price && firstAvailable.compare_at_price > firstAvailable.price) {
+      priceHtml = '<s>' + formatMoney(firstAvailable.compare_at_price) + '</s>' + priceHtml;
+    }
+
+    var variantHtml = '';
+    if (hasOptions) {
+      var optionsHtml = variants.map(function (v) {
+        return '<option value="' + v.id + '" data-price="' + v.price + '" data-compare="' + (v.compare_at_price || '') + '"' + (v.available ? '' : ' disabled') + '>' + v.title + (v.available ? '' : ' — Sold out') + '</option>';
+      }).join('');
+      variantHtml =
+        '<span class="qv-variant-label">Options</span>' +
+        '<select class="qv-variant-select" data-qv-variant>' + optionsHtml + '</select>';
+    }
+
+    qvBody.innerHTML =
+      img +
+      '<h3 class="qv-title">' + p.title + '</h3>' +
+      '<p class="qv-price">' + priceHtml + '</p>' +
+      variantHtml +
+      '<button type="button" class="qv-add" data-qv-add data-variant-id="' + firstAvailable.id + '"' + (firstAvailable.available ? '' : ' disabled') + '>' +
+        (firstAvailable.available ? 'Add to Cart' : 'Sold Out') +
+      '</button>';
+
+    qv.classList.add('cart-quickview--open');
+    qv.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeQuickView() {
+    if (!qv) return;
+    qv.classList.remove('cart-quickview--open');
+    qv.setAttribute('aria-hidden', 'true');
+  }
+
+  if (qv) {
+    qv.addEventListener('click', function (e) {
+      if (e.target.closest('[data-cart-quickview-close]')) { closeQuickView(); return; }
+
+      var variantSelect = e.target.closest('[data-qv-variant]');
+      if (variantSelect) {
+        var opt = variantSelect.selectedOptions[0];
+        var addBtn = qvBody.querySelector('[data-qv-add]');
+        var priceEl = qvBody.querySelector('[data-qv-price]');
+        if (opt && addBtn) {
+          addBtn.dataset.variantId = opt.value;
+          addBtn.disabled = opt.disabled;
+          addBtn.textContent = opt.disabled ? 'Sold Out' : 'Add to Cart';
+        }
+        if (opt && priceEl) priceEl.textContent = formatMoney(parseInt(opt.dataset.price, 10));
+        return;
+      }
+
+      var addBtn2 = e.target.closest('[data-qv-add]');
+      if (addBtn2 && !addBtn2.disabled) {
+        addBtn2.disabled = true;
+        addBtn2.textContent = 'Adding…';
+        addItem(addBtn2.dataset.variantId, 1).then(function () {
+          closeQuickView();
+        }).catch(function () {
+          addBtn2.disabled = false;
+          addBtn2.textContent = 'Add to Cart';
+        });
+      }
+    });
   }
 
   function updateRecsNav() {
@@ -266,6 +415,12 @@
       return;
     }
 
+    var recView = e.target.closest('[data-cart-rec-view]');
+    if (recView) {
+      openQuickView(recView.dataset.cartRecView);
+      return;
+    }
+
     var recAdd = e.target.closest('[data-cart-rec-add]');
     if (recAdd) {
       var variantId = recAdd.dataset.cartRecAdd;
@@ -306,7 +461,9 @@
   }
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && drawer.classList.contains('cart-drawer--open')) close();
+    if (e.key !== 'Escape') return;
+    if (qv && qv.classList.contains('cart-quickview--open')) { closeQuickView(); return; }
+    if (drawer.classList.contains('cart-drawer--open')) close();
   });
 
   document.querySelectorAll('[data-open-cart]').forEach(function (el) {
@@ -317,4 +474,13 @@
   });
 
   window.BalsamCart = { open: function () { fetchCart().then(open); }, close: close, refresh: fetchCart, addItem: addItem };
+
+  /* Landed here via the /cart page's redirect-to-home script — open
+     the drawer once the homepage has settled in. */
+  try {
+    if (sessionStorage.getItem('balsam_open_cart_on_load') === '1') {
+      sessionStorage.removeItem('balsam_open_cart_on_load');
+      window.BalsamCart.open();
+    }
+  } catch (e) {}
 })();

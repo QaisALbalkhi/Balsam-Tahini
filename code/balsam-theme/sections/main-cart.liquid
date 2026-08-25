@@ -1,3 +1,15 @@
+{%- comment -%}
+  Anyone who lands directly on this page (an old bookmark, an
+  externally-shared link, a search result) gets bounced to the
+  homepage with the cart drawer opened instead — the drawer is the
+  theme's actual cart UI now; this full page is only kept as a
+  no-JS fallback so /cart still works if JS fails to load.
+{%- endcomment -%}
+<script>
+  sessionStorage.setItem('balsam_open_cart_on_load', '1');
+  window.location.replace('{{ routes.root_url }}');
+</script>
+
 <section class="main-cart section">
   <div class="container">
     <h1 class="section-title">{{ 'cart.title' | t }}</h1>
