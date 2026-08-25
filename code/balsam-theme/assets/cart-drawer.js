@@ -310,9 +310,17 @@
 
     var mainSrc = (firstAvailable.featured_image && firstAvailable.featured_image.src) || images[0] || '';
 
+    /* Where a thumbnail is literally a photo of one specific pack size
+       (its src matches that variant's own featured_image), tag the
+       button with that variant's id so clicking the photo also
+       selects the matching Pack Size button — the images ARE the
+       size differentiator for products like this, so the two
+       controls need to move together, not act independently. */
     var thumbsHtml = images.length > 1
       ? '<div class="qv-thumbs" data-qv-thumbs>' + images.map(function (src, i) {
-          return '<button type="button" class="qv-thumb' + (src === mainSrc ? ' qv-thumb--active' : '') + '" data-qv-thumb="' + encodeURIComponent(src) + '"><img src="' + qvImgUrl(src, 120) + '" alt=""></button>';
+          var matchedVariant = variants.find(function (v) { return v.featured_image && qvNormalizeUrl(v.featured_image.src) === qvNormalizeUrl(src); });
+          var variantAttr = matchedVariant ? ' data-qv-thumb-variant="' + matchedVariant.id + '"' : '';
+          return '<button type="button" class="qv-thumb' + (qvNormalizeUrl(src) === qvNormalizeUrl(mainSrc) ? ' qv-thumb--active' : '') + '" data-qv-thumb="' + encodeURIComponent(src) + '"' + variantAttr + '><img src="' + qvImgUrl(src, 120) + '" alt=""></button>';
         }).join('') + '</div>'
       : '';
 
@@ -352,6 +360,14 @@
   function qvImgUrl(src, width) {
     if (!src) return '';
     return src + (src.indexOf('?') === -1 ? '?' : '&') + 'width=' + width;
+  }
+
+  /* product.images returns protocol-relative URLs ("//cdn...") while
+     variant.featured_image.src returns absolute ones ("https://cdn...")
+     — same file, different string, so any image-identity comparison
+     needs to strip the protocol first or it silently never matches. */
+  function qvNormalizeUrl(src) {
+    return (src || '').replace(/^https?:/, '');
   }
 
   function qvPriceHtml(variant) {
@@ -402,6 +418,39 @@
     qv.setAttribute('aria-hidden', 'true');
   }
 
+  /* Shared by both the Pack Size buttons and the thumbnail clicks
+     (when a thumbnail is tagged with a matching variant id) — picking
+     either control keeps price, the active Pack Size button, and the
+     active thumbnail all in sync, since for products like this the
+     photo *is* the size indicator. skipThumbSync avoids fighting the
+     thumbnail click handler's own active-state update when the click
+     originated on a thumbnail rather than a Pack Size button. */
+  function applyVariant(chosen, opts) {
+    opts = opts || {};
+
+    qvBody.querySelectorAll('.qv-variant-btn').forEach(function (b) {
+      b.classList.toggle('qv-variant-btn--active', String(b.dataset.qvVariantBtn) === String(chosen.id));
+    });
+
+    var priceEl = qvBody.querySelector('[data-qv-price]');
+    if (priceEl) priceEl.innerHTML = qvPriceHtml(chosen);
+
+    if (!opts.skipImageSync && chosen.featured_image && chosen.featured_image.src) {
+      var mainImg = qvBody.querySelector('[data-qv-main-img]');
+      if (mainImg) mainImg.src = qvImgUrl(chosen.featured_image.src, 480);
+      qvBody.querySelectorAll('.qv-thumb').forEach(function (t) {
+        t.classList.toggle('qv-thumb--active', qvNormalizeUrl(decodeURIComponent(t.dataset.qvThumb || '')) === qvNormalizeUrl(chosen.featured_image.src));
+      });
+    }
+
+    var addBtn = qvBody.querySelector('[data-qv-add]');
+    if (addBtn) {
+      addBtn.dataset.variantId = chosen.id;
+      addBtn.disabled = !chosen.available;
+      addBtn.textContent = chosen.available ? 'Add to Cart' : 'Sold Out';
+    }
+  }
+
   if (qv) {
     qv.addEventListener('click', function (e) {
       if (e.target.closest('[data-cart-quickview-close]')) { closeQuickView(); return; }
@@ -413,6 +462,12 @@
         if (mainImg) mainImg.src = qvImgUrl(src, 480);
         qvBody.querySelectorAll('.qv-thumb').forEach(function (t) { t.classList.remove('qv-thumb--active'); });
         thumbBtn.classList.add('qv-thumb--active');
+
+        if (thumbBtn.dataset.qvThumbVariant) {
+          var variantsForThumb = JSON.parse(qvBody.dataset.qvVariants || '[]');
+          var matchedVariant = variantsForThumb.find(function (v) { return String(v.id) === thumbBtn.dataset.qvThumbVariant; });
+          if (matchedVariant) applyVariant(matchedVariant, { skipImageSync: true });
+        }
         return;
       }
 
@@ -421,29 +476,7 @@
         var variants = JSON.parse(qvBody.dataset.qvVariants || '[]');
         var chosen = variants.find(function (v) { return String(v.id) === variantBtn.dataset.qvVariantBtn; });
         if (!chosen) return;
-
-        qvBody.querySelectorAll('.qv-variant-btn').forEach(function (b) { b.classList.remove('qv-variant-btn--active'); });
-        variantBtn.classList.add('qv-variant-btn--active');
-
-        var priceEl = qvBody.querySelector('[data-qv-price]');
-        if (priceEl) priceEl.innerHTML = qvPriceHtml(chosen);
-
-        /* Only swap the main image if this variant actually has its
-           own photo — most of the catalog doesn't, and silently
-           reverting to the product's generic first image on every
-           click would be more jarring than just leaving it alone. */
-        if (chosen.featured_image && chosen.featured_image.src) {
-          var mainImg2 = qvBody.querySelector('[data-qv-main-img]');
-          if (mainImg2) mainImg2.src = qvImgUrl(chosen.featured_image.src, 480);
-          qvBody.querySelectorAll('.qv-thumb').forEach(function (t) { t.classList.remove('qv-thumb--active'); });
-        }
-
-        var addBtn = qvBody.querySelector('[data-qv-add]');
-        if (addBtn) {
-          addBtn.dataset.variantId = chosen.id;
-          addBtn.disabled = !chosen.available;
-          addBtn.textContent = chosen.available ? 'Add to Cart' : 'Sold Out';
-        }
+        applyVariant(chosen);
         return;
       }
 
