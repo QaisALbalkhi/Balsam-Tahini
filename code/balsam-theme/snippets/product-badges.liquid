@@ -1,0 +1,180 @@
+{% comment %}
+  Automatic promo badges for a product. No manual upkeep required.
+
+  Usage:
+    {% render 'product-badges', product: product, context: 'card', part: 'sticker' %}
+    {% render 'product-badges', product: product, context: 'card', part: 'pills' %}
+    {% render 'product-badges', product: product, context: 'pdp' %}
+
+  Rules:
+    NEW RELEASE  product published within `new_days` (default 30), which
+                 expires on its own, OR tagged `new` / `new-release`, which
+                 holds the badge until the tag is taken off.
+    BOGO         product tagged `bogo`, `bogo-free` or `buy-one-get-one`.
+                 Reads "Buy 1, 2nd 50% Off" (the Pure Butters offer).
+    SAVE n%      compare-at price is higher than the selling price. Hidden
+                 on BOGO products so two 50% labels never stack.
+    BEST SELLER  product tagged `bestseller` / `best-seller` / `best seller`.
+
+  Every badge that applies gets its own flat label on the product image,
+  filling the corners in priority order. On a product page that is top-right,
+  then top-left, then the two bottom corners. On a card the top-right corner
+  is skipped, because the wishlist heart sits there. Any badge past the last
+  free corner falls back to a pill under the title, so nothing is dropped.
+
+  Styles and the product-page placement script live in 'product-badges-css',
+  rendered once from layout/theme.liquid.
+{% endcomment %}
+
+{%- liquid
+  assign pb_ctx = context | default: 'card'
+  assign pb_part = part | default: 'all'
+  assign pb_new_days = new_days | default: 30
+
+  assign pb_tags = product.tags | join: '|' | downcase
+  assign pb_tags = '|' | append: pb_tags | append: '|'
+
+  assign pb_now = 'now' | date: '%s' | plus: 0
+  assign pb_pub = product.published_at | date: '%s' | plus: 0
+  assign pb_age = 999999
+  if pb_pub > 0
+    assign pb_age = pb_now | minus: pb_pub | divided_by: 86400
+  endif
+
+  assign pb_is_new = false
+  if pb_age <= pb_new_days
+    assign pb_is_new = true
+  endif
+  # Pipe delimiters keep these exact: '|new|' cannot match '|new-release|'.
+  if pb_tags contains '|new|'
+    assign pb_is_new = true
+  endif
+  if pb_tags contains '|new-release|'
+    assign pb_is_new = true
+  endif
+
+  assign pb_is_bogo = false
+  if pb_tags contains '|bogo|'
+    assign pb_is_bogo = true
+  endif
+  if pb_tags contains '|bogo-free|'
+    assign pb_is_bogo = true
+  endif
+  if pb_tags contains '|buy-one-get-one|'
+    assign pb_is_bogo = true
+  endif
+
+  assign pb_is_best = false
+  if pb_tags contains '|bestseller|'
+    assign pb_is_best = true
+  endif
+  if pb_tags contains '|best-seller|'
+    assign pb_is_best = true
+  endif
+  if pb_tags contains '|best seller|'
+    assign pb_is_best = true
+  endif
+
+  assign pb_save = 0
+  if product.compare_at_price > product.price
+    assign pb_save = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round
+  endif
+-%}
+
+{%- capture pb_key_list -%}
+  {%- if pb_is_new %}new,{% endif -%}
+  {%- if pb_is_bogo %}bogo,{% endif -%}
+  {%- if pb_save > 0 and pb_is_bogo == false %}save,{% endif -%}
+  {%- if pb_is_best %}best,{% endif -%}
+{%- endcapture -%}
+
+{%- liquid
+  assign pb_keys = pb_key_list | strip | split: ','
+
+  # Corner order per context. The card skips top-right for the wishlist heart.
+  if pb_ctx == 'pdp'
+    assign pb_corners = 'tr,tl,br,bl' | split: ','
+  else
+    assign pb_corners = 'tl,bl,br' | split: ','
+  endif
+  assign pb_corner_count = pb_corners.size
+-%}
+
+{%- capture pb_stickers_html -%}
+  {%- for key in pb_keys -%}
+    {%- if forloop.index0 < pb_corner_count -%}
+      {%- assign pos = pb_corners[forloop.index0] -%}
+      {%- case key -%}
+        {%- when 'new' -%}
+          <span class="pb-sticker pb-sticker--new pb-sticker--{{ pb_ctx }} pb-sticker--{{ pos }}" data-pb-sticker>New Release</span>
+        {%- when 'bogo' -%}
+          <span class="pb-sticker pb-sticker--bogo pb-sticker--{{ pb_ctx }} pb-sticker--{{ pos }}" data-pb-sticker>Buy 1, 2nd 50% Off</span>
+        {%- when 'save' -%}
+          <span class="pb-sticker pb-sticker--save pb-sticker--{{ pb_ctx }} pb-sticker--{{ pos }}" data-pb-sticker>Save {{ pb_save }}%</span>
+        {%- when 'best' -%}
+          <span class="pb-sticker pb-sticker--best pb-sticker--{{ pb_ctx }} pb-sticker--{{ pos }}" data-pb-sticker>Best Seller</span>
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture pb_overflow_html -%}
+  {%- for key in pb_keys -%}
+    {%- if forloop.index0 >= pb_corner_count -%}
+      {%- case key -%}
+        {%- when 'new' -%}<span class="pb-pill pb-pill--new">New Release</span>
+        {%- when 'bogo' -%}<span class="pb-pill pb-pill--bogo">Buy 1, 2nd 50% Off</span>
+        {%- when 'save' -%}<span class="pb-pill pb-pill--save">Save {{ pb_save }}%</span>
+        {%- when 'best' -%}<span class="pb-pill pb-pill--best">Best Seller</span>
+      {%- endcase -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture pb_sr_html -%}
+  {%- for key in pb_keys -%}
+    {%- case key -%}
+      {%- when 'new' -%}New release.
+      {%- when 'bogo' -%}Buy one, get the second one 50% off.
+      {%- when 'save' -%}Save {{ pb_save }}%.
+      {%- when 'best' -%}Best seller.
+    {%- endcase -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture pb_pills_block -%}
+  {%- comment -%}
+    Card labels sit inside an aria-hidden link, so repeat them for screen
+    readers here in the card body, where assistive tech will reach them.
+  {%- endcomment -%}
+  {%- if pb_keys.size > 0 -%}
+    <span class="pb-sr">{{ pb_sr_html | strip }}</span>
+  {%- endif -%}
+  {%- assign pb_overflow = pb_overflow_html | strip -%}
+  {%- if pb_overflow != '' -%}
+    <div class="pb-row pb-row--{{ pb_ctx }}" data-pb-pills>{{ pb_overflow }}</div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if pb_ctx == 'pdp' -%}
+  {%- if pb_keys.size > 0 -%}
+    {%- comment -%}
+      Rendered hidden, then moved into the gallery by the placement script.
+      Keeping it hidden until then avoids a flash in the wrong place.
+    {%- endcomment -%}
+    <div class="pb-pdp" data-pb-pdp hidden>
+      {{- pb_stickers_html -}}
+      {%- assign pb_overflow = pb_overflow_html | strip -%}
+      {%- if pb_overflow != '' -%}
+        <div class="pb-row pb-row--pdp" data-pb-pills>{{ pb_overflow }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- elsif pb_part == 'sticker' -%}
+  {{- pb_stickers_html -}}
+{%- elsif pb_part == 'pills' -%}
+  {{- pb_pills_block -}}
+{%- else -%}
+  {{- pb_stickers_html -}}
+  {{- pb_pills_block -}}
+{%- endif -%}

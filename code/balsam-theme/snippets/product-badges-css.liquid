@@ -1,0 +1,156 @@
+{% comment %}
+  Styles for 'product-badges', plus the script that moves the product-page
+  labels into the gallery. Rendered once from layout/theme.liquid.
+
+  Flat rounded labels, colour-coded per badge type, using the brand tokens
+  from balsam-tokens.css.
+{% endcomment %}
+
+<style>
+  .pb-pdp[hidden] { display: none !important; }
+
+  /* Shared label look: flat, rounded, one line, no rotation */
+  .pb-sticker,
+  .pb-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body, "Open Sans", sans-serif);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    line-height: 1;
+    white-space: nowrap;
+    border-radius: 8px;
+  }
+
+  /* Colour coding */
+  .pb-sticker--new,  .pb-pill--new  { background: #9BE8C0; color: #0B2E1C; }
+  .pb-sticker--bogo, .pb-pill--bogo { background: #F2B544; color: #3B2A05; }
+  .pb-sticker--save, .pb-pill--save { background: #F2B544; color: #3B2A05; }
+  .pb-sticker--best, .pb-pill--best { background: #1B2B3A; color: #FFFFFF; }
+
+  /* On-image labels */
+  .pb-sticker {
+    position: absolute;
+    z-index: 4;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.16);
+    pointer-events: none; /* never steals a click from the gallery or card link */
+  }
+
+  .pb-sticker--card {
+    --pb-inset: 10px;
+    font-size: 0.6rem;
+    padding: 6px 10px;
+  }
+  .pb-sticker--pdp {
+    --pb-inset: 16px;
+    font-size: 0.78rem;
+    padding: 9px 15px;
+  }
+
+  /* Corner placement */
+  .pb-sticker--tr { top: var(--pb-inset); right: var(--pb-inset); }
+  .pb-sticker--tl { top: var(--pb-inset); left:  var(--pb-inset); }
+  .pb-sticker--br { bottom: var(--pb-inset); right: var(--pb-inset); }
+  .pb-sticker--bl { bottom: var(--pb-inset); left:  var(--pb-inset); }
+
+  .pb-media-host { position: relative; }
+
+  /* Overflow pills, only past the last free corner */
+  .pb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .pb-row--card { align-self: flex-start; }
+  .pb-row--pdp  { margin: 0 0 10px; gap: 8px; }
+  .pb-row--card .pb-pill { font-size: 0.6rem; padding: 6px 10px; }
+  .pb-row--pdp  .pb-pill { font-size: 0.78rem; padding: 9px 15px; }
+
+  /* The offer label is the one that needs to be read at a glance, so it runs
+     larger than the other labels, with heavier padding and tighter tracking
+     to keep the longer text on one line. */
+  .pb-sticker--bogo.pb-sticker--card { font-size: 0.78rem; padding: 8px 12px; letter-spacing: 0.04em; }
+  .pb-sticker--bogo.pb-sticker--pdp  { font-size: 1rem;    padding: 11px 18px; letter-spacing: 0.04em; }
+  .pb-pill--bogo { letter-spacing: 0.04em; }
+  .pb-row--card .pb-pill--bogo { font-size: 0.78rem; padding: 8px 12px; }
+  .pb-row--pdp  .pb-pill--bogo { font-size: 1rem;    padding: 11px 18px; }
+
+  @media (max-width: 767px) {
+    .pb-sticker--card { --pb-inset: 8px; font-size: 0.52rem; padding: 5px 8px; }
+    .pb-sticker--pdp  { --pb-inset: 12px; font-size: 0.68rem; padding: 7px 12px; }
+    .pb-row--pdp .pb-pill { font-size: 0.68rem; padding: 7px 12px; }
+    .pb-sticker--bogo.pb-sticker--card { font-size: 0.66rem; padding: 6px 9px; }
+    .pb-sticker--bogo.pb-sticker--pdp  { font-size: 0.84rem; padding: 9px 14px; }
+    .pb-row--card .pb-pill--bogo { font-size: 0.66rem; padding: 6px 9px; }
+    .pb-row--pdp  .pb-pill--bogo { font-size: 0.84rem; padding: 9px 14px; }
+  }
+
+  .pb-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Add-to-cart buttons: drop the em dash before the price.
+     Covers the product card, the product-page button, and the cards that
+     'recently viewed' / 'pairs with' build in JavaScript -- all three emit a
+     dedicated separator span. */
+  .pc-add-btn__sep,
+  .product-form__atc-sep { display: none !important; }
+
+  /* product-card.liquid ships its own <style> block, which the browser sees
+     after this one, so every rule below has to win on !important rather than
+     on source order. */
+  .pc-add-btn { justify-content: center !important; position: relative; }
+  .pc-add-btn__inner { justify-content: center !important; gap: 9px !important; }
+  .pc-add-btn--atc .pc-add-btn__inner { gap: 1px !important; }
+
+  /* Chevron is lifted out of the flow and pinned right, so the label stays
+     centred in the full width of the button instead of being pushed left. */
+  .pc-add-btn__chevron {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%) !important;
+  }
+  .pc-add-btn[aria-expanded="true"] .pc-add-btn__chevron {
+    transform: translateY(-50%) rotate(180deg) !important;
+  }
+</style>
+
+<script>
+(function () {
+  /* The product-page badges render hidden at the end of the document, then
+     move into the gallery, so main-product.liquid needs no edit. */
+  function place() {
+    var src = document.querySelector('[data-pb-pdp]');
+    if (!src) return;
+
+    var stickers = src.querySelectorAll('[data-pb-sticker]');
+    var pills    = src.querySelector('[data-pb-pills]');
+    var media    = document.querySelector('.product-media');
+    var header   = document.querySelector('.pd-sticky-header');
+
+    if (media && stickers.length) {
+      media.classList.add('pb-media-host');
+      Array.prototype.forEach.call(stickers, function (s) { media.appendChild(s); });
+    }
+    if (pills && header) {
+      var title = header.querySelector('h1, .product-name');
+      if (title) { header.insertBefore(pills, title); }
+      else { header.appendChild(pills); }
+    }
+    src.remove();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', place);
+  } else {
+    place();
+  }
+})();
+</script>
