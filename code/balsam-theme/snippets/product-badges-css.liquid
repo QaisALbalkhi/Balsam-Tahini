@@ -29,6 +29,7 @@
   .pb-sticker--bogo, .pb-pill--bogo { background: #F2B544; color: #3B2A05; }
   .pb-sticker--save, .pb-pill--save { background: #F2B544; color: #3B2A05; }
   .pb-sticker--best, .pb-pill--best { background: #1B2B3A; color: #FFFFFF; }
+  .pb-sticker--out,  .pb-pill--out  { background: #C81E1E; color: #FFFFFF; }
 
   /* On-image labels */
   .pb-sticker {
@@ -67,20 +68,20 @@
   /* The offer label is the one that needs to be read at a glance, so it runs
      larger than the other labels, with heavier padding and tighter tracking
      to keep the longer text on one line. */
-  .pb-sticker--bogo.pb-sticker--card { font-size: 0.78rem; padding: 8px 12px; letter-spacing: 0.04em; }
-  .pb-sticker--bogo.pb-sticker--pdp  { font-size: 1rem;    padding: 11px 18px; letter-spacing: 0.04em; }
-  .pb-pill--bogo { letter-spacing: 0.04em; }
-  .pb-row--card .pb-pill--bogo { font-size: 0.78rem; padding: 8px 12px; }
-  .pb-row--pdp  .pb-pill--bogo { font-size: 1rem;    padding: 11px 18px; }
+  .pb-sticker--bogo.pb-sticker--card, .pb-sticker--out.pb-sticker--card { font-size: 0.78rem; padding: 8px 12px; letter-spacing: 0.04em; }
+  .pb-sticker--bogo.pb-sticker--pdp,  .pb-sticker--out.pb-sticker--pdp  { font-size: 1rem;    padding: 11px 18px; letter-spacing: 0.04em; }
+  .pb-pill--bogo, .pb-pill--out { letter-spacing: 0.04em; }
+  .pb-row--card .pb-pill--bogo, .pb-row--card .pb-pill--out { font-size: 0.78rem; padding: 8px 12px; }
+  .pb-row--pdp  .pb-pill--bogo, .pb-row--pdp  .pb-pill--out { font-size: 1rem;    padding: 11px 18px; }
 
   @media (max-width: 767px) {
     .pb-sticker--card { --pb-inset: 8px; font-size: 0.52rem; padding: 5px 8px; }
     .pb-sticker--pdp  { --pb-inset: 12px; font-size: 0.68rem; padding: 7px 12px; }
     .pb-row--pdp .pb-pill { font-size: 0.68rem; padding: 7px 12px; }
-    .pb-sticker--bogo.pb-sticker--card { font-size: 0.66rem; padding: 6px 9px; }
-    .pb-sticker--bogo.pb-sticker--pdp  { font-size: 0.84rem; padding: 9px 14px; }
-    .pb-row--card .pb-pill--bogo { font-size: 0.66rem; padding: 6px 9px; }
-    .pb-row--pdp  .pb-pill--bogo { font-size: 0.84rem; padding: 9px 14px; }
+    .pb-sticker--bogo.pb-sticker--card, .pb-sticker--out.pb-sticker--card { font-size: 0.66rem; padding: 6px 9px; }
+    .pb-sticker--bogo.pb-sticker--pdp,  .pb-sticker--out.pb-sticker--pdp  { font-size: 0.84rem; padding: 9px 14px; }
+    .pb-row--card .pb-pill--bogo, .pb-row--card .pb-pill--out { font-size: 0.66rem; padding: 6px 9px; }
+    .pb-row--pdp  .pb-pill--bogo, .pb-row--pdp  .pb-pill--out { font-size: 0.84rem; padding: 9px 14px; }
   }
 
   .pb-sr {

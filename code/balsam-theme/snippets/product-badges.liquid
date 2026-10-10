@@ -7,6 +7,9 @@
     {% render 'product-badges', product: product, context: 'pdp' %}
 
   Rules:
+    OUT OF STOCK every variant is unavailable. Shown on its own: a promo or
+                 "new" label on something nobody can buy is misleading, so
+                 it replaces every other badge until the product is back.
     NEW RELEASE  product published within `new_days` (default 30), which
                  expires on its own, OR tagged `new` / `new-release`, which
                  holds the badge until the tag is taken off.
@@ -64,6 +67,11 @@
     assign pb_is_bogo = true
   endif
 
+  assign pb_is_out = false
+  if product.available == false
+    assign pb_is_out = true
+  endif
+
   assign pb_is_best = false
   if pb_tags contains '|bestseller|'
     assign pb_is_best = true
@@ -82,10 +90,14 @@
 -%}
 
 {%- capture pb_key_list -%}
-  {%- if pb_is_new %}new,{% endif -%}
-  {%- if pb_is_bogo %}bogo,{% endif -%}
-  {%- if pb_save > 0 and pb_is_bogo == false %}save,{% endif -%}
-  {%- if pb_is_best %}best,{% endif -%}
+  {%- if pb_is_out -%}
+    out,
+  {%- else -%}
+    {%- if pb_is_new %}new,{% endif -%}
+    {%- if pb_is_bogo %}bogo,{% endif -%}
+    {%- if pb_save > 0 and pb_is_bogo == false %}save,{% endif -%}
+    {%- if pb_is_best %}best,{% endif -%}
+  {%- endif -%}
 {%- endcapture -%}
 
 {%- liquid
@@ -105,6 +117,8 @@
     {%- if forloop.index0 < pb_corner_count -%}
       {%- assign pos = pb_corners[forloop.index0] -%}
       {%- case key -%}
+        {%- when 'out' -%}
+          <span class="pb-sticker pb-sticker--out pb-sticker--{{ pb_ctx }} pb-sticker--{{ pos }}" data-pb-sticker>Out of Stock</span>
         {%- when 'new' -%}
           <span class="pb-sticker pb-sticker--new pb-sticker--{{ pb_ctx }} pb-sticker--{{ pos }}" data-pb-sticker>New Release</span>
         {%- when 'bogo' -%}
@@ -122,6 +136,7 @@
   {%- for key in pb_keys -%}
     {%- if forloop.index0 >= pb_corner_count -%}
       {%- case key -%}
+        {%- when 'out' -%}<span class="pb-pill pb-pill--out">Out of Stock</span>
         {%- when 'new' -%}<span class="pb-pill pb-pill--new">New Release</span>
         {%- when 'bogo' -%}<span class="pb-pill pb-pill--bogo">Buy 1, 2nd 50% Off</span>
         {%- when 'save' -%}<span class="pb-pill pb-pill--save">Save {{ pb_save }}%</span>
@@ -134,6 +149,7 @@
 {%- capture pb_sr_html -%}
   {%- for key in pb_keys -%}
     {%- case key -%}
+      {%- when 'out' -%}Out of stock.
       {%- when 'new' -%}New release.
       {%- when 'bogo' -%}Buy one, get the second one 50% off.
       {%- when 'save' -%}Save {{ pb_save }}%.
