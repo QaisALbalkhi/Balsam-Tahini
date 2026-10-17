@@ -12,12 +12,45 @@
     "main": {
       "type": "main-team",
       "blocks": {
-        "m1": { "type": "member", "settings": { "name": "Founder", "role": "Founder & CEO", "bio": "The vision behind Balsam — passionate about authentic food and building something meaningful." } },
-        "m2": { "type": "member", "settings": { "name": "Team Member", "role": "Operations", "bio": "Keeps everything running smoothly from production to your front door." } },
-        "m3": { "type": "member", "settings": { "name": "Team Member", "role": "Marketing", "bio": "Shares the Balsam story and helps customers discover the tahini they've been missing." } },
-        "m4": { "type": "member", "settings": { "name": "Team Member", "role": "Customer Care", "bio": "Here to make sure every Balsam experience exceeds expectations." } }
+        "m1": {
+          "type": "member",
+          "settings": {
+            "name": "Balsam Mahmoud",
+            "role": "Founder and CEO",
+            "bio": "Balsam was born in the Middle East and arrived in Canada at 10 years old. She is a proud Canadian, and feels especially fulfilled when she sees her children are exploring their passions and pursuing their dreams. As a young girl Balsam was a strong spirit and eventually went on to put that determination to use in her business pursuits. No matter the adventure, one thing always remained true –though the girl left her country, you couldn’t take the country out of the girl. With Middle Eastern roots firmly planted within her Balsam helped in growing the small Tahini manufacturing business into the vision she had of a booming company producing a variety of different products.\n\nThe Middle East is rich in history, art, science, and spirit. Food is the most significant way cultures are preserved for those who journey to other lands. Balsam’s heart is in this business. She is so proud to put these richly authentic products on supermarket shelves; honouring the foods and flavours that she grew up with."
+          }
+        },
+        "m2": {
+          "type": "member",
+          "settings": {
+            "name": "Mohamad El Hassan",
+            "role": "Director of Operations",
+            "bio": "Mohamad’s journey brought him to Montreal, Canada at 18 years old, where he would begin to establish himself in the food manufacturing and distribution industry to eventually have 15 years of experience under his belt. During this time Mohamad gained a really good understanding of people in the food industry, market demands and the product. He learned business strategies and how to grow the business and learned the intricacies of bringing our products to some of the industry’s leading Food Product Suppliers, Gourmet food companies, Private business owners and people’s tables. Since 2007, Mohamad has applied his entrepreneurial spirit day in and day out, spearheading product development and client acquisition at Balsam Tahini.\n\nMohamad has implemented iron clad food quality processes that not only ensures the food on the market your family consumes is safe to eat, but he can also attest that the flavours are those he experienced growing up back home and some that his own grandmother would approve of."
+          }
+        },
+        "m3": {
+          "type": "member",
+          "settings": {
+            "name": "Paul Nguyen",
+            "role": "Plant Manager and Operator",
+            "bio": "Paul joined the Balsam Tahini team in 2011 and has since become an important factor in the company’s growing success. Paul plays a very big role in the day to day operations within the production plant. He oversees the ins and outs of every little task that is completed on a daily basis and ensures that each member of the production team is fully trained and has a clear awareness of their role and is comfortable within it.\n\nPaul has a very strong understanding of the technology, material, and process and makes sure all of the food safety and quality standards are being adhered to by every member on the team. Working hand in hand with other leaders in the company Paul ensures that every little detail is handled with the utmost importance and takes every step needed to ensure that daily production is free from any unnecessary glitches."
+          }
+        },
+        "m4": {
+          "type": "member",
+          "settings": {
+            "name": "Ashwini Firoz Nathani",
+            "role": "Quality Assurance Professional, HACCP Certified",
+            "bio": "Perhaps one of the most critical members of the Balsam Tahini team is the person who ensures that all of our food products are safe for consumption. Ashwini’s role is vital to our company’s success. As a trusted Quality Assurance professional in the food industry, Ashwini brings with her years of experience from various food product manufacturers, including Beer, Catering Services, Bakeries, Pasta manufacturers, Poultry, and now the full suite of products at Balsam Tahini.\n\nShe is a fully certified HACCP professional, and her absolute focus on food safety gives all of our customers both confidence and peace of mind that our products can always be trusted."
+          }
+        }
       },
-      "block_order": ["m1","m2","m3","m4"],
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
+      ],
       "settings": {
         "eyebrow": "THE PEOPLE BEHIND BALSAM",
         "heading": "Meet Our Team",
@@ -26,5 +59,7 @@
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
