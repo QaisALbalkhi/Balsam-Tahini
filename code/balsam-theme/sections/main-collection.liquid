@@ -166,18 +166,21 @@
                 {%- endif -%}
               {%- endfor -%}
 
-              <!-- Size group: toggle chips, filled in by the script below -->
-              <div class="cfs-group" id="size-filter" hidden>
-                <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
-                  <span>Size</span>
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-                <div class="cfs-group__body" data-filter-body>
-                  <div class="cfs-chip-list" id="size-chip-list" role="group" aria-label="Size"></div>
+              <!-- Weight / Volume groups: range chips, filled in by the script below -->
+              {%- assign size_groups = 'weight,volume' | split: ',' -%}
+              {%- for sg in size_groups -%}
+                <div class="cfs-group" data-size-group="{{ sg }}" hidden>
+                  <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
+                    <span>{{ sg | capitalize }}</span>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                      <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <div class="cfs-group__body" data-filter-body>
+                    <div class="cfs-chip-list" data-size-chips="{{ sg }}" role="group" aria-label="{{ sg | capitalize }}"></div>
+                  </div>
                 </div>
-              </div>
+              {%- endfor -%}
 
             </form>
           </div><!-- /.cfs__inner -->
@@ -188,8 +191,12 @@
       <div class="collection-products-area">
         <div id="collection-grid-wrap" class="collection-grid-wrap">
           {%- if collection.products.size > 0 -%}
-            {%- comment -%} The pager has to sit inside the paginate block: `paginate` does not exist after endpaginate. {%- endcomment -%}
-            {%- paginate collection.products by settings.collection_products_per_page -%}
+            {%- comment -%}
+              50 is the most Shopify allows per page. The script below pulls the other pages into this grid
+              and hides the pager, so shoppers see one list; the pager is the no-script fallback.
+              It has to sit inside the paginate block: `paginate` does not exist after endpaginate.
+            {%- endcomment -%}
+            {%- paginate collection.products by 50 -%}
               <div class="product-grid" id="product-grid">
                 {%- for product in collection.products -%}
                   {% render 'product-card', product: product %}
@@ -457,7 +464,7 @@
   .cfs-chip:hover { border-color: var(--accent); }
   .cfs-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .cfs-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .product-card.is-size-hidden { display: none !important; }
+  .product-card.is-client-hidden { display: none !important; }
 
   /* ── Products area ── */
   .collection-products-area { flex: 1; min-width: 0; }
@@ -518,8 +525,6 @@
   var gridWrap     = document.getElementById('collection-grid-wrap');
   var sortSelect   = document.getElementById('sort-by');
   var clearBtn     = document.getElementById('clear-all-filters');
-  var sizeGroup    = document.getElementById('size-filter');
-  var sizeList     = document.getElementById('size-chip-list');
   var toggleBtn    = document.getElementById('filter-toggle-btn');
   var cfs          = document.getElementById('cfs');
   var activeBadge  = document.getElementById('filter-active-count');
@@ -528,7 +533,7 @@
   var noResults    = document.getElementById('coll-no-results');
   var productGrid  = document.getElementById('product-grid');
   var filterDebounce, searchDebounce, loadSeq = 0;
-  var selectedSizes = []; /* normalised size keys, e.g. '230g' */
+  var selectedSizes = []; /* keys of the picked weight / volume ranges, e.g. '250g-500g' */
 
   /* ── Sidebar open / close ── */
   function openSidebar() {
@@ -582,12 +587,44 @@
     return params;
   }
 
-  /* ── Size filter ──
+  /* ── Weight / volume range filter ──
      Shopify only filters on a product option once it is switched on in Search &
-     Discovery, so sizes are handled here instead. The server still does the
-     rest of the filtering; with a size picked, every page of that result is
-     gathered into one grid and the cards without that size are hidden. */
+     Discovery, so sizes are handled here instead. A card matches a range when any
+     of its sizes falls inside it, ends included (so a 250g jar is under both
+     15g – 250g and 250g – 500g). Ranges nobody sells in stay hidden. */
+  var SIZE_RANGES = [
+    { key: '15g-250g',    type: 'weight', label: '15g \u2013 250g',  min: 15,   max: 250 },
+    { key: '250g-500g',   type: 'weight', label: '250g \u2013 500g', min: 250,  max: 500 },
+    { key: '500g-1kg',    type: 'weight', label: '500g \u2013 1kg',  min: 500,  max: 1000 },
+    { key: '1kg-5kg',     type: 'weight', label: '1kg \u2013 5kg',   min: 1000, max: 5000 },
+    { key: '5kg-25kg',    type: 'weight', label: '5kg \u2013 25kg',  min: 5000, max: 25000 },
+    { key: 'up-to-250ml', type: 'volume', label: 'Up to 250ml',      min: 0,    max: 250 },
+    { key: '250ml-500ml', type: 'volume', label: '250ml \u2013 500ml', min: 250, max: 500 },
+    { key: '500ml-1l',    type: 'volume', label: '500ml \u2013 1L',  min: 500,  max: 1000 },
+    { key: '1l-5l',       type: 'volume', label: '1L \u2013 5L',     min: 1000, max: 5000 },
+    { key: '5l-25l',      type: 'volume', label: '5L \u2013 25L',    min: 5000, max: 25000 }
+  ];
+
   function sizeKey(t) { return String(t).toLowerCase().replace(/\s+/g, ''); }
+
+  /* '5 KG' -> { type: 'weight', amount: 5000 }; amounts are grams or millilitres */
+  function parseSize(title) {
+    var m = /^(\d+(?:\.\d+)?)(kg|g|ml|l)$/.exec(sizeKey(title));
+    if (!m) return null;
+    var n = parseFloat(m[1]);
+    if (m[2] === 'g')  return { type: 'weight', amount: n };
+    if (m[2] === 'kg') return { type: 'weight', amount: n * 1000 };
+    if (m[2] === 'ml') return { type: 'volume', amount: n };
+    return { type: 'volume', amount: n * 1000 };
+  }
+
+  function rangesFor(title) {
+    var s = parseSize(title);
+    if (!s) return [];
+    return SIZE_RANGES.filter(function (r) {
+      return r.type === s.type && s.amount >= r.min && s.amount <= r.max;
+    }).map(function (r) { return r.key; });
+  }
 
   function withSizes(url) {
     if (!selectedSizes.length) return url;
@@ -603,9 +640,9 @@
       .then(function (r) { return r.text(); })
       .then(function (html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
-        return { page: page, cards: Array.prototype.slice.call(doc.querySelectorAll('#product-grid .product-card')) };
+        return { page: page, ok: true, cards: Array.prototype.slice.call(doc.querySelectorAll('#product-grid .product-card')) };
       })
-      .catch(function () { return { page: page, cards: [] }; });
+      .catch(function () { return { page: page, ok: false, cards: [] }; });
   }
 
   function cardHasSize(card) {
@@ -613,14 +650,31 @@
     if (!el) return false;
     try {
       return JSON.parse(el.textContent).some(function (v) {
-        return selectedSizes.indexOf(sizeKey(v.title)) !== -1;
+        return rangesFor(v.title).some(function (k) { return selectedSizes.indexOf(k) !== -1; });
       });
     } catch (e) { return false; }
   }
 
-  function applySizes(url) {
+  /* "Out of stock" ticked on its own: Shopify matches any product with a sold-out size,
+     so also drop products that still have a size in stock. */
+  function onlyOutOfStock() {
+    return !!filterForm.querySelector('[name="filter.v.availability"][value="0"]:checked') &&
+           !filterForm.querySelector('[name="filter.v.availability"][value="1"]:checked');
+  }
+
+  function cardIsFullyOut(card) {
+    var el = card.querySelector('.pc-variants-json');
+    if (!el) return false;
+    try {
+      return !JSON.parse(el.textContent).some(function (v) { return v.available; });
+    } catch (e) { return false; }
+  }
+
+  /* Pull every page of the current result into the grid (so there is no pager),
+     then hide the cards outside the picked size ranges. */
+  function showAllPages(url) {
     var grid = document.getElementById('product-grid');
-    if (!grid || !selectedSizes.length) return Promise.resolve();
+    if (!grid) return Promise.resolve();
 
     var info  = gridWrap.querySelector('.pagination__info');
     var pm    = info && /Page\s+(\d+)\s+of\s+(\d+)/.exec(info.textContent);
@@ -631,75 +685,77 @@
     for (var p = 1; p <= pages; p++) { if (p !== cur) jobs.push(fetchPageCards(url, p)); }
 
     return Promise.all(jobs).then(function (results) {
-      var byPage = {};
-      byPage[cur] = here;
-      results.forEach(function (r) { byPage[r.page] = r.cards; });
-      for (var i = 1; i <= pages; i++) {
-        (byPage[i] || []).forEach(function (c) { grid.appendChild(c); });
+      var failed = results.some(function (r) { return !r.ok; });
+      if (!failed) {
+        var byPage = {};
+        byPage[cur] = here;
+        results.forEach(function (r) { byPage[r.page] = r.cards; });
+        for (var i = 1; i <= pages; i++) {
+          (byPage[i] || []).forEach(function (c) { grid.appendChild(c); });
+        }
       }
 
       var shown = 0;
+      var outOnly = onlyOutOfStock();
       grid.querySelectorAll('.product-card').forEach(function (c) {
-        var ok = cardHasSize(c);
-        c.classList.toggle('is-size-hidden', !ok);
+        var ok = (!selectedSizes.length || cardHasSize(c)) && (!outOnly || cardIsFullyOut(c));
+        c.classList.toggle('is-client-hidden', !ok);
         if (ok) shown++;
       });
 
-      var pager = gridWrap.querySelector('.pagination');
-      if (pager) pager.style.display = 'none';
-      var countEl = document.getElementById('products-count');
-      if (countEl) countEl.textContent = countEl.textContent.replace(/\d+/, shown);
-      if (shown === 0) {
+      if (!failed) {
+        var pager = gridWrap.querySelector('.pagination');
+        if (pager) pager.style.display = 'none';
+        var countEl = document.getElementById('products-count');
+        if (countEl) countEl.textContent = countEl.textContent.replace(/\d+/, shown);
+      }
+      if (shown === 0 && (selectedSizes.length || outOnly)) {
         var empty = document.createElement('p');
         empty.className = 'coll-no-results';
-        empty.textContent = 'No products come in the selected sizes.';
+        empty.textContent = 'No products match these filters.';
         grid.insertAdjacentElement('afterend', empty);
       }
     });
   }
 
-  function sizeSortValue(k) {
-    var m = /^(\d+(?:\.\d+)?)(kg|g|ml|l)$/.exec(k);
-    if (!m) return 1e12;
-    var n = parseFloat(m[1]);
-    if (m[2] === 'g')  return n;
-    if (m[2] === 'kg') return n * 1000;
-    if (m[2] === 'ml') return 1e6 + n;
-    return 1e6 + n * 1000;
-  }
-
   function buildSizeChips() {
-    if (!sizeGroup || !sizeList) return;
     fetch('/collections/all/products.json?limit=250')
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        var seen = {};
+        var present = {};
         (data.products || []).forEach(function (p) {
           (p.variants || []).forEach(function (v) {
-            var k = sizeKey(v.option1 || v.title);
-            if (k && k !== 'defaulttitle') seen[k] = true;
+            rangesFor(v.option1 || v.title).forEach(function (k) { present[k] = true; });
           });
         });
-        var keys = Object.keys(seen).sort(function (a, b) {
-          return (sizeSortValue(a) - sizeSortValue(b)) || (a < b ? -1 : 1);
-        });
-        if (!keys.length) return;
-        keys.forEach(function (k) {
+        SIZE_RANGES.forEach(function (r) {
+          var list = present[r.key] && document.querySelector('[data-size-chips="' + r.type + '"]');
+          if (!list) return;
           var b = document.createElement('button');
           b.type = 'button';
           b.className = 'cfs-chip';
-          b.dataset.size = k;
-          b.textContent = k;
-          b.setAttribute('aria-pressed', String(selectedSizes.indexOf(k) !== -1));
-          sizeList.appendChild(b);
+          b.dataset.size = r.key;
+          b.textContent = r.label;
+          b.setAttribute('aria-pressed', String(selectedSizes.indexOf(r.key) !== -1));
+          list.appendChild(b);
         });
-        sizeGroup.hidden = false;
+        document.querySelectorAll('[data-size-group]').forEach(function (g) {
+          g.hidden = !g.querySelector('.cfs-chip');
+        });
+
+        /* Shopify counts a product as out of stock when any size is; show fully-out products only */
+        var fullyOut = (data.products || []).filter(function (p) {
+          return (p.variants || []).length && !p.variants.some(function (v) { return v.available; });
+        }).length;
+        var outInput = filterForm.querySelector('[name="filter.v.availability"][value="0"]');
+        var outCount = outInput && outInput.closest('label') && outInput.closest('label').querySelector('.cfs-checkbox__count');
+        if (outCount) outCount.textContent = '(' + fullyOut + ')';
       })
       .catch(function () { /* no chips, the rest of the filters still work */ });
   }
 
-  if (sizeList) {
-    sizeList.addEventListener('click', function (e) {
+  document.querySelectorAll('[data-size-chips]').forEach(function (list) {
+    list.addEventListener('click', function (e) {
       var btn = e.target.closest('.cfs-chip');
       if (!btn) return;
       var k = btn.dataset.size;
@@ -708,7 +764,7 @@
       btn.setAttribute('aria-pressed', String(i === -1));
       applyFilters();
     });
-  }
+  });
 
   /* ── AJAX load (shared by filters + collection nav) ── */
   function loadUrl(url, pushState) {
@@ -726,7 +782,7 @@
         var countEl = document.getElementById('products-count');
         if (newCount && countEl) countEl.textContent = newCount.textContent;
         if (pushState !== false) history.pushState({ url: url }, '', withSizes(url));
-        return applySizes(url).then(function () {
+        return showAllPages(url).then(function () {
           if (seq !== loadSeq) return;
           bindPaginationLinks();
           document.dispatchEvent(new CustomEvent('balsam:grid-updated'));
@@ -777,7 +833,7 @@
     clearBtn.addEventListener('click', function () {
       filterForm.querySelectorAll('[data-filter-input]:checked').forEach(function (cb) { cb.checked = false; });
       selectedSizes = [];
-      if (sizeList) sizeList.querySelectorAll('.cfs-chip').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+      filterForm.querySelectorAll('.cfs-chip').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
       /* restore "All Products" checkbox */
       if (collAllCb) collAllCb.checked = true;
       applyFilters();
@@ -794,7 +850,7 @@
       var name = (card.querySelector('.product-card__name') || card).textContent.toLowerCase();
       var show = q === '' || name.indexOf(q) !== -1;
       card.style.display = show ? '' : 'none';
-      if (show && !card.classList.contains('is-size-hidden')) visible++;
+      if (show && !card.classList.contains('is-client-hidden')) visible++;
     });
     if (noResults) noResults.hidden = visible > 0 || q === '';
   }
@@ -827,15 +883,20 @@
 
   bindPaginationLinks();
 
-  /* A shared link can carry ?size=230g — pick those up and load the filtered grid */
-  selectedSizes = new URLSearchParams(window.location.search).getAll('size').map(sizeKey).filter(Boolean);
+  /* A shared link can carry ?size=250g-500g; drop anything that is not a known range */
+  selectedSizes = new URLSearchParams(window.location.search).getAll('size').map(function (k) { return k.toLowerCase(); })
+    .filter(function (k) { return SIZE_RANGES.some(function (r) { return r.key === k; }); });
   buildSizeChips();
-  if (selectedSizes.length) {
+  gridWrap.classList.add('is-loading');
+  (function () {
     var start = new URL(window.location.href);
     start.searchParams.delete('size');
     start.searchParams.delete('page');
-    loadUrl(start.pathname + start.search, false);
-  }
+    showAllPages(start.pathname + start.search).then(function () {
+      document.dispatchEvent(new CustomEvent('balsam:grid-updated'));
+      updateBadge();
+    }).finally(function () { gridWrap.classList.remove('is-loading'); });
+  })();
   updateBadge();
 
   window.addEventListener('popstate', function () { window.location.reload(); });
