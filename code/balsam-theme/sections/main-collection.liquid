@@ -1,3 +1,24 @@
+{%- comment -%}
+  /collections/all is Shopify's built-in route, not a real collection record,
+  so there is no admin setting for its default sort -- it always comes back
+  alphabetical. Send visitors who arrive without an explicit sort to the
+  best-selling order instead. location.replace keeps this out of the history
+  stack, so Back still leaves the page rather than bouncing through it.
+{%- endcomment -%}
+{%- if collection.handle == 'all' -%}
+  <script>
+    (function () {
+      try {
+        var u = new URL(window.location.href);
+        if (!u.searchParams.has('sort_by')) {
+          u.searchParams.set('sort_by', 'best-selling');
+          window.location.replace(u.toString());
+        }
+      } catch (e) {}
+    })();
+  </script>
+{%- endif -%}
+
 <section class="main-collection section">
   <div class="container">
 
@@ -113,7 +134,8 @@
 
               <!-- Dynamic filter groups -->
               {%- for filter in collection.filters -%}
-                {%- if filter.type == 'list' -%}
+                {%- assign filter_key = filter.label | downcase -%}
+                {%- if filter.type == 'list' and filter_key != 'size' -%}
                   <div class="cfs-group">
                     <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
                       <span>{{ filter.label }}</span>
@@ -141,40 +163,21 @@
                     </div>
                   </div>
 
-                {%- elsif filter.type == 'price_range' -%}
-                  {%- assign rmin = filter.range_min | money_without_currency | replace: ',', '' -%}
-                  {%- assign rmax = filter.range_max | money_without_currency | replace: ',', '' -%}
-                  {%- if filter.min_value.value != blank -%}{%- assign smin = filter.min_value.value | money_without_currency | replace: ',', '' -%}{%- else -%}{%- assign smin = rmin -%}{%- endif -%}
-                  {%- if filter.max_value.value != blank -%}{%- assign smax = filter.max_value.value | money_without_currency | replace: ',', '' -%}{%- else -%}{%- assign smax = rmax -%}{%- endif -%}
-                  <div class="cfs-group">
-                    <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
-                      <span>{{ filter.label }}</span>
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                        <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                    <div class="cfs-group__body" data-filter-body>
-                      <div class="price-slider" id="price-slider"
-                        data-range-min="{{ rmin }}" data-range-max="{{ rmax }}"
-                        data-param-min="{{ filter.min_value.param_name }}" data-param-max="{{ filter.max_value.param_name }}">
-                        <div class="price-slider__track-wrap">
-                          <div class="price-slider__track"><div class="price-slider__fill" id="price-fill"></div></div>
-                          <input type="range" class="price-slider__range price-slider__range--min" id="price-min"
-                            min="{{ rmin }}" max="{{ rmax }}" value="{{ smin }}" step="0.01"
-                            name="{{ filter.min_value.param_name }}" aria-label="Minimum price">
-                          <input type="range" class="price-slider__range price-slider__range--max" id="price-max"
-                            min="{{ rmin }}" max="{{ rmax }}" value="{{ smax }}" step="0.01"
-                            name="{{ filter.max_value.param_name }}" aria-label="Maximum price">
-                        </div>
-                        <div class="price-slider__labels">
-                          <span>$<span id="price-min-label">0</span></span>
-                          <span>$<span id="price-max-label">0</span></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 {%- endif -%}
               {%- endfor -%}
+
+              <!-- Size group: toggle chips, filled in by the script below -->
+              <div class="cfs-group" id="size-filter" hidden>
+                <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
+                  <span>Size</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="cfs-group__body" data-filter-body>
+                  <div class="cfs-chip-list" id="size-chip-list" role="group" aria-label="Size"></div>
+                </div>
+              </div>
 
             </form>
           </div><!-- /.cfs__inner -->
@@ -185,21 +188,22 @@
       <div class="collection-products-area">
         <div id="collection-grid-wrap" class="collection-grid-wrap">
           {%- if collection.products.size > 0 -%}
-            <div class="product-grid" id="product-grid">
-              {%- paginate collection.products by settings.collection_products_per_page -%}
+            {%- comment -%} The pager has to sit inside the paginate block: `paginate` does not exist after endpaginate. {%- endcomment -%}
+            {%- paginate collection.products by settings.collection_products_per_page -%}
+              <div class="product-grid" id="product-grid">
                 {%- for product in collection.products -%}
                   {% render 'product-card', product: product %}
                 {%- endfor -%}
-              {%- endpaginate -%}
-            </div>
-            <p class="coll-no-results" id="coll-no-results" hidden>No products match your search.</p>
-            {%- if paginate.pages > 1 -%}
-              <nav class="pagination" aria-label="Pagination">
-                {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="pagination__btn btn btn-ghost btn--sm">← Previous</a>{%- endif -%}
-                <span class="pagination__info">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
-                {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="pagination__btn btn btn-ghost btn--sm">Next →</a>{%- endif -%}
-              </nav>
-            {%- endif -%}
+              </div>
+              <p class="coll-no-results" id="coll-no-results" hidden>No products match your search.</p>
+              {%- if paginate.pages > 1 -%}
+                <nav class="pagination" aria-label="Pagination">
+                  {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" class="pagination__btn btn btn-ghost btn--sm">← Previous</a>{%- endif -%}
+                  <span class="pagination__info">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+                  {%- if paginate.next -%}<a href="{{ paginate.next.url }}" class="pagination__btn btn btn-ghost btn--sm">Next →</a>{%- endif -%}
+                </nav>
+              {%- endif -%}
+            {%- endpaginate -%}
           {%- else -%}
             <p class="collection-empty">No products found.</p>
           {%- endif -%}
@@ -434,32 +438,26 @@
   .cfs-checkbox__label { color: var(--fg); line-height: 1.3; }
   .cfs-checkbox__count { color: var(--muted); font-size: var(--text-xs); margin-left: 2px; }
 
-  /* Price slider */
-  .price-slider { padding: 4px 0 2px; }
-  .price-slider__track-wrap { position: relative; height: 36px; display: flex; align-items: center; }
-  .price-slider__track { position: absolute; left: 0; right: 0; height: 4px; background: #E5E7EB; border-radius: 4px; }
-  .price-slider__fill { position: absolute; height: 100%; background: var(--accent); border-radius: 4px; }
-  .price-slider__range {
-    position: absolute; left: 0; right: 0; width: 100%; height: 4px;
-    background: transparent; -webkit-appearance: none; appearance: none;
-    pointer-events: none; outline: none;
+  /* Size chips */
+  .cfs-chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); padding-top: 2px; }
+  .cfs-chip {
+    min-width: 52px;
+    padding: 9px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
   }
-  .price-slider__range::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #fff; border: 2px solid var(--accent);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-    cursor: pointer; pointer-events: all; z-index: 2; position: relative;
-    transition: box-shadow 0.15s;
-  }
-  .price-slider__range::-webkit-slider-thumb:hover { box-shadow: 0 0 0 6px rgba(27,67,50,0.12); }
-  .price-slider__range::-moz-range-thumb {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #fff; border: 2px solid var(--accent);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-    cursor: pointer; pointer-events: all;
-  }
-  .price-slider__labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.82rem; font-weight: 600; color: var(--fg); }
+  .cfs-chip:hover { border-color: var(--accent); }
+  .cfs-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cfs-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .product-card.is-size-hidden { display: none !important; }
 
   /* ── Products area ── */
   .collection-products-area { flex: 1; min-width: 0; }
@@ -520,7 +518,8 @@
   var gridWrap     = document.getElementById('collection-grid-wrap');
   var sortSelect   = document.getElementById('sort-by');
   var clearBtn     = document.getElementById('clear-all-filters');
-  var priceSlider  = document.getElementById('price-slider');
+  var sizeGroup    = document.getElementById('size-filter');
+  var sizeList     = document.getElementById('size-chip-list');
   var toggleBtn    = document.getElementById('filter-toggle-btn');
   var cfs          = document.getElementById('cfs');
   var activeBadge  = document.getElementById('filter-active-count');
@@ -528,7 +527,8 @@
   var searchClear  = document.getElementById('coll-search-clear');
   var noResults    = document.getElementById('coll-no-results');
   var productGrid  = document.getElementById('product-grid');
-  var filterDebounce, searchDebounce;
+  var filterDebounce, searchDebounce, loadSeq = 0;
+  var selectedSizes = []; /* normalised size keys, e.g. '230g' */
 
   /* ── Sidebar open / close ── */
   function openSidebar() {
@@ -564,13 +564,7 @@
   /* ── Badge ── */
   function updateBadge() {
     if (!filterForm || !activeBadge) return;
-    var count = filterForm.querySelectorAll('[data-filter-input]:checked').length;
-    if (priceSlider) {
-      var mi = priceSlider.querySelector('.price-slider__range--min');
-      var ma = priceSlider.querySelector('.price-slider__range--max');
-      if (mi && parseFloat(mi.value) > parseFloat(priceSlider.dataset.rangeMin)) count++;
-      if (ma && parseFloat(ma.value) < parseFloat(priceSlider.dataset.rangeMax)) count++;
-    }
+    var count = filterForm.querySelectorAll('[data-filter-input]:checked').length + selectedSizes.length;
     activeBadge.textContent = count;
     activeBadge.hidden = count === 0;
   }
@@ -585,21 +579,145 @@
     filterForm.querySelectorAll('[data-filter-input]:checked').forEach(function (cb) {
       params.append(cb.name, cb.value);
     });
-    if (priceSlider) {
-      var mi = priceSlider.querySelector('.price-slider__range--min');
-      var ma = priceSlider.querySelector('.price-slider__range--max');
-      if (mi && parseFloat(mi.value) > parseFloat(priceSlider.dataset.rangeMin)) params.set(priceSlider.dataset.paramMin, mi.value);
-      if (ma && parseFloat(ma.value) < parseFloat(priceSlider.dataset.rangeMax)) params.set(priceSlider.dataset.paramMax, ma.value);
-    }
     return params;
+  }
+
+  /* ── Size filter ──
+     Shopify only filters on a product option once it is switched on in Search &
+     Discovery, so sizes are handled here instead. The server still does the
+     rest of the filtering; with a size picked, every page of that result is
+     gathered into one grid and the cards without that size are hidden. */
+  function sizeKey(t) { return String(t).toLowerCase().replace(/\s+/g, ''); }
+
+  function withSizes(url) {
+    if (!selectedSizes.length) return url;
+    var u = new URL(url, window.location.origin);
+    selectedSizes.forEach(function (k) { u.searchParams.append('size', k); });
+    return u.pathname + u.search;
+  }
+
+  function fetchPageCards(url, page) {
+    var u = new URL(url, window.location.origin);
+    u.searchParams.set('page', page);
+    return fetch(u.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return { page: page, cards: Array.prototype.slice.call(doc.querySelectorAll('#product-grid .product-card')) };
+      })
+      .catch(function () { return { page: page, cards: [] }; });
+  }
+
+  function cardHasSize(card) {
+    var el = card.querySelector('.pc-variants-json');
+    if (!el) return false;
+    try {
+      return JSON.parse(el.textContent).some(function (v) {
+        return selectedSizes.indexOf(sizeKey(v.title)) !== -1;
+      });
+    } catch (e) { return false; }
+  }
+
+  function applySizes(url) {
+    var grid = document.getElementById('product-grid');
+    if (!grid || !selectedSizes.length) return Promise.resolve();
+
+    var info  = gridWrap.querySelector('.pagination__info');
+    var pm    = info && /Page\s+(\d+)\s+of\s+(\d+)/.exec(info.textContent);
+    var cur   = pm ? parseInt(pm[1], 10) : 1;
+    var pages = pm ? parseInt(pm[2], 10) : 1;
+    var here  = Array.prototype.slice.call(grid.querySelectorAll('.product-card'));
+    var jobs  = [];
+    for (var p = 1; p <= pages; p++) { if (p !== cur) jobs.push(fetchPageCards(url, p)); }
+
+    return Promise.all(jobs).then(function (results) {
+      var byPage = {};
+      byPage[cur] = here;
+      results.forEach(function (r) { byPage[r.page] = r.cards; });
+      for (var i = 1; i <= pages; i++) {
+        (byPage[i] || []).forEach(function (c) { grid.appendChild(c); });
+      }
+
+      var shown = 0;
+      grid.querySelectorAll('.product-card').forEach(function (c) {
+        var ok = cardHasSize(c);
+        c.classList.toggle('is-size-hidden', !ok);
+        if (ok) shown++;
+      });
+
+      var pager = gridWrap.querySelector('.pagination');
+      if (pager) pager.style.display = 'none';
+      var countEl = document.getElementById('products-count');
+      if (countEl) countEl.textContent = countEl.textContent.replace(/\d+/, shown);
+      if (shown === 0) {
+        var empty = document.createElement('p');
+        empty.className = 'coll-no-results';
+        empty.textContent = 'No products come in the selected sizes.';
+        grid.insertAdjacentElement('afterend', empty);
+      }
+    });
+  }
+
+  function sizeSortValue(k) {
+    var m = /^(\d+(?:\.\d+)?)(kg|g|ml|l)$/.exec(k);
+    if (!m) return 1e12;
+    var n = parseFloat(m[1]);
+    if (m[2] === 'g')  return n;
+    if (m[2] === 'kg') return n * 1000;
+    if (m[2] === 'ml') return 1e6 + n;
+    return 1e6 + n * 1000;
+  }
+
+  function buildSizeChips() {
+    if (!sizeGroup || !sizeList) return;
+    fetch('/collections/all/products.json?limit=250')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var seen = {};
+        (data.products || []).forEach(function (p) {
+          (p.variants || []).forEach(function (v) {
+            var k = sizeKey(v.option1 || v.title);
+            if (k && k !== 'defaulttitle') seen[k] = true;
+          });
+        });
+        var keys = Object.keys(seen).sort(function (a, b) {
+          return (sizeSortValue(a) - sizeSortValue(b)) || (a < b ? -1 : 1);
+        });
+        if (!keys.length) return;
+        keys.forEach(function (k) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'cfs-chip';
+          b.dataset.size = k;
+          b.textContent = k;
+          b.setAttribute('aria-pressed', String(selectedSizes.indexOf(k) !== -1));
+          sizeList.appendChild(b);
+        });
+        sizeGroup.hidden = false;
+      })
+      .catch(function () { /* no chips, the rest of the filters still work */ });
+  }
+
+  if (sizeList) {
+    sizeList.addEventListener('click', function (e) {
+      var btn = e.target.closest('.cfs-chip');
+      if (!btn) return;
+      var k = btn.dataset.size;
+      var i = selectedSizes.indexOf(k);
+      if (i === -1) selectedSizes.push(k); else selectedSizes.splice(i, 1);
+      btn.setAttribute('aria-pressed', String(i === -1));
+      applyFilters();
+    });
   }
 
   /* ── AJAX load (shared by filters + collection nav) ── */
   function loadUrl(url, pushState) {
+    var seq = ++loadSeq;
     gridWrap.classList.add('is-loading');
     fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
       .then(function (r) { return r.text(); })
       .then(function (html) {
+        if (seq !== loadSeq) return;
         var doc      = new DOMParser().parseFromString(html, 'text/html');
         var newGrid  = doc.getElementById('collection-grid-wrap');
         var newCount = doc.getElementById('products-count');
@@ -607,14 +725,17 @@
         productGrid = document.getElementById('product-grid');
         var countEl = document.getElementById('products-count');
         if (newCount && countEl) countEl.textContent = newCount.textContent;
-        if (pushState !== false) history.pushState({ url: url }, '', url);
-        bindPaginationLinks();
-        document.dispatchEvent(new CustomEvent('balsam:grid-updated'));
-        updateBadge();
-        if (searchInput && searchInput.value.trim()) filterBySearch(searchInput.value.trim());
+        if (pushState !== false) history.pushState({ url: url }, '', withSizes(url));
+        return applySizes(url).then(function () {
+          if (seq !== loadSeq) return;
+          bindPaginationLinks();
+          document.dispatchEvent(new CustomEvent('balsam:grid-updated'));
+          updateBadge();
+          if (searchInput && searchInput.value.trim()) filterBySearch(searchInput.value.trim());
+        });
       })
       .catch(function () { window.location.href = url; })
-      .finally(function () { gridWrap.classList.remove('is-loading'); });
+      .finally(function () { if (seq === loadSeq) gridWrap.classList.remove('is-loading'); });
   }
 
   function applyFilters() {
@@ -655,13 +776,8 @@
   if (clearBtn) {
     clearBtn.addEventListener('click', function () {
       filterForm.querySelectorAll('[data-filter-input]:checked').forEach(function (cb) { cb.checked = false; });
-      if (priceSlider) {
-        var mi = priceSlider.querySelector('.price-slider__range--min');
-        var ma = priceSlider.querySelector('.price-slider__range--max');
-        if (mi) mi.value = priceSlider.dataset.rangeMin;
-        if (ma) ma.value = priceSlider.dataset.rangeMax;
-        updateSlider();
-      }
+      selectedSizes = [];
+      if (sizeList) sizeList.querySelectorAll('.cfs-chip').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
       /* restore "All Products" checkbox */
       if (collAllCb) collAllCb.checked = true;
       applyFilters();
@@ -678,7 +794,7 @@
       var name = (card.querySelector('.product-card__name') || card).textContent.toLowerCase();
       var show = q === '' || name.indexOf(q) !== -1;
       card.style.display = show ? '' : 'none';
-      if (show) visible++;
+      if (show && !card.classList.contains('is-size-hidden')) visible++;
     });
     if (noResults) noResults.hidden = visible > 0 || q === '';
   }
@@ -698,39 +814,6 @@
     });
   }
 
-  /* ── Price slider ── */
-  function updateSlider() {
-    if (!priceSlider) return;
-    var mi = priceSlider.querySelector('.price-slider__range--min');
-    var ma = priceSlider.querySelector('.price-slider__range--max');
-    var fill = document.getElementById('price-fill');
-    var minLabel = document.getElementById('price-min-label');
-    var maxLabel = document.getElementById('price-max-label');
-    if (!mi || !ma || !fill) return;
-    var rMin = parseFloat(priceSlider.dataset.rangeMin);
-    var rMax = parseFloat(priceSlider.dataset.rangeMax);
-    var minV = parseFloat(mi.value);
-    var maxV = parseFloat(ma.value);
-    var gap  = (rMax - rMin) * 0.01;
-    if (minV > maxV - gap) { mi.value = maxV - gap; minV = parseFloat(mi.value); }
-    if (maxV < minV + gap) { ma.value = minV + gap; maxV = parseFloat(ma.value); }
-    fill.style.left  = ((minV - rMin) / (rMax - rMin)) * 100 + '%';
-    fill.style.width = ((maxV - minV) / (rMax - rMin)) * 100 + '%';
-    if (minLabel) minLabel.textContent = Math.floor(minV);
-    if (maxLabel) maxLabel.textContent = Math.ceil(maxV);
-  }
-
-  if (priceSlider) {
-    var mi = priceSlider.querySelector('.price-slider__range--min');
-    var ma = priceSlider.querySelector('.price-slider__range--max');
-    [mi, ma].forEach(function (inp) {
-      if (!inp) return;
-      inp.addEventListener('input', updateSlider);
-      inp.addEventListener('change', scheduleFilter);
-    });
-    updateSlider();
-  }
-
   /* ── Pagination AJAX ── */
   function bindPaginationLinks() {
     gridWrap.querySelectorAll('.pagination a').forEach(function (a) {
@@ -743,6 +826,16 @@
   }
 
   bindPaginationLinks();
+
+  /* A shared link can carry ?size=230g — pick those up and load the filtered grid */
+  selectedSizes = new URLSearchParams(window.location.search).getAll('size').map(sizeKey).filter(Boolean);
+  buildSizeChips();
+  if (selectedSizes.length) {
+    var start = new URL(window.location.href);
+    start.searchParams.delete('size');
+    start.searchParams.delete('page');
+    loadUrl(start.pathname + start.search, false);
+  }
   updateBadge();
 
   window.addEventListener('popstate', function () { window.location.reload(); });

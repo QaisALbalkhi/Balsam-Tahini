@@ -52,7 +52,12 @@
               <span class="variant-card__value">{{ value }}</span>
 
               {%- if variant_for_value -%}
-                <span class="variant-card__price">{{ variant_for_value.price | money }}</span>
+                <span class="variant-card__price">
+                  {%- if variant_for_value.compare_at_price > variant_for_value.price -%}
+                    <s class="variant-card__compare">{{ variant_for_value.compare_at_price | money }}</s>
+                  {%- endif -%}
+                  <span class="variant-card__now">{{ variant_for_value.price | money }}</span>
+                </span>
               {%- endif -%}
             </label>
           {%- endfor -%}
@@ -168,8 +173,18 @@
   }
 
   .variant-card__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 var(--space-2);
     font-size: var(--text-sm);
     color: var(--muted);
+  }
+
+  /* Struck-through original price, shown ahead of the sale price */
+  .variant-card__compare {
+    color: var(--muted);
+    text-decoration: line-through;
   }
 
   /* Pill picker */
