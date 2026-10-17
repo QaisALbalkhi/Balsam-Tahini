@@ -166,21 +166,24 @@
                 {%- endif -%}
               {%- endfor -%}
 
-              <!-- Weight / Volume groups: range chips, filled in by the script below -->
-              {%- assign size_groups = 'weight,volume' | split: ',' -%}
-              {%- for sg in size_groups -%}
-                <div class="cfs-group" data-size-group="{{ sg }}" hidden>
-                  <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
-                    <span>{{ sg | capitalize }}</span>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                      <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                  <div class="cfs-group__body" data-filter-body>
-                    <div class="cfs-chip-list" data-size-chips="{{ sg }}" role="group" aria-label="{{ sg | capitalize }}"></div>
-                  </div>
+              <!-- Size group: weight and volume range chips, filled in by the script below -->
+              <div class="cfs-group" data-size-group hidden>
+                <button class="cfs-group__toggle" type="button" aria-expanded="true" data-filter-toggle>
+                  <span>Size</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="cfs-group__body" data-filter-body>
+                  {%- assign size_kinds = 'weight,volume' | split: ',' -%}
+                  {%- for sk in size_kinds -%}
+                    <div class="cfs-size-kind" data-size-kind hidden>
+                      <p class="cfs-size-kind__label">{{ sk | capitalize }}</p>
+                      <div class="cfs-chip-list" data-size-chips="{{ sk }}" role="group" aria-label="{{ sk | capitalize }}"></div>
+                    </div>
+                  {%- endfor -%}
                 </div>
-              {%- endfor -%}
+              </div>
 
             </form>
           </div><!-- /.cfs__inner -->
@@ -446,7 +449,16 @@
   .cfs-checkbox__count { color: var(--muted); font-size: var(--text-xs); margin-left: 2px; }
 
   /* Size chips */
-  .cfs-chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); padding-top: 2px; }
+  .cfs-chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .cfs-size-kind + .cfs-size-kind { margin-top: var(--space-4); }
+  .cfs-size-kind__label {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
   .cfs-chip {
     min-width: 52px;
     padding: 9px 14px;
@@ -739,9 +751,11 @@
           b.setAttribute('aria-pressed', String(selectedSizes.indexOf(r.key) !== -1));
           list.appendChild(b);
         });
-        document.querySelectorAll('[data-size-group]').forEach(function (g) {
-          g.hidden = !g.querySelector('.cfs-chip');
+        document.querySelectorAll('[data-size-kind]').forEach(function (k) {
+          k.hidden = !k.querySelector('.cfs-chip');
         });
+        var sizeGroup = document.querySelector('[data-size-group]');
+        if (sizeGroup) sizeGroup.hidden = !sizeGroup.querySelector('.cfs-chip');
 
         /* Shopify counts a product as out of stock when any size is; show fully-out products only */
         var fullyOut = (data.products || []).filter(function (p) {
